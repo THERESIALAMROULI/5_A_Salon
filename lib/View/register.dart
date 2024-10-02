@@ -122,15 +122,11 @@ class _RegisterViewState extends State<RegisterView> {
 
                     child: ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Processing Data'))
-                          );
                           Map<String, dynamic> formData = {};
-                          // formData['username'] = usernameController.text;
+                          formData['username'] = usernameController.text;
                           formData['password'] = passwordController.text;
-                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext buildContext) => LoginView(data: formData,)));
-                        }
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginView(),),);
+                        
                       },
                       child: const Text(
                         "Sign up",

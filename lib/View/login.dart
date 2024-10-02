@@ -15,8 +15,12 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   
+
   @override
   Widget build(BuildContext context) {
+    TextEditingController usernameController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+    Map? dataForm = widget.data;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
