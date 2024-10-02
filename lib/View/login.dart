@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:tubesfix/View/home.dart';
 import 'package:tubesfix/View/register.dart';
+import 'package:tubesfix/component/form_component.dart';
 
-class LoginView extends StatelessWidget {
-  const LoginView({super.key});
+class LoginView extends StatefulWidget {
+  final Map? data;
 
+  const LoginView({super.key, this.data});
+
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
+  final _formKey = GlobalKey<FormState>();
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

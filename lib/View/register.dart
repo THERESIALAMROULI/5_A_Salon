@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:tubesfix/View/login.dart';
+import 'package:tubesfix/component/form_component.dart';
 
-class RegisterView extends StatelessWidget {
+class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
+
+  @override
+  State<RegisterView> createState() => _RegisterViewState();
+}
+
+class _RegisterViewState extends State<RegisterView> {
+
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController notelpController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +31,9 @@ class RegisterView extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
+              children: [
                 Column(
-                  children: <Widget>[
+                  children: [
                     const SizedBox(height: 60.0),
 
                     const Text(
@@ -35,8 +48,9 @@ class RegisterView extends StatelessWidget {
                   ],
                 ),
                 Column(
-                  children: <Widget>[
+                  children: [
                     TextField(
+                      controller: usernameController,
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                           hintText: "Username",
@@ -53,6 +67,7 @@ class RegisterView extends StatelessWidget {
                     const SizedBox(height: 20),
 
                     TextField(
+                      controller: emailController,
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                           hintText: "Email",
@@ -68,6 +83,7 @@ class RegisterView extends StatelessWidget {
                     const SizedBox(height: 20),
 
                     TextField(
+                      controller: passwordController,
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         hintText: "Password",
@@ -84,20 +100,21 @@ class RegisterView extends StatelessWidget {
 
                     const SizedBox(height: 20),
 
-                    TextField(
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        hintText: "Confirm Password",
-                        hintStyle: TextStyle(color: Colors.white.withOpacity(0.75)),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(18),
-                            borderSide: BorderSide.none),
-                        fillColor: const Color.fromRGBO(248,244,227,1).withOpacity(0.1),
-                        filled: true,
-                        prefixIcon: const Icon(Icons.password),
-                      ),
-                      obscureText: true,
-                    ),
+                    // TextField(
+
+                    //   style: TextStyle(color: Colors.white),
+                    //   decoration: InputDecoration(
+                    //     hintText: "Confirm Password",
+                    //     hintStyle: TextStyle(color: Colors.white.withOpacity(0.75)),
+                    //     border: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.circular(18),
+                    //         borderSide: BorderSide.none),
+                    //     fillColor: const Color.fromRGBO(248,244,227,1).withOpacity(0.1),
+                    //     filled: true,
+                    //     prefixIcon: const Icon(Icons.password),
+                    //   ),
+                    //   obscureText: true,
+                    // ),
                   ],
                 ),
                 Container(
@@ -105,6 +122,15 @@ class RegisterView extends StatelessWidget {
 
                     child: ElevatedButton(
                       onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Processing Data'))
+                          );
+                          Map<String, dynamic> formData = {};
+                          // formData['username'] = usernameController.text;
+                          formData['password'] = passwordController.text;
+                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext buildContext) => LoginView(data: formData,)));
+                        }
                       },
                       child: const Text(
                         "Sign up",
@@ -129,7 +155,7 @@ class RegisterView extends StatelessWidget {
                         child: const Text("Login", style: TextStyle(color:  Color.fromRGBO(248,244,227,1),decoration: TextDecoration.underline),)
                     )
                   ],
-                )
+                  ),
               ],
             ),
           ),
