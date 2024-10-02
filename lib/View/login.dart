@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tubesfix/View/register.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -14,10 +15,8 @@ class LoginView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              
               _inputField(context),
               _forgotPassword(context),
-              _signup(context),
             ],
           ),
         ),
@@ -31,20 +30,27 @@ class LoginView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         TextField(
+          style: TextStyle(color: Colors.white),
           decoration: InputDecoration(
               hintText: "Username",
+              hintStyle: TextStyle(color: Colors.white.withOpacity(0.75)),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(18),
                   borderSide: BorderSide.none
+                  
               ),
-              fillColor: Color.fromRGBO(248,244,227,1).withOpacity(0.1),
+              fillColor: const Color.fromRGBO(248,244,227,1).withOpacity(0.1),
               filled: true,
               prefixIcon: const Icon(Icons.person)),
         ),
         const SizedBox(height: 10),
         TextField(
+          style: TextStyle(color: Colors.white),
           decoration: InputDecoration(
+
             hintText: "Password",
+            
+            hintStyle: TextStyle(color: Colors.white.withOpacity(0.75)),
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(18),
                 borderSide: BorderSide.none),
@@ -55,17 +61,34 @@ class LoginView extends StatelessWidget {
           obscureText: true,
         ),
         const SizedBox(height: 10),
-        ElevatedButton(
+        ElevatedButton(//login
           onPressed: () {
           },
           style: ElevatedButton.styleFrom(
             shape: const StadiumBorder(),
             padding: const EdgeInsets.symmetric(vertical: 16),
-            backgroundColor: Color.fromRGBO(248,244,227,1),
+            backgroundColor: Color(0xFFF8F4E3),
           ),
           child: const Text(
             "Login",
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 20,color:  Color.fromRGBO(0, 0, 0, 1)),
+          ),
+        ),
+        const SizedBox(height: 10),
+        ElevatedButton(//regis
+          onPressed: () {
+             Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisterView(),),);
+          },
+          style: ElevatedButton.styleFrom(
+            shape: const StadiumBorder(),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            backgroundColor: Color.fromRGBO(0, 0, 0, 1),
+            side: BorderSide(color:  Color(0xFFF8F4E3))
+          ),
+          child: const Text(
+            "Register",
+            style: TextStyle(fontSize: 20,color: Color(0xFFF8F4E3)),
+            
           ),
         )
       ],
@@ -81,17 +104,5 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  _signup(context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text("Dont have an account? "),
-        TextButton(
-            onPressed: () {
-            },
-            child: const Text("Sign Up", style: TextStyle(color: Color.fromRGBO(248,244,227,1)),)
-        )
-      ],
-    );
-  }
+ 
 }

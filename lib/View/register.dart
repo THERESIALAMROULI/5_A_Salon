@@ -37,8 +37,11 @@ class RegisterView extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     TextField(
+                      style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                           hintText: "Username",
+                          hintStyle: TextStyle(color: Colors.white.withOpacity(0.75)),
+                          
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(18),
                               borderSide: BorderSide.none),
@@ -50,8 +53,10 @@ class RegisterView extends StatelessWidget {
                     const SizedBox(height: 20),
 
                     TextField(
+                      style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                           hintText: "Email",
+                          hintStyle: TextStyle(color: Colors.white.withOpacity(0.75)),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(18),
                               borderSide: BorderSide.none),
@@ -63,8 +68,10 @@ class RegisterView extends StatelessWidget {
                     const SizedBox(height: 20),
 
                     TextField(
+                      style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         hintText: "Password",
+                        hintStyle: TextStyle(color: Colors.white.withOpacity(0.75)),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(18),
                             borderSide: BorderSide.none),
@@ -78,8 +85,10 @@ class RegisterView extends StatelessWidget {
                     const SizedBox(height: 20),
 
                     TextField(
+                      style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         hintText: "Confirm Password",
+                        hintStyle: TextStyle(color: Colors.white.withOpacity(0.75)),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(18),
                             borderSide: BorderSide.none),
@@ -117,7 +126,7 @@ class RegisterView extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginView(),),);
                         },
-                        child: const Text("Login", style: TextStyle(color:  Color.fromRGBO(248,244,227,1)),)
+                        child: const Text("Login", style: TextStyle(color:  Color.fromRGBO(248,244,227,1),decoration: TextDecoration.underline),)
                     )
                   ],
                 )
