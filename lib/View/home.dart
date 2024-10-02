@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tubesfix/View/view_list.dart';
 
 
 class HomeView extends StatefulWidget {
@@ -22,6 +23,7 @@ class _HomeViewState extends State<HomeView> {
       child: Image(image: NetworkImage('https://picsum.photos/200/300')),
     ),
     
+    ListNamaView(),
     Center(
       child: Text(
         'TBA'
@@ -33,6 +35,9 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
+      backgroundColor: Colors.black, // <-- This works for fixed
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Colors.brown,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home,),label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.list,),label: 'List'),

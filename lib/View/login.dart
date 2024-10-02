@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tubesfix/View/register.dart';
+import 'package:tubesfix/View/home.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -63,6 +64,10 @@ class LoginView extends StatelessWidget {
         const SizedBox(height: 10),
         ElevatedButton(//login
           onPressed: () {
+           Navigator.push(
+              context,
+              MaterialPageRoute(
+              builder: (_) =>const HomeView()));
           },
           style: ElevatedButton.styleFrom(
             shape: const StadiumBorder(),
