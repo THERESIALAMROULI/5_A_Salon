@@ -1,10 +1,10 @@
-name: tubesfix
+name: guidedlayout2_2160
 description: "A new Flutter project."
 publish_to: 'none'
 version: 0.1.0
 
 environment:
-  sdk: ^3.5.1
+  sdk: ^3.5.3
 
 dependencies:
   flutter:
