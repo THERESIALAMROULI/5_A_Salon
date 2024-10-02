@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tubesfix/data/people.dart';
+import '/data/people.dart';
 
 class ListNamaView extends StatelessWidget {
   const ListNamaView({super.key});
@@ -7,8 +7,10 @@ class ListNamaView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text("Daftar Nama"),
+        backgroundColor: const Color.fromARGB(255, 228, 218, 128),
       ),
       body: LayoutBuilder(builder: (context, Constraints){
         if(Constraints.maxWidth > 600){
@@ -48,12 +50,17 @@ class _WideLayoutState extends State<WideLayout> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      
       children: [
         SizedBox(
+          
           width: 300,
+          
           child: Padding(
+            
             padding: const EdgeInsets.all(12.0),
             child: PeopleList(
+              
               onPersonTap: (person) => setState(() => _person = person),
             ),),
         ),
@@ -75,7 +82,8 @@ class PeopleList extends StatelessWidget {
     return ListView(children: [
       for(var person in people)
       ListTile(
-        leading: Image.network(person.picture),
+        tileColor: Colors.white,
+ 
         title: Text(person.name),
         onTap: () => onPersonTap(person)
       ),
@@ -95,11 +103,7 @@ class PersonDetail extends StatelessWidget {
           child: BoxConstraints.maxHeight > 200 ? Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              MouseRegion(
-                onHover: (_) => {print("lele :D")},
-                child: Text(person.name),
-              ),
-              Text(person.phone),
+             
               ElevatedButton(
                 onPressed: () {},
                 child: const Text("Contact Me"),
@@ -109,11 +113,7 @@ class PersonDetail extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              MouseRegion(
-                onHover: (_) => {print("Hello World")},
-                child: Text(person.name),
-              ),
-              Text(person.phone),
+             
               ElevatedButton(
                 onPressed: () {},
                 child: const Text("Contact Me"),

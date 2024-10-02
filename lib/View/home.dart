@@ -22,7 +22,6 @@ class _HomeViewState extends State<HomeView> {
     Center(
       child: Image(image: NetworkImage('https://picsum.photos/200/300')),
     ),
-    
     ListNamaView(),
     Center(
       child: Text(
@@ -37,7 +36,7 @@ class _HomeViewState extends State<HomeView> {
       bottomNavigationBar: BottomNavigationBar(
       backgroundColor: Colors.black, // <-- This works for fixed
       selectedItemColor: Colors.white,
-      unselectedItemColor: Colors.brown,
+      unselectedItemColor: const Color.fromARGB(255, 228, 218, 128),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home,),label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.list,),label: 'List'),

@@ -19,7 +19,7 @@ final List<Map<String,Object>> _people =
     "picture": "http://placehold.it/32x32",
     "age": 22,
     "eyeColor": "green",
-    "name": "Henderson Alford",
+    "name": "Barberman 1",
     "gender": "male",
     "company": "MITROC",
     "email": "hendersonalford@mitroc.com",
@@ -64,7 +64,7 @@ final List<Map<String,Object>> _people =
     "picture": "http://placehold.it/32x32",
     "age": 25,
     "eyeColor": "blue",
-    "name": "Laurie Beard",
+    "name": "Barberman 2",
     "gender": "female",
     "company": "COMVEYOR",
     "email": "lauriebeard@comveyor.com",
@@ -97,7 +97,7 @@ final List<Map<String,Object>> _people =
         "name": "Trudy Berg"
       }
     ],
-    "greeting": "Hello, Laurie Beard! You have 7 unread messages.",
+    "greeting": "Hello, Barberman 2! You have 7 unread messages.",
     "favoriteFruit": "strawberry"
   },
   {
