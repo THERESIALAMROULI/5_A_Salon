@@ -1,10 +1,10 @@
-name: tubesfix
+name: guidedlayout2_1955
 description: "A new Flutter project."
 publish_to: 'none'
 version: 0.1.0
 
 environment:
-  sdk: ^3.5.1
+  sdk: ^3.5.3
 
 dependencies:
   flutter:
@@ -16,4 +16,5 @@ dev_dependencies:
   flutter_lints: ^4.0.0
 
 flutter:
-  uses-material-design: true
+  assets:
+    - assets/images/salon_background.jpeg
