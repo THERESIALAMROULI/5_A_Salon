@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tubesfix/View/view_list.dart';
-
+import 'package:tubesfix/View/profile.dart';
+import 'package:tubesfix/View/home_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -19,15 +20,9 @@ class _HomeViewState extends State<HomeView> {
   }
 
   static const List<Widget> _widgetOptions = <Widget>[
-    Center(
-      child: Image(image: NetworkImage('https://picsum.photos/200/300')),
-    ),
+    homeView(),
     ListNamaView(),
-    Center(
-      child: Text(
-        'TBA'
-      ),
-    ),
+    profileView(),
   ];
 
   @override

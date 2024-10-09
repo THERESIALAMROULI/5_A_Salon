@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:tubesfix/View/login.dart';
 
-class RegisterView extends StatelessWidget {
+class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
+
+  @override
+  State<RegisterView> createState() => _RegisterViewState();
+}
+
+class _RegisterViewState extends State<RegisterView> {
+
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController notelpController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +28,14 @@ class RegisterView extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 40),
             height: MediaQuery.of(context).size.height - 50,
             width: double.infinity,
+            child: Form(
+              key: _formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
+              children: [
                 Column(
-                  children: <Widget>[
+                  children: [
                     const SizedBox(height: 60.0),
 
                     const Text(
@@ -35,8 +50,9 @@ class RegisterView extends StatelessWidget {
                   ],
                 ),
                 Column(
-                  children: <Widget>[
-                    TextField(
+                  children: [
+                    TextFormField(
+                      controller: usernameController,
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                           hintText: "Username",
@@ -48,11 +64,18 @@ class RegisterView extends StatelessWidget {
                           fillColor: const Color.fromRGBO(248,244,227,1).withOpacity(0.1),
                           filled: true,
                           prefixIcon: const Icon(Icons.person)),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Username tidak boleh kosong';
+                            }
+                            return null;
+                          },
                     ),
 
                     const SizedBox(height: 20),
 
-                    TextField(
+                    TextFormField(
+                      controller: emailController,
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                           hintText: "Email",
@@ -63,11 +86,21 @@ class RegisterView extends StatelessWidget {
                           fillColor: const Color.fromRGBO(248,244,227,1).withOpacity(0.1),
                           filled: true,
                           prefixIcon: const Icon(Icons.email)),
+                          validator: (value) {
+                          if (value == null || value.isEmpty) {
+                              return 'Email tidak boleh kosong';
+                            } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                                .hasMatch(value)) {
+                              return 'Masukkan email yang valid';
+                            }
+                            return null;
+                          },
                     ),
 
                     const SizedBox(height: 20),
 
-                    TextField(
+                    TextFormField(
+                      controller: passwordController,
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         hintText: "Password",
@@ -80,11 +113,20 @@ class RegisterView extends StatelessWidget {
                         prefixIcon: const Icon(Icons.password),
                       ),
                       obscureText: true,
+                      validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Password tidak boleh kosong';
+                          } else if (value.length < 6) {
+                            return 'Password harus minimal 6 karakter';
+                          }
+                          return null;
+                      },
                     ),
 
                     const SizedBox(height: 20),
 
-                    TextField(
+                    TextFormField(
+                      controller: confirmPasswordController,
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         hintText: "Confirm Password",
@@ -97,6 +139,14 @@ class RegisterView extends StatelessWidget {
                         prefixIcon: const Icon(Icons.password),
                       ),
                       obscureText: true,
+                      validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Konfirmasi password tidak boleh kosong';
+                          } else if (value != passwordController.text) {
+                            return 'Password tidak cocok';
+                          }
+                          return null;
+                      },
                     ),
                   ],
                 ),
@@ -105,16 +155,24 @@ class RegisterView extends StatelessWidget {
 
                     child: ElevatedButton(
                       onPressed: () {
+                        if (_formKey.currentState!.validate()){
+                          Map<String, dynamic> formData = {};
+                          formData['username'] = usernameController.text;
+                          formData['password'] = passwordController.text;
+                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext buildContext) => LoginView(data: formData,)));
+                        }
                       },
-                      child: const Text(
-                        "Sign up",
-                        style: TextStyle(fontSize: 20),
-                      ),
+                      
                       style: ElevatedButton.styleFrom(
                         shape: const StadiumBorder(),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         backgroundColor: const Color.fromRGBO(248,244,227,1),
                       ),
+                      child: const Text(
+                        "Sign up",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      
                     )
                 ),
 
@@ -129,9 +187,10 @@ class RegisterView extends StatelessWidget {
                         child: const Text("Login", style: TextStyle(color:  Color.fromRGBO(248,244,227,1),decoration: TextDecoration.underline),)
                     )
                   ],
-                )
+                  ),
               ],
             ),
+          ),
           ),
         ),
       ),

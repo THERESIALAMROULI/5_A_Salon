@@ -103,11 +103,17 @@ class PersonDetail extends StatelessWidget {
           child: BoxConstraints.maxHeight > 200 ? Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-             
+              CircleAvatar(
+              radius: 70,
+              backgroundImage: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRczQ38KpzzA8jbdjlk6zMB5pdBDG4i-af5g&s'),
+              ),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {},
+                
                 child: const Text("Contact Me"),
                 ),
+              
             ],
           ):
           Row(
