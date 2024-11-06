@@ -134,13 +134,15 @@ class _LoginViewState extends State<LoginView> {
             }
           },
           style: ElevatedButton.styleFrom(
-            shape: const StadiumBorder(),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15)
+            ),
             padding: const EdgeInsets.symmetric(vertical: 16),
-            backgroundColor: Color(0xFFF8F4E3),
+            backgroundColor: Color(0xFFE0AC53),
           ),
           child: const Text(
             "Login",
-            style: TextStyle(fontSize: 20, color: Color.fromRGBO(0, 0, 0, 1)),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color.fromRGBO(0, 0, 0, 1)),
           ),
         ),
         const SizedBox(height: 10),
