@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,6 +20,16 @@ class MyApp extends StatelessWidget {
 }
 
 class ProfilePage extends StatelessWidget {
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _openCamera() async {
+    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+    if (photo != null) {
+      // Lakukan sesuatu dengan gambar, misalnya simpan atau tampilkan
+      print('Image Path: ${photo.path}');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,16 +62,19 @@ class ProfilePage extends StatelessWidget {
                     Positioned(
                       bottom: 0,
                       right: 0,
-                      child: Container(
-                        padding: EdgeInsets.all(3),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.edit,
-                          color: Colors.black,
-                          size: 20,
+                      child: GestureDetector(
+                        onTap: _openCamera,
+                        child: Container(
+                          padding: EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.camera_alt, // Ganti dengan ikon kamera
+                            color: Colors.black,
+                            size: 20,
+                          ),
                         ),
                       ),
                     ),
