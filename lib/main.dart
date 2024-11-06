@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+<<<<<<< Updated upstream
 import 'package:image_picker/image_picker.dart';
+=======
+import 'View/profile.dart';
+>>>>>>> Stashed changes
 
 void main() {
   runApp(MyApp());
@@ -32,6 +36,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< Updated upstream
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -160,6 +165,10 @@ class ProfilePage extends StatelessWidget {
           ),
         ],
       ),
+=======
+    return const MaterialApp(
+      home: ProfileView(),
+>>>>>>> Stashed changes
     );
   }
 }
