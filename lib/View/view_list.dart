@@ -101,6 +101,7 @@ class PersonDetail extends StatelessWidget {
     return LayoutBuilder(
       builder: (buildContext, boxConstraints) {
         return Center(
+<<<<<<< Updated upstream
           child: boxConstraints.maxHeight > 200
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -129,6 +130,20 @@ class PersonDetail extends StatelessWidget {
                       child: const Text("Contact Me"),
                     ),
                   ],
+=======
+          child: BoxConstraints.maxHeight > 200 ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const CircleAvatar(
+              radius: 70,
+              backgroundImage: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRczQ38KpzzA8jbdjlk6zMB5pdBDG4i-af5g&s'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {},
+                
+                child: const Text("Contact Me"),
+>>>>>>> Stashed changes
                 ),
         );
       },
