@@ -54,7 +54,7 @@ class _WideLayoutState extends State<WideLayout> {
       children: [
         SizedBox(
           
-          width: 300,
+          width: 900,
           
           child: Padding(
             
@@ -83,9 +83,16 @@ class PeopleList extends StatelessWidget {
       for(var person in people)
       ListTile(
         tileColor: Colors.white,
+<<<<<<< Updated upstream
  
         title: Text(person.name),
         onTap: () => onPersonTap(person)
+=======
+        title: Text(person.name),
+        
+        onTap: () => onPersonTap(person),
+        contentPadding: EdgeInsets.all(10),
+>>>>>>> Stashed changes
       ),
     ]);
   }
@@ -100,6 +107,7 @@ class PersonDetail extends StatelessWidget {
     return LayoutBuilder(
       builder: (BuildContext, BoxConstraints){
         return Center(
+<<<<<<< Updated upstream
           child: BoxConstraints.maxHeight > 200 ? Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -120,6 +128,10 @@ class PersonDetail extends StatelessWidget {
                 ),
             ],
           ),
+=======
+          
+          
+>>>>>>> Stashed changes
         );
       });
   }
