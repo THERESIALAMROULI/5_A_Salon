@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
+<<<<<<< Updated upstream
 import 'package:guidedlayout2_2160/View/view_list.dart';
 import 'package:guidedlayout2_2160/View/profile.dart';
+=======
+import 'package:tubesfix/View/transaction.dart';
+import 'package:tubesfix/View/view_list.dart';
+import 'package:tubesfix/View/profile.dart';
+import 'package:tubesfix/View/home_view.dart';
+import 'package:tubesfix/View/view_list.dart';
+>>>>>>> Stashed changes
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -24,8 +32,13 @@ class _HomeViewState extends State<HomeView> {
       ),
 
     ListNamaView(),
+<<<<<<< Updated upstream
 
     ProfileScreen(),
+=======
+    profileView(),
+    transactionView(),
+>>>>>>> Stashed changes
   ];
 
   @override
@@ -35,7 +48,7 @@ class _HomeViewState extends State<HomeView> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home,),label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.list,),label: 'List'),
-          BottomNavigationBarItem(icon: Icon(Icons.person,),label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.person,),label: 'Transaction'),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
