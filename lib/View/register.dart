@@ -9,12 +9,10 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
-
   final _formKey = GlobalKey<FormState>();
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController notelpController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
   @override
@@ -23,177 +21,211 @@ class _RegisterViewState extends State<RegisterView> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.black,
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            height: MediaQuery.of(context).size.height - 50,
-            width: double.infinity,
-            child: Form(
-              key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Column(
-                  children: [
-                    const SizedBox(height: 60.0),
-
-                    const Text(
-                      "Sign up",
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color:  Color.fromRGBO(248,244,227,1)
-                      ),
-                    ),
-                   
-                  ],
-                ),
-                Column(
-                  children: [
-                    TextFormField(
-                      controller: usernameController,
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                          hintText: "Username",
-                          hintStyle: TextStyle(color: Colors.white.withOpacity(0.75)),
-                          
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(18),
-                              borderSide: BorderSide.none),
-                          fillColor: const Color.fromRGBO(248,244,227,1).withOpacity(0.1),
-                          filled: true,
-                          prefixIcon: const Icon(Icons.person)),
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(height: 100),
+                        const Text(
+                          "ATMA BARBER",
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFFE0AC53),
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          controller: usernameController,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: _inputDecoration("Username", Icons.person),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Username tidak boleh kosong';
                             }
                             return null;
                           },
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    TextFormField(
-                      controller: emailController,
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                          hintText: "Email",
-                          hintStyle: TextStyle(color: Colors.white.withOpacity(0.75)),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(18),
-                              borderSide: BorderSide.none),
-                          fillColor: const Color.fromRGBO(248,244,227,1).withOpacity(0.1),
-                          filled: true,
-                          prefixIcon: const Icon(Icons.email)),
+                        ),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          controller: emailController,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: _inputDecoration("Email", Icons.email),
                           validator: (value) {
-                          if (value == null || value.isEmpty) {
+                            if (value == null || value.isEmpty) {
                               return 'Email tidak boleh kosong';
-                            } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
-                                .hasMatch(value)) {
+                            } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
                               return 'Masukkan email yang valid';
                             }
                             return null;
                           },
+                        ),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          controller: passwordController,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: _inputDecoration("Password", Icons.lock),
+                          obscureText: true,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Password tidak boleh kosong';
+                            } else if (value.length < 6) {
+                              return 'Password harus minimal 6 karakter';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          controller: confirmPasswordController,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: _inputDecoration("Confirm Password", Icons.lock),
+                          obscureText: true,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Konfirmasi password tidak boleh kosong';
+                            } else if (value != passwordController.text) {
+                              return 'Password tidak cocok';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              _showAccountCreatedDialog();
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            backgroundColor: const Color(0xFFE0AC53),
+                          ),
+                          child: const Text(
+                            "Sign Up",
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+                          ),
+                        ),
+                      ],
                     ),
-
-                    const SizedBox(height: 20),
-
-                    TextFormField(
-                      controller: passwordController,
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        hintText: "Password",
-                        hintStyle: TextStyle(color: Colors.white.withOpacity(0.75)),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(18),
-                            borderSide: BorderSide.none),
-                        fillColor: const Color.fromRGBO(248,244,227,1).withOpacity(0.1),
-                        filled: true,
-                        prefixIcon: const Icon(Icons.password),
-                      ),
-                      obscureText: true,
-                      validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Password tidak boleh kosong';
-                          } else if (value.length < 6) {
-                            return 'Password harus minimal 6 karakter';
-                          }
-                          return null;
-                      },
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    TextFormField(
-                      controller: confirmPasswordController,
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        hintText: "Confirm Password",
-                        hintStyle: TextStyle(color: Colors.white.withOpacity(0.75)),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(18),
-                            borderSide: BorderSide.none),
-                        fillColor: const Color.fromRGBO(248,244,227,1).withOpacity(0.1),
-                        filled: true,
-                        prefixIcon: const Icon(Icons.password),
-                      ),
-                      obscureText: true,
-                      validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Konfirmasi password tidak boleh kosong';
-                          } else if (value != passwordController.text) {
-                            return 'Password tidak cocok';
-                          }
-                          return null;
-                      },
-                    ),
-                  ],
-                ),
-                Container(
-                    padding: const EdgeInsets.only(top: 1, left: 3),
-
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()){
-                          Map<String, dynamic> formData = {};
-                          formData['username'] = usernameController.text;
-                          formData['password'] = passwordController.text;
-                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext buildContext) => LoginView(data: formData,)));
-                        }
-                      },
-                      
-                      style: ElevatedButton.styleFrom(
-                        shape: const StadiumBorder(),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        backgroundColor: const Color.fromRGBO(248,244,227,1),
-                      ),
-                      child: const Text(
-                        "Sign up",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      
-                    )
-                ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Text("Already have an account?", style: TextStyle(color:  Color.fromRGBO(248,244,227,1)),),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginView(),),);
-                        },
-                        child: const Text("Login", style: TextStyle(color:  Color.fromRGBO(248,244,227,1),decoration: TextDecoration.underline),)
-                    )
-                  ],
                   ),
-              ],
-            ),
-          ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 24),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Already have an account?",
+                      style: TextStyle(color: Color(0xFFF8F4E3)),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginView()));
+                      },
+                      child: const Text(
+                        "Login",
+                        style: TextStyle(color: Color(0xFFE0AC53)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
+    );
+  }
+
+  void _showAccountCreatedDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        Future.delayed(const Duration(seconds: 3), () {
+          Navigator.pop(context); 
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const LoginView()),
+          );
+        });
+
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15), 
+          ),
+          backgroundColor: Colors.transparent,
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 80,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFE0AC53),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15),
+                    ),
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.check_circle_outline,
+                      size: 60,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  child: const Text(
+                    "Account Created",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+  InputDecoration _inputDecoration(String hint, IconData icon) {
+    return InputDecoration(
+      hintText: hint,
+      hintStyle: TextStyle(color: Colors.white.withOpacity(0.75)),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(18),
+        borderSide: BorderSide.none,
+      ),
+      fillColor: const Color.fromRGBO(248, 244, 227, 1).withOpacity(0.1),
+      filled: true,
+      prefixIcon: Icon(icon, color: Colors.white.withOpacity(0.75)),
     );
   }
 }
