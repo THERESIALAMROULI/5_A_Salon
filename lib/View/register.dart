@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:guidedlayout2_1955/View/login.dart';
-import 'package:guidedlayout2_1955/component/form_component.dart';
+import 'package:tubesfix/View/login.dart';
+
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -14,96 +14,220 @@ class _RegisterViewState extends State<RegisterView> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController notelpController = TextEditingController();
+
+  TextEditingController confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Form(
-          key: _formKey,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: Colors.black,
+        body: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              inputForm(
-                (p0) {
-                  if (p0 == null || p0.isEmpty) {
-                    return 'Username tidak boleh kosong';
-                  }
-                  if (p0.toLowerCase() == 'anjing') {
-                    return 'Tidak boleh menggunakan kata kasar';
-                  }
-                  return null;
-                },
-                controller: usernameController,
-                hintTxt: "Username",
-                helperTxt: "Contoh: Ucup Surucup",
-                iconData: Icons.person,
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(height: 100),
+                        const Text(
+                          "ATMA BARBER",
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFFE0AC53),
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          controller: usernameController,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: _inputDecoration("Username", Icons.person),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Username must not empty';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          controller: emailController,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: _inputDecoration("Email", Icons.email),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Email must not empty';
+                            } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                              return 'Use a valid email!';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          controller: passwordController,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: _inputDecoration("Password", Icons.lock),
+                          obscureText: true,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Password must not empty';
+                            } else if (value.length < 6) {
+                              return 'Password must be at least 6 character';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          controller: confirmPasswordController,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: _inputDecoration("Confirm Password", Icons.lock),
+                          obscureText: true,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Password confiration must not be empty';
+                            } else if (value != passwordController.text) {
+                              return 'Invalid passsword';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              _showAccountCreatedDialog();
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            backgroundColor: const Color(0xFFE0AC53),
+                          ),
+                          child: const Text(
+                            "Sign Up",
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-              inputForm(
-                (p0) {
-                  if (p0 == null || p0.isEmpty) {
-                    return 'Email tidak boleh kosong';
-                  }
-                  if (!p0.contains('@')) {
-                    return 'Email harus menggunakan @';
-                  }
-                  return null;
-                },
-                controller: emailController,
-                hintTxt: "Email",
-                helperTxt: "Contoh: ucup@gmail.com",
-                iconData: Icons.email,
-              ),
-              inputForm(
-                (p0) {
-                  if (p0 == null || p0.isEmpty) {
-                    return 'Password tidak boleh kosong';
-                  }
-                  if (p0.length < 5) {
-                    return 'Password minimal 5 karakter';
-                  }
-                  return null;
-                },
-                controller: passwordController,
-                hintTxt: "Password",
-                helperTxt: "xxxxxxx",
-                iconData: Icons.password,
-                password: true,
-              ),
-              inputForm(
-                (p0) {
-                  if (p0 == null || p0.isEmpty) {
-                    return 'Nomor telepon tidak boleh kosong';
-                  }
-                  return null;
-                },
-                controller: notelpController,
-                hintTxt: "No Telp",
-                helperTxt: "Contoh: 082123456789",
-                iconData: Icons.phone_android,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    Map<String, dynamic> formData = {};
-                    formData['username'] = usernameController.text;
-                    formData['password'] = passwordController.text;
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LoginView(data: formData),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 24),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Already have an account?",
+                      style: TextStyle(color: Color(0xFFF8F4E3)),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginView()));
+                      },
+                      child: const Text(
+                        "Login",
+                        style: TextStyle(color: Color(0xFFE0AC53)),
                       ),
-                    );
-                  }
-                },
-                child: const Text('Register'),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  void _showAccountCreatedDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        Future.delayed(const Duration(seconds: 3), () {
+          Navigator.pop(context); 
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const LoginView()),
+          );
+        });
+
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15), 
+          ),
+          backgroundColor: Colors.transparent,
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 80,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFE0AC53),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15),
+                    ),
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.check_circle_outline,
+                      size: 60,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  child: const Text(
+                    "Account Created",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+  InputDecoration _inputDecoration(String hint, IconData icon) {
+    return InputDecoration(
+      hintText: hint,
+      hintStyle: TextStyle(color: Colors.white.withOpacity(0.75)),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(18),
+        borderSide: BorderSide.none,
+      ),
+      fillColor: const Color.fromRGBO(248, 244, 227, 1).withOpacity(0.1),
+      filled: true,
+      prefixIcon: Icon(icon, color: Colors.white.withOpacity(0.75)),
     );
   }
 }

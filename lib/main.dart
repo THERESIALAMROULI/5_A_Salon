@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:guidedlayout2_1955/View/login.dart';
 
-void main() {
+import 'View/login.dart';
+
+void main(){
   runApp(const MainApp());
 }
 
