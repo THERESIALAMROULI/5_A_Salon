@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:guidedlayout2_1955/View/login.dart';
-import 'package:guidedlayout2_1955/component/form_component.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});

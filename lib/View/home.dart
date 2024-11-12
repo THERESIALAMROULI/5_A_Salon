@@ -19,16 +19,16 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
-  static List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _widgetOptions = <Widget>[
     Center(
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/salon_background.jpeg'),
             fit: BoxFit.cover,
           ),
         ),
-        child: Center(
+        child: const Center(
           child: Text(
             'Selamat Datang di Atma Salon',
             style: TextStyle(

@@ -29,9 +29,9 @@ class homeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 40),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text(
                   "ATMA BARBER",
                   style: TextStyle(color: Colors.amber, fontSize: 24, fontWeight: FontWeight.bold),
@@ -52,8 +52,8 @@ class homeScreen extends StatelessWidget {
                 color: Colors.amber.shade200,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Column(
-                children: const [
+              child: const Column(
+                children: [
                   Text(
                     "Launching Discount",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
@@ -155,7 +155,7 @@ class homeScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          CircleAvatar(
+          const CircleAvatar(
             radius: 30,
             backgroundImage: AssetImage('assets/barber.jpg'), // Ganti dengan asset gambar barber Anda
           ),
