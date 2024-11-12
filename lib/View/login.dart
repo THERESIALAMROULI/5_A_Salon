@@ -105,6 +105,7 @@ class _LoginViewState extends State<LoginView> {
   }
 
   Widget _inputField() {
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -163,9 +164,10 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void _login() {
-    if (widget.data != null) {
-      if (widget.data!['username'] == usernameController.text &&
-          widget.data!['password'] == passwordController.text) {
+    Map? dataForm = widget.data;
+    if (dataForm != null) {
+      if (dataForm['username'] == usernameController.text &&
+          dataForm['password'] == passwordController.text) {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (_) => const HomeView()),
