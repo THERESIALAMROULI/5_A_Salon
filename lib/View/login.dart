@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:tubesfix/View/home.dart';
-import 'package:tubesfix/View/register.dart';
+import 'package:guidedlayout2_1955/View/register.dart';
+import 'package:guidedlayout2_1955/View/home.dart';
+import 'package:guidedlayout2_1955/component/form_component.dart';
 
 class LoginView extends StatefulWidget {
   final Map? data;
@@ -15,203 +16,107 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.black,
-        body: SafeArea(
+    TextEditingController usernameController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+
+    Map? dataForm = widget.data;
+    return Scaffold(
+      body: SafeArea(
+        child: Form(
+          key: _formKey,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const SizedBox(height: 100),
-                        const Text(
-                          "ATMA BARBER",
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFFE0AC53),
-                          ),
-                          textAlign: TextAlign.left,
-                        ),
-                        const SizedBox(height: 20),
-                        _inputField(),
-                        const SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
+              inputForm(
+                (p0) {
+                  if (p0 == null || p0.isEmpty) {
+                    return "Username tidak boleh kosong";
+                  }
+                  return null;
+                },
+                controller: usernameController,
+                hintTxt: "Username",
+                helperTxt: "Inputkan User yang telah didaftar",
+                iconData: Icons.person,
+              ),
+              inputForm(
+                (p0) {
+                  if (p0 == null || p0.isEmpty) {
+                    return "Password tidak boleh kosong";
+                  }
+                  return null;
+                },
+                password: true,
+                controller: passwordController,
+                hintTxt: "Password",
+                helperTxt: "Inputkan Password",
+                iconData: Icons.password,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        if (dataForm != null &&
+                            dataForm['username'] == usernameController.text &&
+                            dataForm['password'] == passwordController.text) {
+                          Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => const HomeView()),
+                            MaterialPageRoute(
+                                builder: (context) => const HomeView()),
                           );
-                            // if (_formKey.currentState!.validate()) {
-                            //   _login();
-                            // }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              title: const Text('Password Salah'),
+                              content: TextButton(
+                                onPressed: () => pushRegister(context),
+                                child: const Text('Daftar Disini !!'),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(context, 'Cancel'),
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, 'OK'),
+                                  child: const Text('OK'),
+                                ),
+                              ],
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            backgroundColor: const Color(0xFFE0AC53),
-                          ),
-                          child: const Text(
-                            "Login",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                          );
+                        }
+                      }
+                    },
+                    child: const Text('Login'),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 24),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Don't have an account?",
-                      style: TextStyle(color: Color(0xFFF8F4E3)),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const RegisterView()),
-                        );
-                      },
-                      child: const Text(
-                        "Sign Up",
-                        style: TextStyle(color: Color(0xFFE0AC53)),
-                      ),
-                    ),
-                  ],
-                ),
+                  TextButton(
+                    onPressed: () {
+                      Map<String, dynamic> formData = {};
+                      formData['username'] = usernameController.text;
+                      formData['password'] = passwordController.text;
+                      pushRegister(context);
+                    },
+                    child: const Text('Belum punya akun?'),
+                  ),
+                ],
               ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  Widget _inputField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        TextFormField(
-          controller: usernameController,
-          style: const TextStyle(color: Colors.white),
-          decoration: _inputDecoration("Username", Icons.person),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Username masih kosong';
-            }
-            return null;
-          },
-        ),
-        const SizedBox(height: 10),
-        TextFormField(
-          controller: passwordController,
-          style: const TextStyle(color: Colors.white),
-          decoration: _inputDecoration("Password", Icons.lock),
-          obscureText: true,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Password masih kosong';
-            }
-            return null;
-          },
-        ),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: TextButton(
-            onPressed: () {
-              // forgot password nanti disini
-            },
-            child: const Text(
-              "I Forgot My Password",
-              style: TextStyle(color: Color.fromRGBO(248, 244, 227, 1)),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  InputDecoration _inputDecoration(String hint, IconData icon) {
-    return InputDecoration(
-      hintText: hint,
-      hintStyle: TextStyle(color: Colors.white.withOpacity(0.75)),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(18),
-        borderSide: BorderSide.none,
-      ),
-      fillColor: const Color.fromRGBO(248, 244, 227, 1).withOpacity(0.1),
-      filled: true,
-      prefixIcon: Icon(icon, color: Colors.white.withOpacity(0.75)),
-    );
-  }
-
-  void _login() {
-    if (widget.data != null) {
-      if (widget.data!['username'] == usernameController.text &&
-          widget.data!['password'] == passwordController.text) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const HomeView()),
-        );
-      } else {
-        showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: const Text("Username atau Password Salah"),
-            content: const Text("Silakan coba lagi."),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
-              ),
-            ],
-          ),
-        );
-      }
-    } else {
-      showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: const Text("Account not found!"),
-          content: TextButton(
-            onPressed: () => pushRegister(context),
-            child: const Text('Dont have an Account ? Sign up'),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-          ],
-        ),
-      );
-    }
   }
 
   void pushRegister(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisterView()));
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const RegisterView()),
+    );
   }
 }
