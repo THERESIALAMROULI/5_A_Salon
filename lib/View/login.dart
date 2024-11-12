@@ -173,6 +173,7 @@ class _LoginViewState extends State<LoginView> {
           MaterialPageRoute(builder: (_) => const HomeView()),
         );
       } else {
+        // masih pop up lama, working on it :>
         showDialog(
           context: context,
           builder: (_) => AlertDialog(
