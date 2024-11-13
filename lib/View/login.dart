@@ -312,21 +312,84 @@ class _LoginViewState extends State<LoginView> {
       }
     } else {
       showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: const Text("Akun Belum Dibuat!"),
-          content: TextButton(
-            onPressed: () => pushRegister(context),
-            child: const Text('Daftar Disini !!'),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-          ],
-        ),
-      );
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            Future.delayed(const Duration(seconds: 2), () {
+              Navigator.pop(context);
+            });
+
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              backgroundColor: Colors.transparent,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      height: 80,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFE0AC53),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
+                        ),
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.account_circle_outlined,
+                          size: 60,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: const Text(
+                        "No account created",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 24),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Don't have an account?",
+                            style: TextStyle(color: Color(0xFFF8F4E3)),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => const RegisterView()),
+                              );
+                            },
+                            child: const Text(
+                              "Sign Up",
+                              style: TextStyle(color: Color(0xFFE0AC53)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
     }
   }
 
