@@ -9,7 +9,7 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Profile Page',
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.black,
       ),
@@ -72,6 +72,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
+<<<<<<< Updated upstream
       body: Column(
 <<<<<<< Updated upstream
         children: [
@@ -327,11 +328,99 @@ class ProfileScreen extends StatelessWidget {
         ],
         currentIndex: 2, // Profile tab
 >>>>>>> Stashed changes
+=======
+      body: Center( 
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    height: 130,
+                    width: 400, 
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 228, 218, 128),
+                      borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 35,
+                        backgroundImage: NetworkImage(
+                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRczQ38KpzzA8jbdjlk6zMB5pdBDG4i-af5g&s',
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        'Budi Antoro',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'budi01@gmail.com | +62 812 3456 7890',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              
+              ProfileOption(icon: Icons.person, title: 'Edit Profile Information', width: 300),
+              ProfileOption(
+                icon: Icons.notifications,
+                title: 'Notifications',
+                trailing: Text(
+                  'ON',
+                  style: TextStyle(color: Colors.blue, fontSize: 10),
+                ),
+                width: 300,
+              ),
+              ProfileOption(icon: Icons.history, title: 'Transaction History', width: 300),
+              ProfileOption(icon: Icons.card_giftcard, title: 'My Voucher', width: 300),
+              ProfileOption(icon: Icons.contact_support, title: 'Contact Us', width: 300),
+              const SizedBox(height: 12),
+              
+              SizedBox(
+                width: 300, 
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(8),
+                    backgroundColor: const Color.fromARGB(255, 228, 218, 128),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text(
+                    'Logout',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+>>>>>>> Stashed changes
       ),
     );
   }
 }
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 =======
 class DisplayPictureScreen extends StatelessWidget {
@@ -353,10 +442,26 @@ class ProfileMenuContainer extends StatelessWidget {
   final List<Widget> children;
 
   const ProfileMenuContainer({Key? key, required this.children}) : super(key: key);
+=======
+class ProfileOption extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final Widget? trailing;
+  final double width;
+
+  const ProfileOption({
+    Key? key,
+    required this.icon,
+    required this.title,
+    this.trailing,
+    required this.width,
+  }) : super(key: key);
+>>>>>>> Stashed changes
 
   @override
   Widget build(BuildContext context) {
     return Container(
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       padding: const EdgeInsets.all(10),
@@ -370,10 +475,36 @@ class ProfileMenuContainer extends StatelessWidget {
       ),
       child: Column(
         children: children,
+=======
+      width: width, 
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(0, 2),
+            color: const Color.fromARGB(255, 228, 218, 128).withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 5,
+          ),
+        ],
+      ),
+      child: ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+        leading: Icon(icon, color: Colors.black, size: 18),
+        title: Text(
+          title,
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+        ),
+        trailing: trailing ?? Icon(Icons.arrow_forward_ios, color: Colors.white, size: 14),
+>>>>>>> Stashed changes
       ),
     );
   }
 }
+<<<<<<< Updated upstream
 
 class ProfileMenuItem extends StatelessWidget {
   final IconData icon;
@@ -410,3 +541,5 @@ class ProfileMenuItem extends StatelessWidget {
     );
   }
 }
+=======
+>>>>>>> Stashed changes
