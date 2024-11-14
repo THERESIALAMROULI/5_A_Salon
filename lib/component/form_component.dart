@@ -18,7 +18,6 @@ required String hintTxt, required IconData iconData, bool password = false}){
               decoration: InputDecoration(
                 hintText: hintTxt,
                 border: const OutlineInputBorder(),
-
                 prefixIcon: Icon(iconData)
               ),
         ),
