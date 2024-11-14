@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:tubesfix/View/home.dart';
 import 'package:tubesfix/View/register.dart';
 
@@ -13,6 +14,7 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
+
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -48,9 +50,11 @@ class _LoginViewState extends State<LoginView> {
                         const SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {
+
                             if (_formKey.currentState!.validate()) {
                               _login();
                             }
+
                           },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
@@ -164,14 +168,17 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void _login() {
+
     Map? dataForm = widget.data;
     if (dataForm != null) {
       if (dataForm['username'] == usernameController.text &&
           dataForm['password'] == passwordController.text) {
+
         Navigator.push(
           context,
           MaterialPageRoute(builder: (_) => const HomeView()),
         );
+
       } else if(dataForm['username'] == usernameController.text &&
           dataForm['password'] != passwordController.text) {
         showDialog(
@@ -308,10 +315,12 @@ class _LoginViewState extends State<LoginView> {
               ),
             );
           },
+
         );
       }
     } else {
       showDialog(
+
           context: context,
           barrierDismissible: false,
           builder: (BuildContext context) {
@@ -390,6 +399,8 @@ class _LoginViewState extends State<LoginView> {
             );
           },
         );
+
+
     }
   }
 
@@ -397,3 +408,4 @@ class _LoginViewState extends State<LoginView> {
     Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisterView()));
   }
 }
+

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tubesfix/View/login.dart';
 
+
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
@@ -13,6 +14,7 @@ class _RegisterViewState extends State<RegisterView> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
   TextEditingController confirmPasswordController = TextEditingController();
 
   @override
@@ -49,7 +51,9 @@ class _RegisterViewState extends State<RegisterView> {
                           decoration: _inputDecoration("Username", Icons.person),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Username tidak boleh kosong';
+
+                              return 'Username must not empty';
+
                             }
                             return null;
                           },
@@ -61,9 +65,11 @@ class _RegisterViewState extends State<RegisterView> {
                           decoration: _inputDecoration("Email", Icons.email),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Email tidak boleh kosong';
+
+                              return 'Email must not empty';
                             } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                              return 'Masukkan email yang valid';
+                              return 'Use a valid email!';
+
                             }
                             return null;
                           },
@@ -76,9 +82,11 @@ class _RegisterViewState extends State<RegisterView> {
                           obscureText: true,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Password tidak boleh kosong';
+
+                              return 'Password must not empty';
                             } else if (value.length < 6) {
-                              return 'Password harus minimal 6 karakter';
+                              return 'Password must be at least 6 character';
+
                             }
                             return null;
                           },
@@ -91,9 +99,11 @@ class _RegisterViewState extends State<RegisterView> {
                           obscureText: true,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Konfirmasi password tidak boleh kosong';
+
+                              return 'Password confiration must not be empty';
                             } else if (value != passwordController.text) {
-                              return 'Password tidak cocok';
+                              return 'Invalid passsword';
+
                             }
                             return null;
                           },
@@ -102,6 +112,7 @@ class _RegisterViewState extends State<RegisterView> {
                         ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
+
                               Map<String, dynamic> formData = {};
                               formData['username'] = usernameController.text;
                               formData['password'] = passwordController.text;
@@ -163,6 +174,7 @@ class _RegisterViewState extends State<RegisterView> {
                                   );
                                 },
                               );
+
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -204,9 +216,25 @@ class _RegisterViewState extends State<RegisterView> {
                 ),
               ),
             ],
+
           ),
-        ),
+        );
+      },
+    );
+  }
+
+
+  InputDecoration _inputDecoration(String hint, IconData icon) {
+    return InputDecoration(
+      hintText: hint,
+      hintStyle: TextStyle(color: Colors.white.withOpacity(0.75)),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(18),
+        borderSide: BorderSide.none,
       ),
+      fillColor: const Color.fromRGBO(248, 244, 227, 1).withOpacity(0.1),
+      filled: true,
+      prefixIcon: Icon(icon, color: Colors.white.withOpacity(0.75)),
     );
   }
   
