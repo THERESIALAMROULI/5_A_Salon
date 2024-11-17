@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class homeView extends StatelessWidget {
-  const homeView({super.key});
+class HomeView extends StatelessWidget {
+  const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,16 +11,34 @@ class homeView extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.black,
       ),
-      home: const homeScreen(),
+      home: const HomeScreen(),
     );
   }
 }
 
-class homeScreen extends StatelessWidget {
-  const homeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String selectedService = "All"; // Default layanan yang dipilih
+  final List<Map<String, dynamic>> barberList = [
+    {"name": "Sir Sapling the III", "services": ["Haircut"], "rating": 4.5},
+    {"name": "Sir Leaf the II", "services": ["Haircut", "Treatment"], "rating": 4.0},
+    {"name": "Sir Root the IV", "services": ["Beard", "Mustache"], "rating": 4.2},
+    {"name": "Sir Branch the IX", "services": ["Beard", "Mustache", "Coloring"], "rating": 3.8},
+  ];
 
   @override
   Widget build(BuildContext context) {
+    // Filter barber sesuai layanan yang dipilih
+    List<Map<String, dynamic>> filteredBarberList = selectedService == "All"
+        ? barberList
+        : barberList.where((barber) => barber["services"].contains(selectedService)).toList();
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Padding(
@@ -49,7 +67,7 @@ class homeScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
-                color: Colors.amber.shade200,
+                color: const Color(0xFFE0AC53),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Column(
@@ -80,6 +98,7 @@ class homeScreen extends StatelessWidget {
             Wrap(
               spacing: 10,
               children: [
+                serviceButton("All"),
                 serviceButton("Haircut"),
                 serviceButton("Treatment"),
                 serviceButton("Mustache"),
@@ -92,13 +111,12 @@ class homeScreen extends StatelessWidget {
             sectionHeader("Currently", "Available", Colors.white, Colors.amber),
             const SizedBox(height: 10),
             Expanded(
-              child: ListView(
-                children: [
-                  barberProfile("Sir Sapling the III", "Haircut", 4.5),
-                  barberProfile("Sir Leaf the II", "Haircut, Treatment", 4.0),
-                  barberProfile("Sir Root the IV", "Beard, Mustache", 4.2),
-                  barberProfile("Sir Branch the IX", "Beard, Mustache, Coloring", 3.8),
-                ],
+              child: ListView.builder(
+                itemCount: filteredBarberList.length,
+                itemBuilder: (context, index) {
+                  final barber = filteredBarberList[index];
+                  return barberProfile(barber["name"], barber["services"].join(", "), barber["rating"]);
+                },
               ),
             ),
           ],
@@ -130,16 +148,23 @@ class homeScreen extends StatelessWidget {
   }
 
   Widget serviceButton(String title) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-      decoration: BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.amber, width: 1),
-      ),
-      child: Text(
-        title,
-        style: const TextStyle(color: Colors.amber),
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedService = title;
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+        decoration: BoxDecoration(
+          color: selectedService == title ? Colors.amber : Colors.black,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.amber, width: 1),
+        ),
+        child: Text(
+          title,
+          style: TextStyle(color: selectedService == title ? Colors.black : Colors.amber),
+        ),
       ),
     );
   }
@@ -158,8 +183,7 @@ class homeScreen extends StatelessWidget {
           const CircleAvatar(
             radius: 30,
             backgroundImage: NetworkImage(
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRczQ38KpzzA8jbdjlk6zMB5pdBDG4i-af5g&s',
-                ), // Ganti dengan asset gambar barber Anda
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRczQ38KpzzA8jbdjlk6zMB5pdBDG4i-af5g&s',), // Ganti dengan asset gambar barber Anda
           ),
           const SizedBox(width: 10),
           Expanded(

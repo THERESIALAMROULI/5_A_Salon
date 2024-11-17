@@ -24,7 +24,7 @@ class _HomeViewState extends State<HomeView> {
 
 
   static const List<Widget> _widgetOptions = <Widget>[
-    homeScreen(),
+    HomeScreen(),
     ViewListScreen(),
     ProfileView(),
 
