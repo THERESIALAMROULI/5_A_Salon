@@ -24,12 +24,12 @@ class ViewListScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('ATMA BARBER', style: TextStyle(color: Colors.amber)),
+        title: const Text('ATMA BARBER', style: TextStyle(color: Color(0xFFE0AC53))),
         backgroundColor: Colors.black,
         centerTitle: false,
         titleSpacing: 0.5,
         actions: const [
-          Icon(Icons.notifications, color: Colors.amber),
+          Icon(Icons.notifications, color: Color(0xFFE0AC53)),
           SizedBox(width: 16),
         ],
       ),
@@ -43,7 +43,7 @@ class ViewListScreen extends StatelessWidget {
               child: Text(
                 'Our Service List',
                 style: TextStyle(
-                  color: Colors.amber,
+                  color: Color(0xFFE0AC53),
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -64,11 +64,11 @@ class ViewListScreen extends StatelessWidget {
               
               // kapan kapan ganti tombol deh ( mager sekarang )
             ),
-            const Divider(color: Colors.amber, thickness: 1.0, height: 32.0),
+            const Divider(color: Color(0xFFE0AC53), thickness: 1.0, height: 32.0),
             const Text(
               'Currently Available',
               style: TextStyle(
-                color: Colors.amber,
+                color: Color(0xFFE0AC53),
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -136,7 +136,7 @@ class ListItemCard extends StatelessWidget {
         elevation: 5,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),
-          side: BorderSide(color: Colors.amber.shade700, width: 1.5),
+          side: BorderSide(color: Color(0xFFE0AC53), width: 1.5),
         ),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
@@ -168,7 +168,7 @@ class ListItemCard extends StatelessWidget {
                           index < rating.floor()
                               ? Icons.star
                               : Icons.star_half,
-                          color: Colors.amber.shade700,
+                          color: Color(0xFFE0AC53),
                           size: 20,
                         );
                       }),
@@ -194,13 +194,13 @@ class ListItemCard extends StatelessWidget {
                               ),
                               decoration: BoxDecoration(
                                 color: Colors.black,
-                                border: Border.all(color: Colors.amber.shade700),
+                                border: Border.all(color: Color(0xFFE0AC53)),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
                                 tag,
                                 style: const TextStyle(
-                                  color: Colors.amber,
+                                  color: Color(0xFFE0AC53),
                                   fontSize: 12,
                                 ),
                               ),

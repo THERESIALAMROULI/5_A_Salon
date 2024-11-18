@@ -116,6 +116,7 @@ class _RegisterViewState extends State<RegisterView> {
                               Map<String, dynamic> formData = {};
                               formData['username'] = usernameController.text;
                               formData['password'] = passwordController.text;
+                              formData['email'] = emailController.text;
                               showDialog(
                                 context: context,
                                 barrierDismissible: false,
@@ -216,12 +217,10 @@ class _RegisterViewState extends State<RegisterView> {
                 ),
               ),
             ],
-
           ),
-        );
-      },
-    );
-  }
+      )));
+      }  
+  
 
 
   InputDecoration _inputDecoration(String hint, IconData icon) {
@@ -238,17 +237,5 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
   
-  InputDecoration _inputDecoration(String hint, IconData icon) {
-    return InputDecoration(
-      hintText: hint,
-      hintStyle: TextStyle(color: Colors.white.withOpacity(0.75)),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(18),
-        borderSide: BorderSide.none,
-      ),
-      fillColor: const Color.fromRGBO(248, 244, 227, 1).withOpacity(0.1),
-      filled: true,
-      prefixIcon: Icon(icon, color: Colors.white.withOpacity(0.75)),
-    );
-  }
+
 }
