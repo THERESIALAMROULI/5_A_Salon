@@ -29,20 +29,29 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
-      
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.black,
-        selectedItemColor: Color(0xFFE0AC53),
-        unselectedItemColor: const Color(0xFFE0AC53),
-        
-        items: [
-          _buildNavBarItem(icon: Icons.home, label: 'Home', index: 0),
-          _buildNavBarItem(icon: Icons.list, label: 'List', index: 1),
-          _buildNavBarItem(icon: Icons.person, label: 'Profile', index: 2),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Divider(
+            color: Color(0xFFE0AC53), 
+            thickness: 1.5, 
+            height: 1.0,
+          ),
+          BottomNavigationBar(
+            backgroundColor: Colors.black,
+            selectedItemColor: Color(0xFFE0AC53),
+            unselectedItemColor: const Color(0xFFE0AC53),
+            showSelectedLabels: false, 
+            showUnselectedLabels: false,
+            items: [
+              _buildNavBarItem(icon: Icons.home, label: 'Home', index: 0),
+              _buildNavBarItem(icon: Icons.list, label: 'List', index: 1),
+              _buildNavBarItem(icon: Icons.person, label: 'Profile', index: 2),
+            ],
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+          ),
         ],
-        
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
       ),
     );
   }
