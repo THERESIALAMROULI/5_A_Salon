@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tubesfix/View/home_view.dart';
 import 'package:tubesfix/View/view_list.dart';
 import 'package:tubesfix/View/profile.dart';
 
@@ -18,58 +19,63 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
-  static final List<Widget> _widgetOptions = <Widget>[
-    Center(
-      child: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/salon_background.jpeg'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: const Center(
-          child: Text(
-            'Selamat Datang di Atma Salon',
-            style: TextStyle(
-              fontSize: 32,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              backgroundColor: Colors.black45,
-            ),
-          ),
-        ),
-      ),
-    ),
-    const ListNamaView(),
-    const Center(
-      child: Text(
-        'Index 3: Profile',
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-      ),
-    ),
+  static const List<Widget> _widgetOptions = <Widget>[
+    homeScreen(),
+    ViewListScreen(),
+    ProfileView(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Divider(
+            color: Color(0xFFE0AC53), 
+            thickness: 1.5, 
+            height: 1.0,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'List',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+          BottomNavigationBar(
+            backgroundColor: Colors.black,
+            selectedItemColor: Color(0xFFE0AC53),
+            unselectedItemColor: const Color(0xFFE0AC53),
+            showSelectedLabels: false, 
+            showUnselectedLabels: false,
+            items: [
+              _buildNavBarItem(icon: Icons.home, label: 'Home', index: 0),
+              _buildNavBarItem(icon: Icons.list, label: 'List', index: 1),
+              _buildNavBarItem(icon: Icons.person, label: 'Profile', index: 2),
+            ],
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
           ),
         ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+      ),
+    );
+  }
+
+  BottomNavigationBarItem _buildNavBarItem({
+    required IconData icon,
+    required String label,
+    required int index,
+  }) {
+    return BottomNavigationBarItem(
+      label: label,
+      icon: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(
+            top: 0,
+            child: Container(
+              width: 40,
+              height: 3,
+              color: _selectedIndex == index ? Color(0xFFE0AC53) : Colors.transparent,
+            ),
+          ),
+          Icon(icon),
+        ],
       ),
     );
   }

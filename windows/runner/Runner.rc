@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "tubesfix" "\0"
+            VALUE "FileDescription", "guidedlayout2_1955" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "tubesfix" "\0"
+            VALUE "InternalName", "guidedlayout2_1955" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "tubesfix.exe" "\0"
-            VALUE "ProductName", "tubesfix" "\0"
+            VALUE "OriginalFilename", "guidedlayout2_1955.exe" "\0"
+            VALUE "ProductName", "guidedlayout2_1955" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
