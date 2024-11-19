@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
 import 'package:permission_handler/permission_handler.dart';
 import 'edit_profile_information.dart'; 
 
@@ -102,16 +103,19 @@ class _ProfileViewState extends State<profileView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
+
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+
               children: [
                 Stack(
                   alignment: Alignment.center,
                   children: [
+
                     Container(
                       height: 170,
                       width: double.infinity,

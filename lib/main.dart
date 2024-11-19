@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-// import 'View/login.dart';
-import 'View/profile.dart';
+
+import 'package:tubesfix/View/login.dart';
+import 'package:flutter/services.dart';
+import 'package:tubesfix/View/transaction.dart';
+import 'View/login.dart';
+
 
 void main(){
   runApp(const MainApp());
@@ -14,5 +18,5 @@ class MainApp extends StatelessWidget {
     return const MaterialApp(
       home: LoginView(),
     );
-  }
+  }    
 }
