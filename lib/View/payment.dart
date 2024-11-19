@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:tubesfix/View/eBooking.dart';
 
 class PaymentView extends StatefulWidget {
   @override
@@ -259,9 +260,10 @@ class _PaymentViewState extends State<PaymentView> {
                     ),
                   ),
                   onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Confirmation Submitted'),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EBookingView(),
                       ),
                     );
                   },
