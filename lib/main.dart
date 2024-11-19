@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:guidedlayout2_2160/View/login.dart';
+import 'package:tubesfix/View/login.dart';
 import 'package:flutter/services.dart';
+import 'package:tubesfix/View/transaction.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -16,7 +17,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: LoginView(),
+      home: transactionView(),
     );
   }
 }

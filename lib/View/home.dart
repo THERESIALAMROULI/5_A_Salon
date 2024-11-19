@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
-<<<<<<< Updated upstream
-import 'package:guidedlayout2_2160/View/view_list.dart';
-import 'package:guidedlayout2_2160/View/profile.dart';
-=======
-import 'package:tubesfix/View/transaction.dart';
 import 'package:tubesfix/View/view_list.dart';
 import 'package:tubesfix/View/profile.dart';
-import 'package:tubesfix/View/home_view.dart';
-import 'package:tubesfix/View/view_list.dart';
->>>>>>> Stashed changes
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -19,41 +11,66 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   int _selectedIndex = 0;
-  void _onItemTapped(int index){
+
+  void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
-  static const List<Widget> _widgetOptions = <Widget>[
-
+  static final List<Widget> _widgetOptions = <Widget>[
     Center(
-      child: Image(image: NetworkImage('https://picsum.photos/200/300'))
+      child: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/salon_background.jpeg'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: const Center(
+          child: Text(
+            'Selamat Datang di Atma Salon',
+            style: TextStyle(
+              fontSize: 32,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              backgroundColor: Colors.black45,
+            ),
+          ),
+        ),
       ),
-
-    ListNamaView(),
-<<<<<<< Updated upstream
-
-    ProfileScreen(),
-=======
-    profileView(),
-    transactionView(),
->>>>>>> Stashed changes
+    ),
+    const ListNamaView(),
+    const Center(
+      child: Text(
+        'Index 3: Profile',
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      ),
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home,),label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.list,),label: 'List'),
-          BottomNavigationBarItem(icon: Icon(Icons.person,),label: 'Transaction'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'List',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
-      body: _widgetOptions.elementAt(_selectedIndex),
     );
   }
 }

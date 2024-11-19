@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:guidedlayout2_2160/View/login.dart';
-import 'package:guidedlayout2_2160/component/form_component.dart';
+import 'package:tubesfix/View/login.dart';
+import 'package:tubesfix/component/form_component.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});

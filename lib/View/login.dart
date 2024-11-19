@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:guidedlayout2_2160/View/home.dart';
-import 'package:guidedlayout2_2160/View/register.dart';
-import 'package:guidedlayout2_2160/component/form_component.dart';
+import 'package:tubesfix/View/home.dart';
+import 'package:tubesfix/View/register.dart';
+import 'package:tubesfix/component/form_component.dart';
 
 
 class LoginView extends StatefulWidget {
