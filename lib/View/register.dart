@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tubesfix/View/login.dart';
 
-
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
@@ -51,7 +50,9 @@ class _RegisterViewState extends State<RegisterView> {
                           decoration: _inputDecoration("Username", Icons.person),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
+
                               return 'Username must not empty';
+
                             }
                             return null;
                           },
@@ -63,9 +64,11 @@ class _RegisterViewState extends State<RegisterView> {
                           decoration: _inputDecoration("Email", Icons.email),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
+
                               return 'Email must not empty';
                             } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
                               return 'Use a valid email!';
+
                             }
                             return null;
                           },
@@ -78,9 +81,11 @@ class _RegisterViewState extends State<RegisterView> {
                           obscureText: true,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
+
                               return 'Password must not empty';
                             } else if (value.length < 6) {
                               return 'Password must be at least 6 character';
+
                             }
                             return null;
                           },
@@ -93,9 +98,11 @@ class _RegisterViewState extends State<RegisterView> {
                           obscureText: true,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
+
                               return 'Password confiration must not be empty';
                             } else if (value != passwordController.text) {
                               return 'Invalid passsword';
+
                             }
                             return null;
                           },
@@ -104,7 +111,70 @@ class _RegisterViewState extends State<RegisterView> {
                         ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              _showAccountCreatedDialog();
+
+                              Map<String, dynamic> formData = {};
+                              formData['username'] = usernameController.text;
+                              formData['password'] = passwordController.text;
+                              formData['email'] = emailController.text;
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  Future.delayed(const Duration(seconds: 2), () {
+                                    Navigator.pop(context); 
+                                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext buildContext) => LoginView(data: formData,)));;
+                                  });
+
+                                  return Dialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15), 
+                                    ),
+                                    backgroundColor: Colors.transparent,
+                                    child: Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                            width: double.infinity,
+                                            height: 80,
+                                            decoration: const BoxDecoration(
+                                              color: Color(0xFFE0AC53),
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(15),
+                                                topRight: Radius.circular(15),
+                                              ),
+                                            ),
+                                            child: const Center(
+                                              child: Icon(
+                                                Icons.check_circle_outline,
+                                                size: 60,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: const EdgeInsets.all(16),
+                                            child: const Text(
+                                              "Account Created",
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -147,74 +217,9 @@ class _RegisterViewState extends State<RegisterView> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  void _showAccountCreatedDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        Future.delayed(const Duration(seconds: 3), () {
-          Navigator.pop(context); 
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const LoginView()),
-          );
-        });
-
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15), 
-          ),
-          backgroundColor: Colors.transparent,
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 80,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFE0AC53),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
-                    ),
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.check_circle_outline,
-                      size: 60,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  child: const Text(
-                    "Account Created",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+      )));
+      }  
+  
 
 
   InputDecoration _inputDecoration(String hint, IconData icon) {
@@ -230,4 +235,7 @@ class _RegisterViewState extends State<RegisterView> {
       prefixIcon: Icon(icon, color: Colors.white.withOpacity(0.75)),
     );
   }
+  
+
 }
+
