@@ -4,7 +4,7 @@ publish_to: 'none'
 version: 0.1.0
 
 environment:
-  sdk: ^3.5.3
+  sdk: ^3.5.1
 
 dependencies:
   flutter:
@@ -27,7 +27,4 @@ flutter:
     - assets/images/
   uses-material-design: true
 
-  assets:
-    - assets/image1.jpeg
-    - goto/rect.jpg
 

@@ -6,7 +6,7 @@ class transactionView extends StatelessWidget {
   final Map? data;
 
   const transactionView({super.key, this.data});
-
+  
   @override
   Widget build(BuildContext context) {
     String username = data?['username'] ?? 'Guest';
