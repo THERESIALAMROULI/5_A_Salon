@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tubesfix/View/home_view.dart';
 import 'package:tubesfix/View/view_list.dart';
 import 'package:tubesfix/View/profile.dart';
+import 'package:tubesfix/View/transaction.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final Map? data;
+
+  const HomeView({super.key, this.data});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -19,14 +22,14 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    homeScreen(),
-    ViewListScreen(),
-    ProfileView(),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _widgetOptions = <Widget>[
+      homeView(data: widget.data),
+      ViewListScreen(), 
+      transactionView(data: widget.data), 
+    ];
+
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: Column(

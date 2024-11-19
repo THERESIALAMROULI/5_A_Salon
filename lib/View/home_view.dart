@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class homeView extends StatelessWidget {
-  const homeView({super.key});
+  final Map? data;
+
+  const homeView({super.key, this.data});
 
   @override
   Widget build(BuildContext context) {
