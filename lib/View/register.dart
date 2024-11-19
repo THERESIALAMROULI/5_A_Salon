@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tubesfix/View/login.dart';
 
-
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
@@ -239,3 +238,4 @@ class _RegisterViewState extends State<RegisterView> {
   
 
 }
+

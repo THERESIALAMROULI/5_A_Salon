@@ -1,4 +1,3 @@
-
 import 'dart:math';
 import 'package:flutter/material.dart';
 
@@ -336,4 +335,3 @@ List<String> getRandomTags() {
   
   return selectedTags.toList();
 }
-

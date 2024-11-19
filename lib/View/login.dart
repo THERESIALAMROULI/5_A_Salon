@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:tubesfix/View/home.dart';
 import 'package:tubesfix/View/register.dart';
+
 
 class LoginView extends StatefulWidget {
   final Map? data;
@@ -408,4 +408,3 @@ class _LoginViewState extends State<LoginView> {
     Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisterView()));
   }
 }
-
