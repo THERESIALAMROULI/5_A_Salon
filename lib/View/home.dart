@@ -31,7 +31,7 @@ class _HomeViewState extends State<HomeView> {
     final List<Widget> _widgetOptions = <Widget>[
       homeView(data: widget.data),
       ViewListScreen(), 
-      transactionView(data: widget.data), 
+      profileView(data: widget.data), 
     ];
 
     return Scaffold(

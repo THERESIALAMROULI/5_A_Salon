@@ -9,7 +9,7 @@ class transactionView extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    String username = data?['username'] ?? 'Guest';
+    String name = data?['name'] ?? 'Guest';
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -48,7 +48,7 @@ class transactionView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Hi $username!',
+                          'Hi $name!',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
