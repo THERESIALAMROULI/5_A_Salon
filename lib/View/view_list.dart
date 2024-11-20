@@ -167,6 +167,7 @@ class ViewListScreen extends StatelessWidget {
                 itemCount: names.length, 
                 itemBuilder: (context, i) {
                   return ListItemCard(
+                    
                     name: names[i],
                     imageUrl: imageUrls[i], 
                     tags: getRandomTags(),
@@ -226,6 +227,7 @@ class ListItemCard extends StatelessWidget {
       width: double.infinity,
       height: 160,
       child: Card(
+        
         color: Colors.black,
         elevation: 5,
         shape: RoundedRectangleBorder(

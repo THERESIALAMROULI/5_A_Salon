@@ -9,6 +9,7 @@ class HomeView extends StatefulWidget {
 
   const HomeView({super.key, this.data});
 
+
   @override
   State<HomeView> createState() => _HomeViewState();
 }
@@ -16,11 +17,14 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   int _selectedIndex = 0;
 
+
   void _onItemTapped(int index) {
+
     setState(() {
       _selectedIndex = index;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -83,3 +87,4 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 }
+
