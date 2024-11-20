@@ -104,12 +104,19 @@ class _ProfileViewState extends State<profileView> {
               _email = newEmail;
               _phone = newPhone;
               _username = newUsername;
+              if (widget.data != null) {
+                widget.data!['name'] = newName;
+                widget.data!['email'] = newEmail;
+                widget.data!['phone'] = newPhone;
+                widget.data!['username'] = newUsername;
+              }
             });
           },
         ),
       ),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
