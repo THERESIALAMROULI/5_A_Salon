@@ -9,11 +9,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   image_picker: ^0.8.7+5
   permission_handler: ^10.0.0
   camera: ^0.10.0+2
-
+  image_picker: ^0.8.5+3
+  qr_flutter: ^4.1.0
 
 
 dev_dependencies:
