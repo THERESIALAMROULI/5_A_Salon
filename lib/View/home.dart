@@ -3,6 +3,8 @@ import 'package:tubesfix/View/home_view.dart';
 import 'package:tubesfix/View/view_list.dart';
 import 'package:tubesfix/View/profile.dart';
 import 'package:tubesfix/View/transaction.dart';
+import 'package:tubesfix/View/paymentMethod.dart';
+
 
 class HomeView extends StatefulWidget {
   final Map? data;
@@ -24,7 +26,6 @@ class _HomeViewState extends State<HomeView> {
       _selectedIndex = index;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
