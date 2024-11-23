@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:tubesfix/View/eBooking.dart';
 
 class PaymentView extends StatefulWidget {
+  final int total; 
+
+  const PaymentView({Key? key, required this.total}) : super(key: key);
+
   @override
   _PaymentViewState createState() => _PaymentViewState();
 }
@@ -70,7 +74,7 @@ class _PaymentViewState extends State<PaymentView> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 16),
                 Card(
@@ -87,11 +91,11 @@ class _PaymentViewState extends State<PaymentView> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Total payment',
+                              'Total Payment',
                               style: TextStyle(color: Colors.white, fontSize: 16),
                             ),
                             Text(
-                              'Rp. 112.000',
+                              'Rp. ${widget.total}', 
                               style: TextStyle(
                                 color: Color(0xFFE0AC53),
                                 fontWeight: FontWeight.bold,
@@ -137,7 +141,7 @@ class _PaymentViewState extends State<PaymentView> {
                           children: [
                             Image.asset(
                               'assets/images/icon_bri.png',
-                              width: 70, 
+                              width: 70,
                             ),
                             const SizedBox(width: 8),
                             Text(
@@ -150,7 +154,6 @@ class _PaymentViewState extends State<PaymentView> {
                           ],
                         ),
                         const Divider(color: Color(0xFFE0AC53)),
-                        const SizedBox(height: 8),
                         Padding(
                           padding: const EdgeInsets.only(left: 16.0),
                           child: Column(
@@ -202,7 +205,7 @@ class _PaymentViewState extends State<PaymentView> {
                             children: [
                               const SizedBox(height: 8),
                               Text(
-                                'The verification process takes less than 10 minutes after successful payment',
+                                'The verification process takes less than 10 minutes after successful payment.',
                                 style: TextStyle(
                                   color: Colors.grey,
                                   fontSize: 12,
@@ -211,7 +214,7 @@ class _PaymentViewState extends State<PaymentView> {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                'Pay the order to the Virtual Account above before making another order with the virtual account so that the number remains the same.',
+                                'Pay the order to the Virtual Account above before making another order with the same account number to ensure consistency.',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 12,
@@ -230,7 +233,6 @@ class _PaymentViewState extends State<PaymentView> {
                             ],
                           ),
                         ),
-                        // dropdownnya intruksinya belum bang :>
                         const SizedBox(height: 16),
                         _buildInstructionButton(
                           context,
@@ -253,7 +255,7 @@ class _PaymentViewState extends State<PaymentView> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFE0AC53),
+                    backgroundColor: const Color(0xFFE0AC53),
                     minimumSize: const Size.fromHeight(50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -263,7 +265,7 @@ class _PaymentViewState extends State<PaymentView> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EBookingView(),
+                        builder: (context) => EBookingView(total: widget.total), // Kirim total harga
                       ),
                     );
                   },
@@ -288,8 +290,8 @@ class _PaymentViewState extends State<PaymentView> {
   Widget _buildInstructionButton(BuildContext context, String text) {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
-        backgroundColor: Color(0xFFE0AC53),
-        side: BorderSide(color: Color(0xFFE0AC53)),
+        backgroundColor: const Color(0xFFE0AC53),
+        side: const BorderSide(color: Color(0xFFE0AC53)),
         padding: const EdgeInsets.symmetric(vertical: 16),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
@@ -299,14 +301,14 @@ class _PaymentViewState extends State<PaymentView> {
       child: Row(
         children: [
           const SizedBox(width: 16),
-          Icon(
+          const Icon(
             Icons.keyboard_arrow_down,
             color: Colors.black,
           ),
           const SizedBox(width: 16),
           Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontSize: 14,
               fontWeight: FontWeight.bold,

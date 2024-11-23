@@ -6,10 +6,13 @@ class transactionView extends StatelessWidget {
   final Map? data;
 
   const transactionView({super.key, this.data});
-  
+
   @override
   Widget build(BuildContext context) {
     String name = data?['name'] ?? 'Guest';
+    List services = data?['prices'] ?? [];
+    int total = data?['total'] ?? 0;
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -18,10 +21,12 @@ class transactionView extends StatelessWidget {
           backgroundColor: Colors.black,
           elevation: 0,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Color(0xFFE0AC53)),
-            onPressed: () {},
+            icon: const Icon(Icons.arrow_back, color: Color(0xFFE0AC53)),
+            onPressed: () {
+              Navigator.pop(context); 
+            },
           ),
-          title: Text(
+          title: const Text(
             'Transaction',
             style: TextStyle(
               color: Color(0xFFE0AC53),
@@ -49,22 +54,22 @@ class transactionView extends StatelessWidget {
                       children: [
                         Text(
                           'Hi $name!',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: 4),
-                        Text(
+                        const Text(
                           "Let's complete the transaction",
-                          style: TextStyle(color: Colors.grey[400]),
+                          style: TextStyle(color: Colors.grey),
                         ),
                         const SizedBox(height: 16),
                         Row(
-                          children: [
+                          children: const [
                             Icon(Icons.list_alt, color: Color(0xFFE0AC53)),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8),
                             Text(
                               'Transaction List',
                               style: TextStyle(
@@ -76,37 +81,34 @@ class transactionView extends StatelessWidget {
                           ],
                         ),
                         const Divider(color: Color(0xFFE0AC53)),
-                        const TransactionListItem(
-                          name: 'Haircut',
-                          quantity: 1,
-                          price: 70000,
-                        ),
-                        const TransactionListItem(
-                          name: 'Treatment',
-                          quantity: 1,
-                          price: 90000,
-                        ),
-                        const TransactionListItem(
-                          name: 'Voucher',
-                          quantity: 1,
-                          price: -48000,
-                        ),
+                        ...services.map((service) {
+                          return TransactionListItem(
+                            name: service['name'],
+                            quantity: 1,
+                            price: service['price'],
+                          );
+                        }).toList(),
+
                         const Divider(color: Color(0xFFE0AC53)),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('SubTotal',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                              Text('Rp. 112.000',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  )),
+                              const Text(
+                                'SubTotal',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'Rp. $total',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -121,7 +123,7 @@ class transactionView extends StatelessWidget {
                 const SizedBox(height: 24),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFE0AC53),
+                    backgroundColor: const Color(0xFFE0AC53),
                     minimumSize: const Size.fromHeight(50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -130,7 +132,11 @@ class transactionView extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => PaymentView()),
+                      MaterialPageRoute(
+                        builder: (context) => PaymentView(
+                          total: total,
+                        ),
+                      ),
                     );
                   },
                   child: const Text(
@@ -174,10 +180,9 @@ class TransactionListItem extends StatelessWidget {
             flex: 2,
             child: Text(
               name,
-              style: TextStyle(color: Colors.white, fontSize: 14),
+              style: const TextStyle(color: Colors.white, fontSize: 14),
             ),
           ),
-
           Expanded(
             flex: 1,
             child: Center(
@@ -189,18 +194,17 @@ class TransactionListItem extends StatelessWidget {
                 ),
                 child: Text(
                   '× $quantity',
-                  style: TextStyle(color: Colors.white, fontSize: 14),
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
                 ),
               ),
             ),
           ),
-
           Expanded(
             flex: 2,
             child: Text(
-              '${price < 0 ? '-' : ''}Rp. ${price.abs()}',
+              'Rp. ${price.toStringAsFixed(0)}',
               textAlign: TextAlign.right,
-              style: TextStyle(color: Colors.white, fontSize: 14),
+              style: const TextStyle(color: Colors.white, fontSize: 14),
             ),
           ),
         ],
@@ -208,6 +212,7 @@ class TransactionListItem extends StatelessWidget {
     );
   }
 }
+
 class PaymentMethodSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
