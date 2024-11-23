@@ -79,23 +79,50 @@ class _LoginViewState extends State<LoginView> {
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 24),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Column(
                   children: [
-                    const Text(
-                      "Don't have an account?",
-                      style: TextStyle(color: Color(0xFFF8F4E3)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "don't have an account? ",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => const RegisterView()),
+                            );
+                          },
+                          child: const Text(
+                            "Sign up",
+                            style: TextStyle(
+                              color: Color(0xFFE0AC53),
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     TextButton(
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const RegisterView()),
+                          MaterialPageRoute(
+                            builder: (_) => HomeView(data: {'username': 'Guest'}),
+                          ),
                         );
                       },
                       child: const Text(
-                        "Sign Up",
-                        style: TextStyle(color: Color(0xFFE0AC53)),
+                        "Enter as guest",
+                        style: TextStyle(
+                          color: Color(0xFFE0AC53),
+                          fontSize: 14,
+                        ),
                       ),
                     ),
                   ],
@@ -176,7 +203,9 @@ class _LoginViewState extends State<LoginView> {
 
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => const HomeView()),
+          MaterialPageRoute(
+            builder: (_) => HomeView(data: dataForm), 
+          ),
         );
 
       } else if(dataForm['username'] == usernameController.text &&

@@ -5,8 +5,12 @@ import 'package:tubesfix/View/profile.dart';
 import 'package:tubesfix/View/transaction.dart';
 import 'package:tubesfix/View/paymentMethod.dart';
 
+
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final Map? data;
+
+  const HomeView({super.key, this.data});
+
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -15,20 +19,22 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   int _selectedIndex = 0;
 
+
   void _onItemTapped(int index) {
+
     setState(() {
       _selectedIndex = index;
     });
   }
 
-  static List<Widget> _widgetOptions = <Widget>[
-    const homeScreen(),
-    const ViewListScreen(),
-    PaymentMethodScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _widgetOptions = <Widget>[
+      homeView(data: widget.data),
+      ViewListScreen(), 
+      profileView(data: widget.data), 
+    ];
+
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: Column(
@@ -82,3 +88,4 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 }
+

@@ -10,8 +10,10 @@ class RegisterView extends StatefulWidget {
 
 class _RegisterViewState extends State<RegisterView> {
   final _formKey = GlobalKey<FormState>();
+  TextEditingController namaController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController noTeleponController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   TextEditingController confirmPasswordController = TextEditingController();
@@ -45,9 +47,23 @@ class _RegisterViewState extends State<RegisterView> {
                         ),
                         const SizedBox(height: 20),
                         TextFormField(
+                          controller: namaController,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: _inputDecoration("Name", Icons.person),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+
+                              return 'Name must not empty';
+
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        TextFormField(
                           controller: usernameController,
                           style: const TextStyle(color: Colors.white),
-                          decoration: _inputDecoration("Username", Icons.person),
+                          decoration: _inputDecoration("Username", Icons.people_alt),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
 
@@ -68,6 +84,20 @@ class _RegisterViewState extends State<RegisterView> {
                               return 'Email must not empty';
                             } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
                               return 'Use a valid email!';
+
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          controller: noTeleponController,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: _inputDecoration("Phone Number", Icons.phone),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+
+                              return 'Phone Number must not empty';
 
                             }
                             return null;
@@ -113,9 +143,11 @@ class _RegisterViewState extends State<RegisterView> {
                             if (_formKey.currentState!.validate()) {
 
                               Map<String, dynamic> formData = {};
+                              formData['name'] = namaController.text;
                               formData['username'] = usernameController.text;
                               formData['password'] = passwordController.text;
                               formData['email'] = emailController.text;
+                              formData['phone'] = noTeleponController.text;
                               showDialog(
                                 context: context,
                                 barrierDismissible: false,
