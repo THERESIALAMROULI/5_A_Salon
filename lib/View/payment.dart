@@ -6,12 +6,16 @@ class PaymentView extends StatefulWidget {
   final int total;
   final String bankName; 
   final String bankIcon;
+  final Map dataformat;
+  final Map data;
 
   const PaymentView({
     Key? key,
     required this.total,
     required this.bankName,
     required this.bankIcon,
+    required this.dataformat,
+    required this.data
   }) : super(key: key);
 
   @override
@@ -21,11 +25,13 @@ class PaymentView extends StatefulWidget {
 class _PaymentViewState extends State<PaymentView> {
   late Timer _timer;
   Duration _timeRemaining = Duration(hours: 23, minutes: 59, seconds: 59);
-
+  late Map? data;
+  
   @override
   void initState() {
     super.initState();
     _startCountdownTimer();
+    data = widget.data;
   }
 
   @override
@@ -272,7 +278,7 @@ class _PaymentViewState extends State<PaymentView> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EBookingView(total: widget.total), 
+                        builder: (context) => EBookingView(total: widget.total, dataformat: widget.dataformat, data: widget.data,), 
                       ),
                     );
                   },

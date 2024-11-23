@@ -13,6 +13,8 @@ dependencies:
   permission_handler: ^10.0.0
   camera: ^0.10.0+2
   qr_flutter: ^4.1.0
+  pdf: ^3.10.4
+  printing: ^5.11.0
 
 
 dev_dependencies:
@@ -34,3 +36,4 @@ flutter:
     - assets/images/icon_ovo.png
     - assets/images/icon_gopay.png
   uses-material-design: true
+  

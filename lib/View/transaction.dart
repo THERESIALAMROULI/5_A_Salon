@@ -3,13 +3,13 @@ import 'package:tubesfix/View/payment.dart';
 import 'package:tubesfix/View/paymentMethod.dart';
 
 class TransactionListItem extends StatelessWidget {
-  final String name;
+  final String nama;
   final int quantity;
   final int price;
 
   const TransactionListItem({
     super.key,
-    required this.name,
+    required this.nama,
     required this.quantity,
     required this.price,
   });
@@ -23,7 +23,7 @@ class TransactionListItem extends StatelessWidget {
           Expanded(
             flex: 2,
             child: Text(
-              name,
+              nama,
               style: const TextStyle(color: Colors.white, fontSize: 14),
             ),
           ),
@@ -58,15 +58,17 @@ class TransactionListItem extends StatelessWidget {
 }
 
 class transactionView extends StatefulWidget {
-  final Map? data;
+  final Map dataformat;
+  final Map data;
 
-  const transactionView({super.key, this.data});
+  const transactionView({super.key, required this.dataformat, required this.data});
 
   @override
   _transactionViewState createState() => _transactionViewState();
 }
 
 class _transactionViewState extends State<transactionView> {
+
   String selectedPaymentMethod = "Bank Rakyat Indonesia"; 
   String selectedPaymentIcon = "assets/images/icon_bri.png"; 
 
@@ -85,9 +87,9 @@ class _transactionViewState extends State<transactionView> {
 
   @override
   Widget build(BuildContext context) {
-    String name = widget.data?['name'] ?? 'Guest';
-    List services = widget.data?['prices'] ?? [];
-    int total = widget.data?['total'] ?? 0;
+    String name = widget.dataformat['nama'] ?? 'Guest';
+    List services = widget.dataformat['prices'] ?? [];
+    int total = widget.dataformat['total'] ?? 0;
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -159,7 +161,7 @@ class _transactionViewState extends State<transactionView> {
                         const Divider(color: Color(0xFFE0AC53)),
                         ...services.map((service) {
                           return TransactionListItem(
-                            name: service['name'],
+                            nama: service['name'],
                             quantity: 1,
                             price: service['price'],
                           );
@@ -311,6 +313,8 @@ class _transactionViewState extends State<transactionView> {
                           total: total,
                           bankName: selectedPaymentMethod, 
                           bankIcon: selectedPaymentIcon,
+                          dataformat: widget.dataformat,
+                          data: widget.data,
                         ),
                       ),
                     );

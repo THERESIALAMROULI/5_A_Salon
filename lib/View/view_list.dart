@@ -2,22 +2,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:tubesfix/View/selectService.dart';
 
-class ViewList extends StatelessWidget {
-  const ViewList({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.black,
-      ),
-      home: const ViewListScreen(),
-    );
-  }
-}
 
 class ViewListScreen extends StatefulWidget {
-  const ViewListScreen({Key? key}) : super(key: key);
+  final Map data;
+  
+  const ViewListScreen({super.key, required this.data});
 
   @override
   _ViewListScreenState createState() => _ViewListScreenState();
@@ -144,15 +133,12 @@ class _ViewListScreenState extends State<ViewListScreen> {
                 padding: const EdgeInsets.only(bottom: 16),
                 itemCount: names.length,
                 itemBuilder: (context, i) {
-                  if (selectedTags.isNotEmpty &&
-                      !selectedTags.every((tag) => barberTags[i].contains(tag))) {
-                    return const SizedBox.shrink();
-                  }
                   return ListItemCard(
                     name: names[i],
                     imageUrl: imageUrls[i],
                     tags: barberTags[i],
                     rating: 4.5,
+                    data: widget.data,
                   );
                 },
               ),
@@ -230,6 +216,7 @@ class ListItemCard extends StatelessWidget {
   final String imageUrl;
   final List<String> tags;
   final double rating;
+  final Map data;
 
   const ListItemCard({
     Key? key,
@@ -237,6 +224,7 @@ class ListItemCard extends StatelessWidget {
     required this.imageUrl,
     required this.tags,
     required this.rating,
+    required this.data
   }) : super(key: key);
 
   @override
@@ -250,6 +238,7 @@ class ListItemCard extends StatelessWidget {
               barberName: name,
               barberImage: imageUrl,
               barberTags: tags,
+              data: data,
             ),
           ),
         );
@@ -349,7 +338,6 @@ class ListItemCard extends StatelessWidget {
     );
   }
 }
-
 
 // i know im so fking good // :>
 List<String> getRandomTags() {

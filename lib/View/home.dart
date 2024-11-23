@@ -7,9 +7,9 @@ import 'package:tubesfix/View/paymentMethod.dart';
 
 
 class HomeView extends StatefulWidget {
-  final Map? data;
+  final Map data;
 
-  const HomeView({super.key, this.data});
+  const HomeView({super.key, required this.data});
 
 
   @override
@@ -31,7 +31,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     final List<Widget> _widgetOptions = <Widget>[
       homeView(data: widget.data),
-      ViewListScreen(), 
+      ViewListScreen(data: widget.data), 
       profileView(data: widget.data), 
     ];
 

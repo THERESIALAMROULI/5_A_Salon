@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:tubesfix/View/pdfViewer.dart';
 
 class CouponEdge extends CustomClipper<Path> {
   @override
@@ -26,8 +27,10 @@ class CouponEdge extends CustomClipper<Path> {
 
 class EBookingView extends StatelessWidget {
   final int total;
+  final Map dataformat;
+  final Map data;
 
-  const EBookingView({Key? key, required this.total}) : super(key: key);
+  const EBookingView({Key? key, required this.total, required this.dataformat, required this.data}) : super(key: key);
 
   String _generateOrderNumber() {
     final random = Random();
@@ -221,6 +224,22 @@ class EBookingView extends StatelessWidget {
                       icon: Icons.print,
                       label: 'Print',
                       onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PdfViewerPage(
+                              bookingID: bookingID,
+                              name: dataformat["nama"], 
+                              email: data['email'],
+                              phoneNumber: data['phone'], 
+                              total: total,
+                              date: "20 Sept 2024", 
+                              publicationDate: "16 Sept 2024", 
+                              services: dataformat['servicesPdf'],
+                              data: data,
+                            ),
+                          ),
+                        );
                       },
                     ),
                   ],

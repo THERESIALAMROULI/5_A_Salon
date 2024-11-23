@@ -5,12 +5,14 @@ class SelectServiceScreen extends StatefulWidget {
   final String barberName;
   final String barberImage;
   final List<String> barberTags;
+  final Map data;
 
   const SelectServiceScreen({
     Key? key,
     required this.barberName,
     required this.barberImage,
     required this.barberTags,
+    required this.data
   }) : super(key: key);
 
   @override
@@ -355,14 +357,19 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => transactionView(
-                                data: {
-                                  'name': namaController.text,
+                                dataformat: {
+                                  'nama': namaController.text,
                                   'services': selectedServices,
+                                  'servicesPdf': selectedServices
+                                    .where((service) => services.containsKey(service)) 
+                                    .map((service) => {'name': service, 'quantity': 1}) 
+                                    .toList(),
                                   'prices': selectedServices
                                       .map((service) => {'name': service, 'price': services[service]!})
                                       .toList(),
                                   'total': selectedTotal,
                                 },
+                                data: widget.data,
                               ),
                             ),
                           );
