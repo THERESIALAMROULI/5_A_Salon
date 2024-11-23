@@ -1,151 +1,164 @@
 import 'package:flutter/material.dart';
 
-// Halaman utama untuk Payment Method
-class PaymentMethodScreen extends StatelessWidget {
+class PaymentMethodScreen extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    print("PaymentMethodScreen loaded");
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: PaymentMethodPage(),
-    );
-  }
+  _PaymentMethodScreenState createState() => _PaymentMethodScreenState();
 }
 
-// Widget utama untuk menampilkan halaman pembayaran
-class PaymentMethodPage extends StatelessWidget {
+class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
+  String? selectedPaymentMethod; 
+
   @override
   Widget build(BuildContext context) {
+    final paymentOptions = [
+      {"icon": "assets/images/icon_bri.png", "label": "Bank Rakyat Indonesia"},
+      {"icon": "assets/images/icon_bni.png", "label": "Bank Negara Indonesia"},
+      {"icon": "assets/images/icon_bca.png", "label": "Bank Central Asia"},
+      {"icon": "assets/images/icon_mandiri.png", "label": "Bank Mandiri"},
+      {"icon": "assets/images/icon_bsi.png", "label": "Bank Syariah Indonesia"},
+      {"icon": "assets/images/icon_bankpapua.png", "label": "Bank Papua"}, 
+      {"icon": "assets/images/icon_bpd.png", "label": "Bank BPD DIY"},
+      {"icon": "assets/images/icon_dana.png", "label": "DANA"},
+      {"icon": "assets/images/icon_ovo.png", "label": "OVO"},
+      {"icon": "assets/images/icon_gopay.png", "label": "Gopay"},
+    ];
+
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFFE0AC53)),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text(
+          "Payment Method",
+          style: TextStyle(
+            color: Color(0xFFE0AC53),
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Judul Halaman
-                    Text(
-                      "Payment Method",
-                      style: TextStyle(
-                        color: Color(0xFFE0AC53),
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 16),
-
-                    // Virtual Account Section
-                    _buildSectionTitle("Virtual Account"),
-                    SizedBox(height: 8),
-                    _buildPaymentOptions(context, isVirtualAccount: true),
-
-                    SizedBox(height: 16),
-
-                    // E-Wallet Section
-                    _buildSectionTitle("E-Wallet"),
-                    SizedBox(height: 8),
-                    _buildPaymentOptions(context, isVirtualAccount: false),
+                    _buildSectionHeader("Virtual Account", Icons.swap_horiz),
+                    const SizedBox(height: 8),
+                    ...paymentOptions.sublist(0, 7).map((option) => _buildPaymentOption(
+                          iconPath: option['icon']!,
+                          label: option['label']!,
+                        )), 
+                    const Divider(color: Color(0xFFE0AC53), thickness: 1),
+                    const SizedBox(height: 8),
+                    _buildSectionHeader("E-Wallet", Icons.account_balance_wallet),
+                    const SizedBox(height: 8),
+                    ...paymentOptions.sublist(7).map((option) => _buildPaymentOption(
+                          iconPath: option['icon']!,
+                          label: option['label']!,
+                        )),
                   ],
                 ),
               ),
             ),
-          ),
 
-          // Tombol Select Payment di bagian bawah
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: _buildSelectPaymentButton(),
-          ),
-        ],
+            ElevatedButton(
+              onPressed: () {
+                if (selectedPaymentMethod != null) {
+                  Navigator.pop(context, selectedPaymentMethod); 
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        "Please select a payment method!",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFE0AC53),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                minimumSize: const Size(double.infinity, 50),
+              ),
+              child: const Text(
+                "Select Payment",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  // Fungsi untuk membuat judul section
-  Widget _buildSectionTitle(String title) {
-    return Text(
-      title,
-      style: TextStyle(color: Colors.white, fontSize: 18),
-    );
-  }
-
-  // Fungsi untuk membuat daftar opsi pembayaran
-  Widget _buildPaymentOptions(BuildContext context, {required bool isVirtualAccount}) {
-    final options = isVirtualAccount
-        ? [
-            {"icon": "assets/images/icon_bri.png", "label": "Bank Rakyat Indonesia"},
-            {"icon": "assets/images/icon_bni.png", "label": "Bank Negara Indonesia"},
-            {"icon": "assets/images/icon_bca.png", "label": "Bank Central Asia"},
-            {"icon": "assets/images/icon_mandiri.png", "label": "Bank Mandiri"},
-            {"icon": "assets/images/icon_bsi.png", "label": "Bank Syariah Indonesia"},
-            {"icon": "assets/images/icon_bankpapua.png", "label": "Bank Papua"},
-          ]
-        : [
-            {"icon": "assets/images/icon_dana.png", "label": "DANA Rp. 23,000"},
-            {"icon": "assets/images/icon_ovo.png", "label": "OVO Rp. 45,000"},
-            {"icon": "assets/images/icon_gopay.png", "label": "Gopay Tautkan"},
-          ];
-
-    return Column(
-      children: options
-          .map((option) => _buildPaymentOptionRow(
-                context,
-                iconPath: option['icon']!,
-                label: option['label']!,
-              ))
-          .toList(),
-    );
-  }
-
-  // Fungsi untuk membuat baris opsi pembayaran
-  Widget _buildPaymentOptionRow(BuildContext context, {required String iconPath, required String label}) {
+  Widget _buildSectionHeader(String title, IconData icon) {
     return Row(
       children: [
-        Image.asset(iconPath, width: 36, height: 36), // Ukuran ikon
-        SizedBox(width: 12),
-        Expanded(
-          child: Text(
-            label,
-            style: TextStyle(color: Colors.white),
+        Icon(icon, color: const Color(0xFFE0AC53)),
+        const SizedBox(width: 8),
+        Text(
+          title,
+          style: const TextStyle(
+            color: Color(0xFFE0AC53),
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
           ),
-        ),
-        Radio(
-          value: label,
-          groupValue: null, // Placeholder untuk state management
-          onChanged: (value) {},
-          activeColor: Color(0xFFE0AC53),
         ),
       ],
     );
   }
 
-  // Fungsi untuk membuat tombol Select Payment
-  Widget _buildSelectPaymentButton() {
-    return ElevatedButton(
-      onPressed: () {}, // Fungsi untuk melanjutkan pembayaran
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFFE0AC53),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+  Widget _buildPaymentOption({required String iconPath, required String label}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    child: Row(
+      children: [
+        Image.asset(
+          iconPath,
+          width: 36,
+          height: 36,
         ),
-        minimumSize: Size(double.infinity, 50),
-      ),
-      child: Text(
-        "Select Payment",
-        style: TextStyle(color: Colors.black, fontSize: 16),
-      ),
-    );
-  }
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            label,
+            style: const TextStyle(color: Colors.white, fontSize: 14),
+          ),
+        ),
+        Radio<String>(
+          value: label,
+          groupValue: selectedPaymentMethod,
+          onChanged: (value) {
+            setState(() {
+              selectedPaymentMethod = value; 
+              print("Selected Payment Method: $selectedPaymentMethod"); 
+            });
+          },
+          activeColor: const Color(0xFFE0AC53),
+        ),
+      ],
+    ),
+  );
 }
 
-// Fungsi utama aplikasi
-void main() {
-  runApp(MaterialApp(
-    home: PaymentMethodScreen(),
-    debugShowCheckedModeBanner: false,
-  ));
+
+
 }

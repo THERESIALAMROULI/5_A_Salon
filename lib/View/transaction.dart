@@ -1,17 +1,93 @@
 import 'package:flutter/material.dart';
 import 'package:tubesfix/View/payment.dart';
+import 'package:tubesfix/View/paymentMethod.dart';
 
+class TransactionListItem extends StatelessWidget {
+  final String name;
+  final int quantity;
+  final int price;
 
-class transactionView extends StatelessWidget {
+  const TransactionListItem({
+    super.key,
+    required this.name,
+    required this.quantity,
+    required this.price,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child: Text(
+              name,
+              style: const TextStyle(color: Colors.white, fontSize: 14),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.grey[800],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  '× $quantity',
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Text(
+              'Rp. ${price.toStringAsFixed(0)}',
+              textAlign: TextAlign.right,
+              style: const TextStyle(color: Colors.white, fontSize: 14),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class transactionView extends StatefulWidget {
   final Map? data;
 
   const transactionView({super.key, this.data});
 
   @override
+  _transactionViewState createState() => _transactionViewState();
+}
+
+class _transactionViewState extends State<transactionView> {
+  String selectedPaymentMethod = "Bank Rakyat Indonesia"; 
+  String selectedPaymentIcon = "assets/images/icon_bri.png"; 
+
+  final paymentOptions = {
+    "Bank Rakyat Indonesia": "assets/images/icon_bri.png",
+    "Bank Negara Indonesia": "assets/images/icon_bni.png",
+    "Bank Central Asia": "assets/images/icon_bca.png",
+    "Bank Mandiri": "assets/images/icon_mandiri.png",
+    "Bank Syariah Indonesia": "assets/images/icon_bsi.png",
+    "Bank Papua": "assets/images/icon_bankpapua.png", 
+    "Bank BPD DIY": "assets/images/icon_bpd.png",     
+    "DANA": "assets/images/icon_dana.png",
+    "OVO": "assets/images/icon_ovo.png",
+    "Gopay": "assets/images/icon_gopay.png",
+  };
+
+  @override
   Widget build(BuildContext context) {
-    String name = data?['name'] ?? 'Guest';
-    List services = data?['prices'] ?? [];
-    int total = data?['total'] ?? 0;
+    String name = widget.data?['name'] ?? 'Guest';
+    List services = widget.data?['prices'] ?? [];
+    int total = widget.data?['total'] ?? 0;
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -23,7 +99,7 @@ class transactionView extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Color(0xFFE0AC53)),
             onPressed: () {
-              Navigator.pop(context); 
+              Navigator.pop(context);
             },
           ),
           title: const Text(
@@ -113,7 +189,105 @@ class transactionView extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        PaymentMethodSection(),
+                        Row(
+                          children: const [
+                            Icon(Icons.account_balance_wallet, color: Color(0xFFE0AC53)),
+                            SizedBox(width: 8),
+                            Text(
+                              'Payment Method',
+                              style: TextStyle(
+                                color: Color(0xFFE0AC53),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Color(0xFFE0AC53)),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                selectedPaymentIcon,
+                                width: 50,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      selectedPaymentMethod,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[800],
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: const Text(
+                                        'Selected',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: const Color(0xFFE0AC53),
+                            side: const BorderSide(color: Color(0xFFE0AC53)),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: () async {
+                            final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PaymentMethodScreen(),
+                              ),
+                            );
+                            if (result != null && paymentOptions.containsKey(result)) {
+                              setState(() {
+                                selectedPaymentMethod = result;
+                                selectedPaymentIcon = paymentOptions[result]!;
+                                print("Selected Method: $selectedPaymentMethod");
+                                print("Selected Icon: $selectedPaymentIcon");
+                              });
+                            }else{
+                              print("null");
+                            }
+                          },
+                          child: const Center(
+                            child: Text(
+                              'Select Other Payments',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
                         const SizedBox(height: 16),
                         VoucherSection(),
                       ],
@@ -135,6 +309,8 @@ class transactionView extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) => PaymentView(
                           total: total,
+                          bankName: selectedPaymentMethod, 
+                          bankIcon: selectedPaymentIcon,
                         ),
                       ),
                     );
@@ -154,158 +330,6 @@ class transactionView extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class TransactionListItem extends StatelessWidget {
-  final String name;
-  final int quantity;
-  final int price;
-
-  const TransactionListItem({
-    super.key,
-    required this.name,
-    required this.quantity,
-    required this.price,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 2,
-            child: Text(
-              name,
-              style: const TextStyle(color: Colors.white, fontSize: 14),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Center(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.grey[800],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  '× $quantity',
-                  style: const TextStyle(color: Colors.white, fontSize: 14),
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Text(
-              'Rp. ${price.toStringAsFixed(0)}',
-              textAlign: TextAlign.right,
-              style: const TextStyle(color: Colors.white, fontSize: 14),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class PaymentMethodSection extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(Icons.account_balance_wallet, color: Color(0xFFE0AC53)),
-            const SizedBox(width: 8),
-            Text(
-              'Payment Method',
-              style: TextStyle(
-                color: Color(0xFFE0AC53),
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFFE0AC53)),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Row(
-            children: [
-              Image.asset(
-                'assets/images/icon_bri.png', 
-                width: 50,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Bank Rakyat Indonesia',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Container(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[800],
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        'Last Used',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Icon(Icons.radio_button_checked, color: Color(0xFFE0AC53)),
-            ],
-          ),
-        ),
-        
-        const SizedBox(height: 16),
-        
-        OutlinedButton(
-          style: OutlinedButton.styleFrom(
-            foregroundColor: Color(0xFFE0AC53), 
-            side: BorderSide(color: Color(0xFFE0AC53)), 
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          onPressed: () {},
-          child: Center(
-            child: Text(
-              'Select Other Payments',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
@@ -365,4 +389,3 @@ class VoucherSection extends StatelessWidget {
     );
   }
 }
-

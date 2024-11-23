@@ -3,9 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:tubesfix/View/eBooking.dart';
 
 class PaymentView extends StatefulWidget {
-  final int total; 
+  final int total;
+  final String bankName; 
+  final String bankIcon;
 
-  const PaymentView({Key? key, required this.total}) : super(key: key);
+  const PaymentView({
+    Key? key,
+    required this.total,
+    required this.bankName,
+    required this.bankIcon,
+  }) : super(key: key);
 
   @override
   _PaymentViewState createState() => _PaymentViewState();
@@ -140,12 +147,12 @@ class _PaymentViewState extends State<PaymentView> {
                         Row(
                           children: [
                             Image.asset(
-                              'assets/images/icon_bri.png',
+                              widget.bankIcon,
                               width: 70,
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              'Bank Rakyat Indonesia',
+                              widget.bankName,
                               style: TextStyle(
                                 color: Color(0xFFE0AC53),
                                 fontWeight: FontWeight.bold,
@@ -265,7 +272,7 @@ class _PaymentViewState extends State<PaymentView> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EBookingView(total: widget.total), // Kirim total harga
+                        builder: (context) => EBookingView(total: widget.total), 
                       ),
                     );
                   },

@@ -23,5 +23,14 @@ dev_dependencies:
 
 flutter:
   assets:
-    - assets/images/
+    - assets/images/icon_bri.png
+    - assets/images/icon_bni.png
+    - assets/images/icon_bca.png
+    - assets/images/icon_mandiri.png
+    - assets/images/icon_bsi.png
+    - assets/images/icon_bankpapua.png
+    - assets/images/icon_bpd.png 
+    - assets/images/icon_dana.png
+    - assets/images/icon_ovo.png
+    - assets/images/icon_gopay.png
   uses-material-design: true
