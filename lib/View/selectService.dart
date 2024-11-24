@@ -5,14 +5,14 @@ class SelectServiceScreen extends StatefulWidget {
   final String barberName;
   final String barberImage;
   final List<String> barberTags;
-  final Map data;
+  final Map? data;
 
   const SelectServiceScreen({
     Key? key,
     required this.barberName,
     required this.barberImage,
     required this.barberTags,
-    required this.data
+    this.data
   }) : super(key: key);
 
   @override
@@ -52,16 +52,14 @@ class SectionTitle extends StatelessWidget {
                 text: firstText,
                 style: TextStyle(
                   color: firstTextColor,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.w700
                 ),
               ),
               TextSpan(
                 text: secondText,
                 style: TextStyle(
                   color: secondTextColor,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.w700
                 ),
               ),
             ],
@@ -111,8 +109,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
         title: const Text(
           'ATMA BARBER',
           style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+            fontFamily: 'Mixages', fontSize: 24, fontWeight: FontWeight.w700,
             color: Color(0xFFE0AC53),
           ),
         ),
@@ -148,8 +145,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                               widget.barberName,
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Inter', fontSize: 18, fontWeight: FontWeight.w600
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -167,7 +163,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                               'Tags:',
                               style: TextStyle(
                                 color: Colors.white70,
-                                fontSize: 14,
+                                fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w400
                               ),
                             ),
                             Wrap(
@@ -187,7 +183,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                                     tag,
                                     style: const TextStyle(
                                       color: Color(0xFFE0AC53),
-                                      fontSize: 12,
+                                      fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w400
                                     ),
                                   ),
                                 );
@@ -240,7 +236,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                         service,
                         style: TextStyle(
                           color: isSelected ? Color(0xFFE0AC53) : Colors.white54,
-                          fontSize: 12,
+                          fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w400
                         ),
                       ),
                     ),
@@ -287,14 +283,14 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                               service,
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 14,
+                                fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600
                               ),
                             ),
                             Text(
                               'Rp. ${services[service]!.toStringAsFixed(0)}',
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 14,
+                                fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600
                               ),
                             ),
                           ],
@@ -308,8 +304,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                             'Total',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w700
                             ),
                           ),
                           Text(
@@ -337,7 +332,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                       ),
                       child: const Text(
                         'Cancel',
-                        style: TextStyle(color: Color(0xFFE0AC53)),
+                        style: TextStyle(color: Color(0xFFE0AC53), fontFamily: 'Inter', fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),
@@ -380,7 +375,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                       ),
                       child: const Text(
                         'Payment',
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(color: Colors.black, fontFamily: 'Inter', fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),

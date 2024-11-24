@@ -28,9 +28,9 @@ class CouponEdge extends CustomClipper<Path> {
 class EBookingView extends StatelessWidget {
   final int total;
   final Map dataformat;
-  final Map data;
+  final Map? data;
 
-  const EBookingView({Key? key, required this.total, required this.dataformat, required this.data}) : super(key: key);
+  const EBookingView({Key? key, required this.total, required this.dataformat, this.data}) : super(key: key);
 
   String _generateOrderNumber() {
     final random = Random();
@@ -67,8 +67,9 @@ class EBookingView extends StatelessWidget {
             'E-Booking',
             style: TextStyle(
               color: Color(0xFFE0AC53),
+              fontFamily: 'Inter',
               fontSize: 24,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),
@@ -130,8 +131,9 @@ class EBookingView extends StatelessWidget {
                                     'ID BOOKING',
                                     style: TextStyle(
                                       color: Colors.white,
+                                      fontFamily: 'Inter',
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w700
                                     ),
                                   ),
                                   const SizedBox(height: 8),
@@ -148,8 +150,9 @@ class EBookingView extends StatelessWidget {
                                       bookingID, 
                                       style: const TextStyle(
                                         color: Color(0xFFF8EFE0),
+                                        fontFamily: 'Inter',
                                         fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.w900
                                       ),
                                     ),
                                   ),
@@ -195,8 +198,9 @@ class EBookingView extends StatelessWidget {
                                       '*Scan QR at Barbershop',
                                       style: TextStyle(
                                         color: Colors.grey,
+                                        fontFamily: 'Inter',
                                         fontSize: 12,
-                                        fontStyle: FontStyle.italic,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ),
@@ -230,8 +234,8 @@ class EBookingView extends StatelessWidget {
                             builder: (context) => PdfViewerPage(
                               bookingID: bookingID,
                               name: dataformat["nama"], 
-                              email: data['email'],
-                              phoneNumber: data['phone'], 
+                              email: data?['email'] ?? "guest@guest.com",
+                              phoneNumber: data?['phone'] ?? "08123456789", 
                               total: total,
                               date: "20 Sept 2024", 
                               publicationDate: "16 Sept 2024", 
@@ -253,7 +257,9 @@ class EBookingView extends StatelessWidget {
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         color: Colors.red,
+                        fontFamily: 'Inter',
                         fontSize: 12,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const Divider(
@@ -265,7 +271,9 @@ class EBookingView extends StatelessWidget {
                       'Atma Barber',
                       style: TextStyle(
                         color: Colors.grey,
+                        fontFamily: 'Inter',
                         fontSize: 12,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -274,7 +282,9 @@ class EBookingView extends StatelessWidget {
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         color: Colors.grey,
+                        fontFamily: 'Inter',
                         fontSize: 12,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const Divider(
@@ -289,8 +299,9 @@ class EBookingView extends StatelessWidget {
                         'Need help? Contact us',
                         style: TextStyle(
                           color: Color(0xFFE0AC53),
+                          fontFamily: 'Inter',
                           fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -317,8 +328,9 @@ class EBookingView extends StatelessWidget {
           label,
           style: const TextStyle(
             color: Color(0xFFEED1A0),
+            fontFamily: 'Inter',
             fontSize: 11,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600
           ),
         ),
         Row(
@@ -327,8 +339,9 @@ class EBookingView extends StatelessWidget {
               value,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
+                fontFamily: 'Inter',
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
               ),
             ),
             if (isCopyable)
@@ -365,8 +378,9 @@ class EBookingView extends StatelessWidget {
             label,
             style: const TextStyle(
               color: Color(0xFFE0AC53),
-              fontWeight: FontWeight.bold,
+              fontFamily: 'Inter',
               fontSize: 16,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),

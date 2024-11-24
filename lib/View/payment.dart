@@ -7,7 +7,7 @@ class PaymentView extends StatefulWidget {
   final String bankName; 
   final String bankIcon;
   final Map dataformat;
-  final Map data;
+  final Map? data;
 
   const PaymentView({
     Key? key,
@@ -15,7 +15,7 @@ class PaymentView extends StatefulWidget {
     required this.bankName,
     required this.bankIcon,
     required this.dataformat,
-    required this.data
+    this.data
   }) : super(key: key);
 
   @override
@@ -78,8 +78,9 @@ class _PaymentViewState extends State<PaymentView> {
             'Payment',
             style: TextStyle(
               color: Color(0xFFE0AC53),
+              fontFamily: 'Inter',
               fontSize: 24,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),
@@ -105,14 +106,18 @@ class _PaymentViewState extends State<PaymentView> {
                           children: [
                             Text(
                               'Total Payment',
-                              style: TextStyle(color: Colors.white, fontSize: 16),
+                              style: TextStyle(color: Colors.white, fontFamily: 'Inter',
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,),
                             ),
                             Text(
                               'Rp. ${widget.total}', 
                               style: TextStyle(
                                 color: Color(0xFFE0AC53),
-                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Inter',
                                 fontSize: 16,
+                                fontWeight: FontWeight.w600,
+
                               ),
                             ),
                           ],
@@ -125,15 +130,18 @@ class _PaymentViewState extends State<PaymentView> {
                               'Pay In',
                               style: TextStyle(
                                 color: Colors.white,
+                                fontFamily: 'Inter',
                                 fontSize: 14,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                             Text(
                               _formatTime(_timeRemaining),
                               style: TextStyle(
                                 color: Color(0xFFE0AC53),
+                                fontFamily: 'Inter',
                                 fontSize: 13,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ],
@@ -145,7 +153,9 @@ class _PaymentViewState extends State<PaymentView> {
                             'Due Jan. 01, 2024, 23:59',
                             style: TextStyle(
                               color: Colors.grey,
-                              fontSize: 12,
+                              fontFamily: 'Inter',
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
@@ -161,7 +171,8 @@ class _PaymentViewState extends State<PaymentView> {
                               widget.bankName,
                               style: TextStyle(
                                 color: Color(0xFFE0AC53),
-                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ],
@@ -176,8 +187,9 @@ class _PaymentViewState extends State<PaymentView> {
                                 'Account number',
                                 style: TextStyle(
                                   color: Colors.white,
+                                  fontFamily: 'Inter',
                                   fontSize: 14,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                               const SizedBox(height: 4),
@@ -188,8 +200,9 @@ class _PaymentViewState extends State<PaymentView> {
                                     '128 0813 4315 5142',
                                     style: TextStyle(
                                       color: Color(0xFFE0AC53),
+                                      fontFamily: 'Inter',
                                       fontSize: 20,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w900,
                                     ),
                                   ),
                                   IconButton(
@@ -221,7 +234,9 @@ class _PaymentViewState extends State<PaymentView> {
                                 'The verification process takes less than 10 minutes after successful payment.',
                                 style: TextStyle(
                                   color: Colors.grey,
+                                  fontFamily: 'Inter',
                                   fontSize: 12,
+                                  fontWeight: FontWeight.w600,
                                   fontStyle: FontStyle.italic,
                                 ),
                               ),
@@ -230,8 +245,9 @@ class _PaymentViewState extends State<PaymentView> {
                                 'Pay the order to the Virtual Account above before making another order with the same account number to ensure consistency.',
                                 style: TextStyle(
                                   color: Colors.white,
+                                  fontFamily: 'Inter',
                                   fontSize: 12,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                               const SizedBox(height: 8),
@@ -239,7 +255,9 @@ class _PaymentViewState extends State<PaymentView> {
                                 '*Only accepts Bank Rakyat Indonesia',
                                 style: TextStyle(
                                   color: Colors.grey,
+                                  fontFamily: 'Inter',
                                   fontSize: 12,
+                                  fontWeight: FontWeight.w600,
                                   fontStyle: FontStyle.italic,
                                 ),
                               ),
@@ -249,7 +267,7 @@ class _PaymentViewState extends State<PaymentView> {
                         const SizedBox(height: 16),
                         _buildInstructionButton(
                           context,
-                          'mBanking Transfer Instructions',
+                          'mBanking Instructions',
                         ),
                         const SizedBox(height: 8),
                         _buildInstructionButton(
@@ -286,8 +304,9 @@ class _PaymentViewState extends State<PaymentView> {
                     'Confirmation',
                     style: TextStyle(
                       color: Colors.black,
+                      fontFamily: 'Inter',
                       fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -323,8 +342,9 @@ class _PaymentViewState extends State<PaymentView> {
             text,
             style: const TextStyle(
               color: Colors.black,
+              fontFamily: 'Inter',
               fontSize: 14,
-              fontWeight: FontWeight.bold,
+             fontWeight: FontWeight.w600,
             ),
           ),
         ],

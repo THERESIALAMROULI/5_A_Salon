@@ -39,8 +39,7 @@ class _RegisterViewState extends State<RegisterView> {
                         const Text(
                           "ATMA BARBER",
                           style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Mixages', fontSize: 28, fontWeight: FontWeight.w700,
                             color: Color(0xFFE0AC53),
                           ),
                           textAlign: TextAlign.left,
@@ -218,7 +217,7 @@ class _RegisterViewState extends State<RegisterView> {
                           ),
                           child: const Text(
                             "Sign Up",
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+                            style: TextStyle(fontFamily: 'Inter', fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
                           ),
                         ),
                       ],
@@ -233,7 +232,7 @@ class _RegisterViewState extends State<RegisterView> {
                   children: [
                     const Text(
                       "Already have an account?",
-                      style: TextStyle(color: Color(0xFFF8F4E3)),
+                      style: TextStyle(color: Color(0xFFF8F4E3), fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w400),
                     ),
                     TextButton(
                       onPressed: () {
@@ -241,7 +240,7 @@ class _RegisterViewState extends State<RegisterView> {
                       },
                       child: const Text(
                         "Login",
-                        style: TextStyle(color: Color(0xFFE0AC53)),
+                        style: TextStyle(color: Color(0xFFE0AC53), fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w400),
                       ),
                     ),
                   ],

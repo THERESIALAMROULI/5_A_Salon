@@ -24,7 +24,7 @@ class TransactionListItem extends StatelessWidget {
             flex: 2,
             child: Text(
               nama,
-              style: const TextStyle(color: Colors.white, fontSize: 14),
+              style: const TextStyle(color: Colors.white, fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600),
             ),
           ),
           Expanded(
@@ -38,7 +38,7 @@ class TransactionListItem extends StatelessWidget {
                 ),
                 child: Text(
                   '× $quantity',
-                  style: const TextStyle(color: Colors.white, fontSize: 14),
+                  style: const TextStyle(color: Colors.white, fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w600),
                 ),
               ),
             ),
@@ -48,7 +48,7 @@ class TransactionListItem extends StatelessWidget {
             child: Text(
               'Rp. ${price.toStringAsFixed(0)}',
               textAlign: TextAlign.right,
-              style: const TextStyle(color: Colors.white, fontSize: 14),
+              style: const TextStyle(color: Colors.white, fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -59,9 +59,9 @@ class TransactionListItem extends StatelessWidget {
 
 class transactionView extends StatefulWidget {
   final Map dataformat;
-  final Map data;
+  final Map? data;
 
-  const transactionView({super.key, required this.dataformat, required this.data});
+  const transactionView({super.key, required this.dataformat, this.data});
 
   @override
   _transactionViewState createState() => _transactionViewState();
@@ -108,8 +108,9 @@ class _transactionViewState extends State<transactionView> {
             'Transaction',
             style: TextStyle(
               color: Color(0xFFE0AC53),
+              fontFamily: 'Inter',
               fontSize: 24,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),
@@ -134,14 +135,17 @@ class _transactionViewState extends State<transactionView> {
                           'Hi $name!',
                           style: const TextStyle(
                             color: Colors.white,
+                            fontFamily: 'Inter',
                             fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w800,
                           ),
                         ),
                         const SizedBox(height: 4),
                         const Text(
                           "Let's complete the transaction",
-                          style: TextStyle(color: Colors.grey),
+                          style: TextStyle(color: Colors.grey, fontFamily: 'Inter',
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,),
                         ),
                         const SizedBox(height: 16),
                         Row(
@@ -152,8 +156,9 @@ class _transactionViewState extends State<transactionView> {
                               'Transaction List',
                               style: TextStyle(
                                 color: Color(0xFFE0AC53),
+                                fontFamily: 'Inter',
                                 fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                           ],
@@ -177,14 +182,14 @@ class _transactionViewState extends State<transactionView> {
                                 'SubTotal',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600
                                 ),
                               ),
                               Text(
                                 'Rp. $total',
                                 style: const TextStyle(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600
                                 ),
                               ),
                             ],
@@ -199,8 +204,7 @@ class _transactionViewState extends State<transactionView> {
                               'Payment Method',
                               style: TextStyle(
                                 color: Color(0xFFE0AC53),
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w700
                               ),
                             ),
                           ],
@@ -227,7 +231,7 @@ class _transactionViewState extends State<transactionView> {
                                       selectedPaymentMethod,
                                       style: const TextStyle(
                                         color: Colors.white,
-                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600
                                       ),
                                     ),
                                     const SizedBox(height: 4),
@@ -242,7 +246,7 @@ class _transactionViewState extends State<transactionView> {
                                         'Selected',
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 12,
+                                          fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w600
                                         ),
                                       ),
                                     ),
@@ -284,8 +288,7 @@ class _transactionViewState extends State<transactionView> {
                             child: Text(
                               'Select Other Payments',
                               style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w600
                               ),
                             ),
                           ),
@@ -323,8 +326,7 @@ class _transactionViewState extends State<transactionView> {
                     'Continue Payment',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w600
                     ),
                   ),
                 ),
@@ -355,8 +357,7 @@ class VoucherSection extends StatelessWidget {
                   'Voucher',
                   style: TextStyle(
                     color: Color(0xFFE0AC53),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w700
                   ),
                 ),
               ],
@@ -375,8 +376,7 @@ class VoucherSection extends StatelessWidget {
                     '-Rp48RB',
                     style: TextStyle(
                       color: Color(0xFFE0AC53),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
+                      fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600
                     ),
                   ),
                 ],

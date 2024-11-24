@@ -35,5 +35,22 @@ flutter:
     - assets/images/icon_dana.png
     - assets/images/icon_ovo.png
     - assets/images/icon_gopay.png
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter/Inter_18pt-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter/Inter_18pt-Black.ttf
+          weight: 900
+        - asset: assets/fonts/Inter/Inter_18pt-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Inter/Inter_18pt-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Inter/Inter_18pt-Regular.ttf
+          weight: 400
+    - family: Mixage
+      fonts:
+        - asset: assets/fonts/Mixages/MixageITCStd-Bold.otf
+          weight: 700
   uses-material-design: true
   

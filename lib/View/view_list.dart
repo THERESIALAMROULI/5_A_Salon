@@ -4,9 +4,9 @@ import 'package:tubesfix/View/selectService.dart';
 
 
 class ViewListScreen extends StatefulWidget {
-  final Map data;
+  final Map? data;
   
-  const ViewListScreen({super.key, required this.data});
+  const ViewListScreen({super.key, this.data});
 
   @override
   _ViewListScreenState createState() => _ViewListScreenState();
@@ -56,8 +56,7 @@ class _ViewListScreenState extends State<ViewListScreen> {
           child: Text(
             'ATMA BARBER',
             style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+              fontFamily: 'Mixages', fontSize: 24, fontWeight: FontWeight.w700,
               color: Color(0xFFE0AC53),
             ),
           ),
@@ -113,7 +112,7 @@ class _ViewListScreenState extends State<ViewListScreen> {
                       tag,
                       style: TextStyle(
                         color: isSelected ? Color(0xFFE0AC53) : Colors.white54,
-                        fontSize: 12,
+                        fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w600
                       ),
                     ),
                   ),
@@ -172,8 +171,7 @@ class SectionTitle extends StatelessWidget {
           '— ',
           style: TextStyle(
             color: firstTextColor,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+            fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.w700
           ),
         ),
         RichText(
@@ -183,16 +181,14 @@ class SectionTitle extends StatelessWidget {
                 text: firstText,
                 style: TextStyle(
                   color: firstTextColor,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.w700
                 ),
               ),
               TextSpan(
                 text: secondText,
                 style: TextStyle(
                   color: secondTextColor,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.w700
                 ),
               ),
             ],
@@ -216,7 +212,7 @@ class ListItemCard extends StatelessWidget {
   final String imageUrl;
   final List<String> tags;
   final double rating;
-  final Map data;
+  final Map? data;
 
   const ListItemCard({
     Key? key,
@@ -224,7 +220,7 @@ class ListItemCard extends StatelessWidget {
     required this.imageUrl,
     required this.tags,
     required this.rating,
-    required this.data
+    this.data
   }) : super(key: key);
 
   @override
@@ -272,8 +268,7 @@ class ListItemCard extends StatelessWidget {
                         name,
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Inter', fontSize: 18, fontWeight: FontWeight.w700
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -296,7 +291,7 @@ class ListItemCard extends StatelessWidget {
                             'Tags:',
                             style: TextStyle(
                               color: Colors.white70,
-                              fontSize: 14,
+                              fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w400
                             ),
                           ),
                           const SizedBox(width: 4),
@@ -318,7 +313,7 @@ class ListItemCard extends StatelessWidget {
                                     tag,
                                     style: const TextStyle(
                                       color: Color(0xFFE0AC53),
-                                      fontSize: 12,
+                                      fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w400
                                     ),
                                   ),
                                 );

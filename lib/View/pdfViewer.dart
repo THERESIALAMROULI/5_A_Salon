@@ -247,15 +247,15 @@ class PdfViewerPage extends StatelessWidget {
           label,
           style: pw.TextStyle(
             fontSize: 12,
-            fontWeight: pw.FontWeight.bold,
-            color: PdfColors.black,
+            color: PdfColors.grey,
           ),
         ),
         pw.Text(
           value,
           style: pw.TextStyle(
             fontSize: 12,
-            color: PdfColors.grey,
+            fontWeight: pw.FontWeight.bold,
+            color: PdfColors.black,
           ),
         ),
       ],
