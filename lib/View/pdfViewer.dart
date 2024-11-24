@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -37,8 +38,9 @@ class PdfViewerPage extends StatelessWidget {
           'PDF Preview',
           style: TextStyle(
               color: Color(0xFFE0AC53),
+              fontFamily: 'Inter',
               fontSize: 24,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w700,
             ),
         ),
         iconTheme: const IconThemeData(color: Color(0xFFE0AC53)),
@@ -54,7 +56,7 @@ class PdfViewerPage extends StatelessWidget {
 
   Future<Uint8List> _generatePdf(PdfPageFormat format) async {
     final pdf = pw.Document();
-
+    
     pdf.addPage(
       pw.Page(
         pageFormat: format,

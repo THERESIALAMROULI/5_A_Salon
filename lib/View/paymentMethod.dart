@@ -38,8 +38,9 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
           "Payment Method",
           style: TextStyle(
             color: Color(0xFFE0AC53),
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
+            fontFamily: 'Inter',
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
           ),
         ),
       ),
@@ -98,8 +99,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                 "Select Payment",
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w600
                 ),
               ),
             ),
@@ -118,8 +118,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
           title,
           style: const TextStyle(
             color: Color(0xFFE0AC53),
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
+            fontFamily: 'Inter', fontSize: 18, fontWeight: FontWeight.w900
           ),
         ),
       ],
@@ -133,14 +132,14 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
       children: [
         Image.asset(
           iconPath,
-          width: 36,
-          height: 36,
+          width: 55,
+          height: 55,
         ),
         const SizedBox(width: 12),
         Expanded(
           child: Text(
             label,
-            style: const TextStyle(color: Colors.white, fontSize: 14),
+            style: const TextStyle(color: Color(0xFFE0AC53), fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600),
           ),
         ),
         Radio<String>(
