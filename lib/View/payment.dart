@@ -122,7 +122,7 @@ class _PaymentViewState extends State<PaymentView> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 16),
+                        const Divider(color: Color(0xFFE0AC53)),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -159,7 +159,7 @@ class _PaymentViewState extends State<PaymentView> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 30),
                         Row(
                           children: [
                             Image.asset(
@@ -211,11 +211,7 @@ class _PaymentViewState extends State<PaymentView> {
                                       color: Color(0xFFE0AC53),
                                     ),
                                     onPressed: () {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text('Account number copied!'),
-                                        ),
-                                      );
+                                      // copy no rek disini
                                     },
                                   ),
                                 ],

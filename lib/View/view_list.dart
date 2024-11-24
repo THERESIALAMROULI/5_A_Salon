@@ -45,8 +45,20 @@ class _ViewListScreenState extends State<ViewListScreen> {
 
   final Set<String> selectedTags = {}; 
 
+List<int> getFilteredIndices() {
+  if (selectedTags.isEmpty) {
+    return List.generate(names.length, (index) => index);
+  }
+
+  return List.generate(names.length, (index) => index).where((i) {
+    return selectedTags.every((tag) => barberTags[i].contains(tag));
+  }).toList();
+}
+
   @override
   Widget build(BuildContext context) {
+    final filteredIndices = getFilteredIndices();
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -56,7 +68,9 @@ class _ViewListScreenState extends State<ViewListScreen> {
           child: Text(
             'ATMA BARBER',
             style: TextStyle(
-              fontFamily: 'Mixages', fontSize: 24, fontWeight: FontWeight.w700,
+              fontFamily: 'Mixages',
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
               color: Color(0xFFE0AC53),
             ),
           ),
@@ -112,7 +126,9 @@ class _ViewListScreenState extends State<ViewListScreen> {
                       tag,
                       style: TextStyle(
                         color: isSelected ? Color(0xFFE0AC53) : Colors.white54,
-                        fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w600
+                        fontFamily: 'Inter',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -130,8 +146,9 @@ class _ViewListScreenState extends State<ViewListScreen> {
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.only(bottom: 16),
-                itemCount: names.length,
-                itemBuilder: (context, i) {
+                itemCount: filteredIndices.length,
+                itemBuilder: (context, index) {
+                  final i = filteredIndices[index];
                   return ListItemCard(
                     name: names[i],
                     imageUrl: imageUrls[i],

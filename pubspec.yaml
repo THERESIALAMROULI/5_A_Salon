@@ -50,7 +50,7 @@ flutter:
           weight: 400
     - family: Mixage
       fonts:
-        - asset: assets/fonts/Mixages/MixageITCStd-Bold.otf
+        - asset: assets/fonts/Mixages/Mixage_ITC_Std_Bold.otf
           weight: 700
   uses-material-design: true
   

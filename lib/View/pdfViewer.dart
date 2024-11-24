@@ -65,7 +65,7 @@ class PdfViewerPage extends StatelessWidget {
             decoration: pw.BoxDecoration(
               border: pw.Border.all(
                 color: PdfColor.fromHex("#E0AC53"),
-                width: 12, 
+                width: 20, 
               ),
             ),
             child: pw.Padding(
