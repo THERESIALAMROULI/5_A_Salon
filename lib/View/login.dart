@@ -39,8 +39,7 @@ class _LoginViewState extends State<LoginView> {
                         const Text(
                           "ATMA BARBER",
                           style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Mixages', fontSize: 28, fontWeight: FontWeight.w700,
                             color: Color(0xFFE0AC53),
                           ),
                           textAlign: TextAlign.left,
@@ -66,8 +65,7 @@ class _LoginViewState extends State<LoginView> {
                           child: const Text(
                             "Login",
                             style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Inter', fontSize: 20, fontWeight: FontWeight.w600,
                               color: Colors.black,
                             ),
                           ),
@@ -88,7 +86,7 @@ class _LoginViewState extends State<LoginView> {
                           "don't have an account? ",
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 14,
+                            fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w400
                           ),
                         ),
                         TextButton(
@@ -102,7 +100,7 @@ class _LoginViewState extends State<LoginView> {
                             "Sign up",
                             style: TextStyle(
                               color: Color(0xFFE0AC53),
-                              fontSize: 14,
+                              fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w400
                             ),
                           ),
                         ),
@@ -121,7 +119,7 @@ class _LoginViewState extends State<LoginView> {
                         "Enter as guest",
                         style: TextStyle(
                           color: Color(0xFFE0AC53),
-                          fontSize: 14,
+                          fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w400
                         ),
                       ),
                     ),
@@ -172,7 +170,7 @@ class _LoginViewState extends State<LoginView> {
             },
             child: const Text(
               "I Forgot My Password",
-              style: TextStyle(color: Color.fromRGBO(248, 244, 227, 1)),
+              style: TextStyle(color: Color.fromRGBO(248, 244, 227, 1), fontFamily: 'Inter', fontSize: 10, fontWeight: FontWeight.w400),
             ),
           ),
         ),
