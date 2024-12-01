@@ -32,7 +32,7 @@ class SectionTitle extends StatelessWidget {
     required this.firstTextColor,
     required this.secondTextColor,
   }) : super(key: key);
-
+  
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -91,6 +91,21 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
   final List<String> selectedServices = []; 
   TextEditingController namaController = TextEditingController();
   String? errorText; 
+  DateTime? selectedDate;
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(Duration(days: 365)), 
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -265,6 +280,32 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                 style: const TextStyle(color: Colors.white),
               ),
               const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => _selectDate(context),
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Color(0xFFE0AC53)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8), 
+                        ),
+                      ),
+                      child: Text(
+                        selectedDate == null
+                            ? 'Select Date'
+                            : 'Date: ${selectedDate!.toLocal().toString().split(' ')[0]}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
               Card(
                 color: Colors.black,
                 shape: RoundedRectangleBorder(
@@ -342,11 +383,15 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                       onPressed: () {
                         if (namaController.text.isEmpty) {
                           setState(() {
-                            errorText = 'Booking Name cannot be empty'; 
+                            errorText = 'Booking Name cannot be empty';
+                          });
+                        } else if (selectedDate == null) {
+                          setState(() {
+                            errorText = 'Please select a date';
                           });
                         } else {
                           setState(() {
-                            errorText = null; 
+                            errorText = null;
                           });
                           Navigator.push(
                             context,
@@ -354,11 +399,12 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                               builder: (context) => transactionView(
                                 dataformat: {
                                   'nama': namaController.text,
+                                  'date': selectedDate, 
                                   'services': selectedServices,
                                   'servicesPdf': selectedServices
-                                    .where((service) => services.containsKey(service)) 
-                                    .map((service) => {'name': service, 'quantity': 1}) 
-                                    .toList(),
+                                      .where((service) => services.containsKey(service))
+                                      .map((service) => {'name': service, 'quantity': 1})
+                                      .toList(),
                                   'prices': selectedServices
                                       .map((service) => {'name': service, 'price': services[service]!})
                                       .toList(),

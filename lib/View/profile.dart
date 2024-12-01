@@ -28,8 +28,8 @@ class _ProfileViewState extends State<profileView> {
 
 
     _name = widget.data?['name'] ?? "Guest";
-    _email = widget.data?['email'] ?? "guest@guest.com";
-    _phone = widget.data?['phone'] ?? "08000000000000";
+    _email = widget.data?['email'] ?? "guest@example.com";
+    _phone = widget.data?['phone'] ?? "08123456789";
     _username = widget.data?['username'] ?? "guest";
   }
 

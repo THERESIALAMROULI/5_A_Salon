@@ -18,9 +18,6 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
       {"icon": "assets/images/icon_bsi.png", "label": "Bank Syariah Indonesia"},
       {"icon": "assets/images/icon_bankpapua.png", "label": "Bank Papua"}, 
       {"icon": "assets/images/icon_bpd.png", "label": "Bank BPD DIY"},
-      {"icon": "assets/images/icon_dana.png", "label": "DANA"},
-      {"icon": "assets/images/icon_ovo.png", "label": "OVO"},
-      {"icon": "assets/images/icon_gopay.png", "label": "Gopay"},
     ];
 
     return Scaffold(
@@ -59,14 +56,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                           iconPath: option['icon']!,
                           label: option['label']!,
                         )), 
-                    const Divider(color: Color(0xFFE0AC53), thickness: 1),
                     const SizedBox(height: 8),
-                    _buildSectionHeader("E-Wallet", Icons.account_balance_wallet),
-                    const SizedBox(height: 8),
-                    ...paymentOptions.sublist(7).map((option) => _buildPaymentOption(
-                          iconPath: option['icon']!,
-                          label: option['label']!,
-                        )),
                   ],
                 ),
               ),

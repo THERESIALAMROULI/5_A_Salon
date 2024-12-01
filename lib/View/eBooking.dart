@@ -2,6 +2,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tubesfix/View/pdfViewer.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CouponEdge extends CustomClipper<Path> {
   @override
@@ -29,8 +32,9 @@ class EBookingView extends StatelessWidget {
   final int total;
   final Map dataformat;
   final Map? data;
+  final String bankName;
 
-  const EBookingView({Key? key, required this.total, required this.dataformat, this.data}) : super(key: key);
+  const EBookingView({Key? key, required this.total, required this.dataformat, this.data, required this.bankName}) : super(key: key);
 
   String _generateOrderNumber() {
     final random = Random();
@@ -42,6 +46,37 @@ class EBookingView extends StatelessWidget {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     return List.generate(8, (_) => characters[random.nextInt(characters.length)])
         .join();
+  }
+
+  String _formatDate(DateTime date) { 
+    return DateFormat('dd MMMM yyyy', 'en_US').format(date); 
+  }
+
+  String _getCurrentDate() {
+    DateTime now = DateTime.now(); 
+    return DateFormat('dd MMM yyyy', 'en_US').format(now); 
+  }
+
+  void _copyToClipboard(String text, BuildContext context) {
+    Clipboard.setData(ClipboardData(text: text));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Copied to clipboard!'),
+        backgroundColor: Colors.green,
+      ),
+    );
+  }
+
+  Future<void> _openMaps() async {
+    const String barbershopLatitude = '-7.779366'; 
+    const String barbershopLongitude = '110.416324'; 
+    final String googleUrl = "google.navigation:q=$barbershopLatitude,$barbershopLongitude"; 
+    
+    if (await canLaunch(googleUrl)) {
+      await launch(googleUrl);
+    } else {
+      throw 'Could not launch $googleUrl';
+    }
   }
 
   @override
@@ -103,6 +138,7 @@ class EBookingView extends StatelessWidget {
                               label: 'ORDER NUMBER',
                               value: orderNumber,
                               isCopyable: true,
+                              onCopy: () => _copyToClipboard(orderNumber, context),
                             ),
                             const Divider(
                               color: Color(0xFFB98F48),
@@ -121,7 +157,7 @@ class EBookingView extends StatelessWidget {
                             const SizedBox(height: 8),
                             _buildDetailRow(
                               label: 'APPOINTMENT DATE',
-                              value: '01 Jan 2024',
+                              value: _formatDate(dataformat['date']),
                             ),
                             const SizedBox(height: 16),
                             Center(
@@ -184,7 +220,7 @@ class EBookingView extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                   child: QrImageView(
-                                    data: qrData,
+                                    data: bookingID,
                                     size: 130,
                                     backgroundColor: Colors.white,
                                   ),
@@ -215,15 +251,39 @@ class EBookingView extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: ElevatedButton.icon(
+                          onPressed: _openMaps, 
+                          icon: const Icon(Icons.directions),
+                          label: const Text('Navigate to Barbershop'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFE0AC53), 
+                            foregroundColor: Colors.black, 
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10), 
+                            textStyle: const TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
                     _buildActionButton(
                       icon: Icons.share,
                       label: 'Share',
-                      onPressed: () {
-                      },
+                      onPressed: () =>{
+                        
+                      }
                     ),
-                    const SizedBox(width: 24),
+                    const SizedBox(width: 16),
                     _buildActionButton(
                       icon: Icons.print,
                       label: 'Print',
@@ -234,11 +294,11 @@ class EBookingView extends StatelessWidget {
                             builder: (context) => PdfViewerPage(
                               bookingID: bookingID,
                               name: dataformat["nama"], 
-                              email: data?['email'] ?? "guest@guest.com",
+                              email: data?['email'] ?? "guest@example.com",
                               phoneNumber: data?['phone'] ?? "08123456789", 
                               total: total,
-                              date: "20 Sept 2024", 
-                              publicationDate: "16 Sept 2024", 
+                              date: _formatDate(dataformat['date']), 
+                              publicationDate: _getCurrentDate(), 
                               services: dataformat['servicesPdf'],
                               data: data,
                             ),
@@ -320,6 +380,7 @@ class EBookingView extends StatelessWidget {
     required String label,
     required String value,
     bool isCopyable = false,
+    VoidCallback? onCopy,
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -330,7 +391,7 @@ class EBookingView extends StatelessWidget {
             color: Color(0xFFEED1A0),
             fontFamily: 'Inter',
             fontSize: 11,
-            fontWeight: FontWeight.w600
+            fontWeight: FontWeight.w600,
           ),
         ),
         Row(
@@ -352,13 +413,16 @@ class EBookingView extends StatelessWidget {
                   color: Color(0xFFA57B33),
                 ),
                 onPressed: () {
+                  if (onCopy != null) {
+                    onCopy();  
+                  }
                 },
               ),
           ],
         ),
       ],
     );
-  }
+  }                                 
 
   Widget _buildActionButton({
     required IconData icon,
