@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:tubesfix/View/eBooking.dart';
+import 'package:intl/intl.dart'; 
+import 'package:flutter/services.dart';
 
 class PaymentView extends StatefulWidget {
   final int total;
@@ -24,14 +26,18 @@ class PaymentView extends StatefulWidget {
 
 class _PaymentViewState extends State<PaymentView> {
   late Timer _timer;
-  Duration _timeRemaining = Duration(hours: 23, minutes: 59, seconds: 59);
+  Duration _timeRemaining = Duration(hours: 24, minutes: 00, seconds: 00);
   late Map? data;
-  
+  late String dueDate;
+
   @override
   void initState() {
     super.initState();
     _startCountdownTimer();
     data = widget.data;
+    DateTime now = DateTime.now();
+    DateTime dueDateTime = now.add(Duration(days: 1)); 
+    dueDate = DateFormat('MMM dd, yyyy, HH:mm').format(dueDateTime);
   }
 
   @override
@@ -57,6 +63,24 @@ class _PaymentViewState extends State<PaymentView> {
     String minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
     String seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
     return '$hours Hours $minutes Minutes $seconds Seconds';
+  }
+
+  Map<String, String> bankVirtualAccounts = {
+    "Bank Rakyat Indonesia": "128 0813 4315 5142",
+    "Bank Negara Indonesia": "123 4567 8901 2345",
+    "Bank Central Asia": "456 7890 1234 5678",
+    "Bank Mandiri": "789 0123 4567 8901",
+    "Bank Syariah Indonesia": "234 5678 9012 3456",
+    "Bank Papua": "345 6789 0123 4567",
+    "Bank BPD DIY": "567 8901 2345 6789",
+  };
+
+  void copyToClipboard(String text) {
+    Clipboard.setData(ClipboardData(text: text)).then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Virtual Account copied to clipboard!')),
+      );
+    });
   }
 
   @override
@@ -150,7 +174,7 @@ class _PaymentViewState extends State<PaymentView> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: Text(
-                            'Due Jan. 01, 2024, 23:59',
+                            'Due $dueDate',
                             style: TextStyle(
                               color: Colors.grey,
                               fontFamily: 'Inter',
@@ -197,11 +221,11 @@ class _PaymentViewState extends State<PaymentView> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '128 0813 4315 5142',
+                                    bankVirtualAccounts[widget.bankName] ?? 'VA Not Found',
                                     style: TextStyle(
                                       color: Color(0xFFE0AC53),
                                       fontFamily: 'Inter',
-                                      fontSize: 20,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w900,
                                     ),
                                   ),
@@ -211,7 +235,7 @@ class _PaymentViewState extends State<PaymentView> {
                                       color: Color(0xFFE0AC53),
                                     ),
                                     onPressed: () {
-                                      // copy no rek disini
+                                      copyToClipboard(bankVirtualAccounts[widget.bankName] ?? 'VA Not Found');
                                     },
                                   ),
                                 ],
@@ -248,7 +272,7 @@ class _PaymentViewState extends State<PaymentView> {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                '*Only accepts Bank Rakyat Indonesia',
+                                '*Only accepts ${widget.bankName}',
                                 style: TextStyle(
                                   color: Colors.grey,
                                   fontFamily: 'Inter',
@@ -261,19 +285,22 @@ class _PaymentViewState extends State<PaymentView> {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        _buildInstructionButton(
+                        _buildExpandableInstruction(
                           context,
                           'mBanking Instructions',
+                          'Follow these steps to complete your payment via mBanking: \n1. Open your mobile banking app.\n2. Go to the payment section.\n3. Enter the Virtual Account number.\n4. Confirm payment details and make payment.',
                         ),
                         const SizedBox(height: 8),
-                        _buildInstructionButton(
+                        _buildExpandableInstruction(
                           context,
                           'ATM Transfer Instructions',
+                          'Follow these steps for ATM Transfer: \n1. Visit any ATM.\n2. Select “Transfer” option.\n3. Choose the "Virtual Account" option.\n4. Enter the account number and payment amount.\n5. Confirm and finish the transaction.',
                         ),
                         const SizedBox(height: 8),
-                        _buildInstructionButton(
+                        _buildExpandableInstruction(
                           context,
                           'EDC Transfer Instructions',
+                          'Follow these steps for EDC Transfer: \n1. Visit the nearest EDC terminal.\n2. Select the option for Virtual Account payment.\n3. Enter the account number shown above and confirm.\n4. Complete the payment.',
                         ),
                       ],
                     ),
@@ -292,7 +319,7 @@ class _PaymentViewState extends State<PaymentView> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EBookingView(total: widget.total, dataformat: widget.dataformat, data: widget.data,), 
+                        builder: (context) => EBookingView(total: widget.total, dataformat: widget.dataformat, data: widget.data, bankName: widget.bankName), 
                       ),
                     );
                   },
@@ -315,32 +342,42 @@ class _PaymentViewState extends State<PaymentView> {
     );
   }
 
-  Widget _buildInstructionButton(BuildContext context, String text) {
-    return OutlinedButton(
-      style: OutlinedButton.styleFrom(
-        backgroundColor: const Color(0xFFE0AC53),
-        side: const BorderSide(color: Color(0xFFE0AC53)),
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+  Widget _buildExpandableInstruction(BuildContext context, String title, String content) {
+    return Card(
+      color: Color(0xFFE0AC53),  
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
       ),
-      onPressed: () {},
-      child: Row(
-        children: [
-          const SizedBox(width: 16),
-          const Icon(
-            Icons.keyboard_arrow_down,
-            color: Colors.black,
-          ),
-          const SizedBox(width: 16),
-          Text(
-            text,
+      child: ExpansionTile(
+        tilePadding: EdgeInsets.zero,  
+        title: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+          child: Text(
+            title,
             style: const TextStyle(
               color: Colors.black,
               fontFamily: 'Inter',
               fontSize: 14,
-             fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  content,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Inter',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
