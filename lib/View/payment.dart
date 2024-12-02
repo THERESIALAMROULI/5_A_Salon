@@ -77,9 +77,6 @@ class _PaymentViewState extends State<PaymentView> {
 
   void copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text)).then((_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Virtual Account copied to clipboard!')),
-      );
     });
   }
 
