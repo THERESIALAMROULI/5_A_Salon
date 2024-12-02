@@ -90,7 +90,8 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
 
   final List<String> selectedServices = []; 
   TextEditingController namaController = TextEditingController();
-  String? errorText; 
+  String? errorTextName;
+  String? errorTextDate; 
   DateTime? selectedDate;
 
   Future<void> _selectDate(BuildContext context) async {
@@ -275,7 +276,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                     borderRadius: BorderRadius.circular(8),
                     borderSide: const BorderSide(color: Colors.white54),
                   ),
-                  errorText: errorText, 
+                  errorText: errorTextName, 
                 ),
                 style: const TextStyle(color: Colors.white),
               ),
@@ -283,24 +284,44 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
               Row(
                 children: [
                   Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => _selectDate(context),
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Color(0xFFE0AC53)),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8), 
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center, 
+                      children: [
+                        OutlinedButton(
+                          onPressed: () => _selectDate(context),
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(color: Color(0xFFE0AC53)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            minimumSize: const Size.fromHeight(48), 
+                          ),
+                          child: Text(
+                            selectedDate == null
+                                ? 'Select Date'
+                                : 'Date: ${selectedDate!.toLocal().toString().split(' ')[0]}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        selectedDate == null
-                            ? 'Select Date'
-                            : 'Date: ${selectedDate!.toLocal().toString().split(' ')[0]}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                        if (errorTextDate != null) 
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              errorTextDate!, 
+                              textAlign: TextAlign.center, 
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 12,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                 ],
@@ -381,17 +402,25 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
+                        final today = DateTime.now();
                         if (namaController.text.isEmpty) {
                           setState(() {
-                            errorText = 'Booking Name cannot be empty';
+                            errorTextName = 'Booking Name cannot be empty';
                           });
                         } else if (selectedDate == null) {
                           setState(() {
-                            errorText = 'Please select a date';
+                            errorTextDate = 'Please select a date';
+                          });
+                        } else if (selectedDate!.year == today.year &&
+                            selectedDate!.month == today.month &&
+                            selectedDate!.day == today.day) {
+                          setState(() {
+                            errorTextDate = 'You cannot book for today. Select a later date.';
                           });
                         } else {
                           setState(() {
-                            errorText = null;
+                            errorTextName = null;
+                            errorTextDate = null;
                           });
                           Navigator.push(
                             context,
@@ -399,7 +428,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                               builder: (context) => transactionView(
                                 dataformat: {
                                   'nama': namaController.text,
-                                  'date': selectedDate, 
+                                  'date': selectedDate,
                                   'services': selectedServices,
                                   'servicesPdf': selectedServices
                                       .where((service) => services.containsKey(service))

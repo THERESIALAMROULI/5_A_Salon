@@ -59,12 +59,6 @@ class EBookingView extends StatelessWidget {
 
   void _copyToClipboard(String text, BuildContext context) {
     Clipboard.setData(ClipboardData(text: text));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Copied to clipboard!'),
-        backgroundColor: Colors.green,
-      ),
-    );
   }
 
   Future<void> _openMaps() async {
@@ -83,7 +77,6 @@ class EBookingView extends StatelessWidget {
   Widget build(BuildContext context) {
     final String orderNumber = _generateOrderNumber(); 
     final String bookingID = _generateBookingID(); 
-    final String qrData = 'https://youtu.be/NY0ffyEu6uo?si=JZs_wMSXWfnC-OF_';
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
