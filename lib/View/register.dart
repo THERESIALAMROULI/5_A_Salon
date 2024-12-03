@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tubesfix/View/login.dart';
+import 'package:tubesfix/client/PelangganClient.dart';
+import 'package:tubesfix/entity/Pelanggan.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -138,7 +140,7 @@ class _RegisterViewState extends State<RegisterView> {
                         ),
                         const SizedBox(height: 10),
                         ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (_formKey.currentState!.validate()) {
 
                               Map<String, dynamic> formData = {};
@@ -147,65 +149,79 @@ class _RegisterViewState extends State<RegisterView> {
                               formData['password'] = passwordController.text;
                               formData['email'] = emailController.text;
                               formData['phone'] = noTeleponController.text;
-                              showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (BuildContext context) {
-                                  Future.delayed(const Duration(seconds: 2), () {
-                                    Navigator.pop(context); 
-                                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext buildContext) => LoginView(data: formData,)));;
-                                  });
+                              
+                              final pelanggan = Pelanggan(
+                                  id: 0,
+                                  nama: namaController.text,
+                                  username: usernameController.text,
+                                  email: emailController.text,
+                                  telepon: noTeleponController.text,
+                                  password: passwordController.text,
+                                );
 
-                                  return Dialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15), 
-                                    ),
-                                    backgroundColor: Colors.transparent,
-                                    child: Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: Colors.black,
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Container(
-                                            width: double.infinity,
-                                            height: 80,
-                                            decoration: const BoxDecoration(
-                                              color: Color(0xFFE0AC53),
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(15),
-                                                topRight: Radius.circular(15),
-                                              ),
-                                            ),
-                                            child: const Center(
-                                              child: Icon(
-                                                Icons.check_circle_outline,
-                                                size: 60,
-                                                color: Colors.black,
-                                              ),
-                                            ),
+                              final response = await PelangganClient.create(pelanggan);
+                              if (response.statusCode == 201) {
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (BuildContext context) {
+                                      Future.delayed(const Duration(seconds: 2), () {
+                                        Navigator.pop(context); 
+                                        Navigator.push(context, MaterialPageRoute(builder: (BuildContext buildContext) => LoginView(data: formData,)));;
+                                      });
+
+                                      return Dialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(15), 
+                                        ),
+                                        backgroundColor: Colors.transparent,
+                                        child: Container(
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            color: Colors.black,
+                                            borderRadius: BorderRadius.circular(15),
                                           ),
-                                          Container(
-                                            padding: const EdgeInsets.all(16),
-                                            child: const Text(
-                                              "Account Created",
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Container(
+                                                width: double.infinity,
+                                                height: 80,
+                                                decoration: const BoxDecoration(
+                                                  color: Color(0xFFE0AC53),
+                                                  borderRadius: BorderRadius.only(
+                                                    topLeft: Radius.circular(15),
+                                                    topRight: Radius.circular(15),
+                                                  ),
+                                                ),
+                                                child: const Center(
+                                                  child: Icon(
+                                                    Icons.check_circle_outline,
+                                                    size: 60,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
                                               ),
-                                            ),
+                                              Container(
+                                                padding: const EdgeInsets.all(16),
+                                                child: const Text(
+                                                  "Account Created",
+                                                  style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                    ),
+                                        ),
+                                      );
+                                    },
                                   );
-                                },
-                              );
-
+                              } else {
+                                  print('Gagal: ${response.body}');
+                              }
                             }
                           },
                           style: ElevatedButton.styleFrom(
