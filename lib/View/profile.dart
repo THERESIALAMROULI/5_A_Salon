@@ -2,8 +2,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart'; 
 import 'edit_profile_information.dart'; 
+
 import 'history_transaction_view.dart';
+
+import 'package:tubesfix/View/login.dart';
+import 'package:tubesfix/client/PelangganClient.dart';
 
 class profileView extends StatefulWidget {
   final Map? data;
@@ -26,8 +31,6 @@ class _ProfileViewState extends State<profileView> {
   @override
   void initState() {
     super.initState();
-
-
     _name = widget.data?['name'] ?? "Guest";
     _email = widget.data?['email'] ?? "guest@example.com";
     _phone = widget.data?['phone'] ?? "08123456789";
@@ -118,6 +121,17 @@ class _ProfileViewState extends State<profileView> {
     );
   }
 
+  Future<void> _logout() async {
+    final pelangganClient = PelangganClient();
+    final storage = FlutterSecureStorage();
+    final response = await pelangganClient.logout();
+    await storage.delete(key: 'token');
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginView()),
+    );
+    
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -207,9 +221,7 @@ class _ProfileViewState extends State<profileView> {
                     backgroundColor: const Color(0xFFE0AC53),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   ),
-                  onPressed: () {
-                    // tombol untuk Logout
-                  },
+                  onPressed: _logout,  
                   child: const Padding(
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                     child: Text(
@@ -245,4 +257,3 @@ class _ProfileViewState extends State<profileView> {
     );
   }
 }
-
