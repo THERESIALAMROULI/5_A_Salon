@@ -32,7 +32,7 @@ class PelangganClient {
   static Future<Response> create(Pelanggan pelanggan) async {
     try {
       var response = await post(
-        Uri.parse('http://192.168.0.102/laravel_tubes/public/api/pelanggan'),
+        Uri.parse('http://192.168.65.1/laravel_tubes/public/api/pelanggan'),
         headers: {"Content-Type": "application/json"},
         body: pelanggan.toRawJson(),
       );
@@ -59,7 +59,7 @@ class PelangganClient {
 
   Future<Map<String, dynamic>> login(String username, String password) async {
     final response = await http.post(
-      Uri.parse('http://192.168.0.102/laravel_tubes/public/api/login'),
+      Uri.parse('http://192.168.65.1/laravel_tubes/public/api/login'),
       body: json.encode({
         'username': username, 
         'password': password,
@@ -82,7 +82,7 @@ class PelangganClient {
 
   Future<void> fetchPelangganData(String token) async {
     final response = await http.get(
-      Uri.parse('http://192.168.0.102/laravel_tubes/public/api/pelanggan'),
+      Uri.parse('http://192.168.65.1/laravel_tubes/public/api/pelanggan'),
       headers: {
         'Authorization': 'Bearer $token',
       },
@@ -106,7 +106,7 @@ class PelangganClient {
       }
 
       final response = await http.post(
-        Uri.parse('http://192.168.0.102/laravel_tubes/public/api/logout'),
+        Uri.parse('http://192.168.65.1/laravel_tubes/public/api/logout'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
