@@ -96,45 +96,47 @@ List<int> getFilteredIndices() {
               secondTextColor: Colors.white,
             ),
             const SizedBox(height: 16),
-            Wrap(
-              spacing: 8.0,
-              runSpacing: 4.0,
-              children: serviceTags.map((tag) {
-                final isSelected = selectedTags.contains(tag);
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      if (isSelected) {
-                        selectedTags.remove(tag); 
-                      } else {
-                        selectedTags.add(tag);
-                      }
-                    });
-                  },
-                  child: Container(
-                    width: 80,
-                    height: 32,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      border: Border.all(
-                        color: isSelected ? Color(0xFFE0AC53) : Colors.white54,
+            Center(
+              child: Wrap(
+                spacing: 8.0,
+                runSpacing: 4.0,
+                children: serviceTags.map((tag) {
+                  final isSelected = selectedTags.contains(tag);
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (isSelected) {
+                          selectedTags.remove(tag); 
+                        } else {
+                          selectedTags.add(tag);
+                        }
+                      });
+                    },
+                    child: Container(
+                      width: 95,
+                      height: 42,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        border: Border.all(
+                          color: isSelected ? Color(0xFFE0AC53) : Colors.white54,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      tag,
-                      style: TextStyle(
-                        color: isSelected ? Color(0xFFE0AC53) : Colors.white54,
-                        fontFamily: 'Inter',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
+                      child: Text(
+                        tag,
+                        style: TextStyle(
+                          color: isSelected ? Color(0xFFE0AC53) : Colors.white54,
+                          fontFamily: 'Inter',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }).toList(),
-            ),
+                  );
+                }).toList(),
+              ),
+            ), 
             const SizedBox(height: 16),
             const SectionTitle(
               firstText: 'Currently ',
@@ -259,7 +261,7 @@ class ListItemCard extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4.0),
         width: double.infinity,
-        height: 160,
+        height: 150,
         child: Card(
           color: Colors.black,
           elevation: 5,
