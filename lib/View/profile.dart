@@ -4,6 +4,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'; 
 import 'edit_profile_information.dart'; 
+
+import 'history_transaction_view.dart';
+
 import 'package:tubesfix/View/login.dart';
 import 'package:tubesfix/client/PelangganClient.dart';
 
@@ -197,7 +200,19 @@ class _ProfileViewState extends State<profileView> {
                   ),
                   onTap: () => setState(() => _notificationsOn = !_notificationsOn),
                 ),
-                _profileOption(Icons.history, "Transaction History"),
+                _profileOption(
+            Icons.history,
+            "Transaction History",
+            onTap: () {
+              // Navigasi ke halaman TransactionHistoryPage
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const TransactionHistoryPage(),
+                ),
+              );
+            },
+          ),
                 _profileOption(Icons.card_giftcard, "My Voucher"),
                 _profileOption(Icons.contact_support, "Contact Us"),
                 const SizedBox(height: 20),
