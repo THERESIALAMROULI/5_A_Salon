@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'edit_profile_information.dart'; 
+import 'history_transaction_view.dart';
 
 class profileView extends StatefulWidget {
   final Map? data;
@@ -185,7 +186,19 @@ class _ProfileViewState extends State<profileView> {
                   ),
                   onTap: () => setState(() => _notificationsOn = !_notificationsOn),
                 ),
-                _profileOption(Icons.history, "Transaction History"),
+                _profileOption(
+            Icons.history,
+            "Transaction History",
+            onTap: () {
+              // Navigasi ke halaman TransactionHistoryPage
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const TransactionHistoryPage(),
+                ),
+              );
+            },
+          ),
                 _profileOption(Icons.card_giftcard, "My Voucher"),
                 _profileOption(Icons.contact_support, "Contact Us"),
                 const SizedBox(height: 20),
