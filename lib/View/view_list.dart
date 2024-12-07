@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:tubesfix/View/selectService.dart';
 
-
 class ViewListScreen extends StatefulWidget {
   final Map? data;
   
@@ -21,12 +20,50 @@ class _ViewListScreenState extends State<ViewListScreen> {
     'Maria Castillara',
   ];
 
+  final List<String> reviews = [
+    'The barber was incredibly professional and gave me the best haircut I’ve had in years!',
+    'Amazing service! The staff was friendly, and the haircut exceeded my expectations.',
+    'The attention to detail was impressive, and the barber ensured I was comfortable throughout.',
+    'I loved how they styled my hair; it’s exactly what I wanted. Highly recommend!',
+    'Unfortunately, the barber seemed rushed, and the haircut didn’t turn out as I had hoped.',
+    'The atmosphere was pleasant, but the haircut was just average for the price.',
+    'The barber took the time to understand what I wanted and delivered perfectly!',
+    'It was okay, but I felt the barber wasn’t very engaged during the session.',
+    'I wasn’t happy with the way my hair was trimmed—it was uneven in some places.',
+    'The service was quick, and the barber was polite, but the results were underwhelming.',
+    'They were very professional, explained the process, and gave helpful styling tips.',
+    'The cleanliness and setup of the place were great, but the haircut was disappointing.',
+    'I loved the precision and care the barber showed. Definitely coming back!',
+    'The haircut was fine, but the barber didn’t seem interested in giving suggestions.',
+    'Best experience ever! The barber made me feel at ease and delivered a flawless cut.'
+  ];
+
+  final List<String> descriptions = [
+    'Experienced barber specializing in modern and classic haircuts. Ensures attention to detail and customer satisfaction.',
+    'Known for creative styles and a friendly approach, offering personalized haircut and grooming services.',
+    'Highly skilled in handling a variety of hair types and styles, from simple trims to intricate designs.',
+    'Combines professionalism and creativity to deliver hairstyles that match your personality and preferences.',
+    'Focuses on creating a relaxing experience while achieving the perfect look for every client.',
+    'Expert in beard grooming and styling, providing sharp, clean cuts tailored to individual needs.',
+    'Passionate about helping clients achieve their desired look through precision and artistic techniques.',
+    'Offers professional haircut and treatment services in a welcoming and comfortable environment.',
+    'Dedicated to providing top-notch customer service and ensuring every client leaves with a smile.',
+    'Excels in blending traditional barber techniques with modern trends for unique, stylish results.',
+    'Known for expert advice and guidance on hair care and styling, ensuring long-lasting results.',
+    'Creates a friendly and professional atmosphere, perfect for anyone looking for a quality haircut.',
+    'Experienced in grooming, beard trims, and advanced hairstyling for special occasions.',
+    'Highly trained in contemporary techniques, specializing in haircuts that complement face shapes.',
+    'Committed to providing a premium grooming experience with a focus on quality and style.',
+    'Not gonna lie, the barber is so attractive, I might book another session just to see them again.',
+    'Honestly, the haircut was great, but I couldn’t stop thinking about how cute the barber was. Call me? 😉'
+  ];
+
   final List<String> imageUrls = [
-    'https://insertface.com/fb/2826/hairstyle-oval-face-man-2825929-kt0sv-fb.jpg',
-    'https://insertface.com/fb/2809/oval-face-shape-hairstyle-2808777-a6n25-fb.jpg',
-    'https://insertface.com/fb/2822/oval-face-hairstyle-male-2821798-5p40c-fb.jpg',
-    'https://insertface.com/fb/2822/oval-face-curly-hairstyle-2821797-vehkh-fb.jpg',
-    'https://insertface.com/fb/2801/curly-hairstyle-oval-face-2801258-ixuew-fb.jpg',
+    'https://drive.usercontent.google.com/download?id=1eKqFqigcme6f1SKOLYWsUIjMf7bCGdAs',
+    'https://drive.usercontent.google.com/download?id=18gSwk7y7t_4_z6aTj5S3b7b0URVmTGvq',
+    'https://drive.usercontent.google.com/download?id=1C4rr6Q6pUSIUA09ub5sSLN7qjB_1Espe',
+    'https://drive.usercontent.google.com/download?id=1mZwiDqZYL-098jws22YHT4uZSE3taPSH',
+    'https://drive.usercontent.google.com/download?id=174r-_8CHvBRR5j1_ThCJGHqc8Au-awpb',
   ];
 
   late final List<List<String>> barberTags = List.generate(
@@ -45,15 +82,27 @@ class _ViewListScreenState extends State<ViewListScreen> {
 
   final Set<String> selectedTags = {}; 
 
-List<int> getFilteredIndices() {
-  if (selectedTags.isEmpty) {
-    return List.generate(names.length, (index) => index);
+  List<int> getFilteredIndices() {
+    if (selectedTags.isEmpty) {
+      return List.generate(names.length, (index) => index);
+    }
+
+    return List.generate(names.length, (index) => index).where((i) {
+      return selectedTags.every((tag) => barberTags[i].contains(tag));
+    }).toList();
   }
 
-  return List.generate(names.length, (index) => index).where((i) {
-    return selectedTags.every((tag) => barberTags[i].contains(tag));
-  }).toList();
-}
+  List<String> getRandomReviews(int minReviews, int maxReviews) {
+    final random = Random();
+    final reviewCount = random.nextInt(maxReviews - minReviews + 1) + minReviews;
+    final selectedReviews = <String>{};
+
+    while (selectedReviews.length < reviewCount) {
+      selectedReviews.add(reviews[random.nextInt(reviews.length)]);
+    }
+
+    return selectedReviews.toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -156,6 +205,8 @@ List<int> getFilteredIndices() {
                     imageUrl: imageUrls[i],
                     tags: barberTags[i],
                     rating: 4.5,
+                    reviews: getRandomReviews(1, 4),
+                    description: descriptions[i], 
                     data: widget.data,
                   );
                 },
@@ -231,6 +282,8 @@ class ListItemCard extends StatelessWidget {
   final String imageUrl;
   final List<String> tags;
   final double rating;
+  final List<String> reviews;
+  final String description; 
   final Map? data;
 
   const ListItemCard({
@@ -239,7 +292,9 @@ class ListItemCard extends StatelessWidget {
     required this.imageUrl,
     required this.tags,
     required this.rating,
-    this.data
+    required this.reviews,
+    required this.description,
+    this.data,
   }) : super(key: key);
 
   @override
@@ -253,6 +308,8 @@ class ListItemCard extends StatelessWidget {
               barberName: name,
               barberImage: imageUrl,
               barberTags: tags,
+              barberReview: reviews,
+              barberDescription: description, 
               data: data,
             ),
           ),
@@ -287,7 +344,9 @@ class ListItemCard extends StatelessWidget {
                         name,
                         style: const TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Inter', fontSize: 18, fontWeight: FontWeight.w700
+                          fontFamily: 'Inter',
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -307,10 +366,12 @@ class ListItemCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Tags:',
+                            'Tags: ',
                             style: TextStyle(
                               color: Colors.white70,
-                              fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w400
+                              fontFamily: 'Inter',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                           const SizedBox(width: 4),
@@ -332,7 +393,9 @@ class ListItemCard extends StatelessWidget {
                                     tag,
                                     style: const TextStyle(
                                       color: Color(0xFFE0AC53),
-                                      fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w400
+                                      fontFamily: 'Inter',
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
                                     ),
                                   ),
                                 );

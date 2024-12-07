@@ -40,6 +40,11 @@ flutter:
     - assets/images/icon_dana.png
     - assets/images/icon_ovo.png
     - assets/images/icon_gopay.png
+    - assets/images/08e70783-bb83-4d5a-ba05-3f828028147d.jpg
+    - assets/images/60d04c08-ba9a-4a8b-81ee-fa28c1de0526.jpg
+    - assets/images/750c4cb8-8b7e-49f4-9ad0-66c3108eac87.jpg
+    - assets/images/afc4f05d-5efc-4f69-97ab-5dfc66e92b09.jpg
+    - assets/images/f7f1e639-d2ac-4f98-9131-992c4a8d71f5.jpg
   fonts:
     - family: Inter
       fonts:

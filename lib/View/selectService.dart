@@ -5,6 +5,8 @@ class SelectServiceScreen extends StatefulWidget {
   final String barberName;
   final String barberImage;
   final List<String> barberTags;
+  final List<String> barberReview;
+  final String barberDescription;
   final Map? data;
 
   const SelectServiceScreen({
@@ -12,6 +14,8 @@ class SelectServiceScreen extends StatefulWidget {
     required this.barberName,
     required this.barberImage,
     required this.barberTags,
+    required this.barberReview,
+    required this.barberDescription,
     this.data
   }) : super(key: key);
 
@@ -146,66 +150,133 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundImage: NetworkImage(widget.barberImage),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.barberName,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Inter', fontSize: 18, fontWeight: FontWeight.w600
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Row(
-                              children: const [
-                                Icon(Icons.star, color: Color(0xFFE0AC53)),
-                                Icon(Icons.star, color: Color(0xFFE0AC53)),
-                                Icon(Icons.star, color: Color(0xFFE0AC53)),
-                                Icon(Icons.star, color: Color(0xFFE0AC53)),
-                                Icon(Icons.star_half, color: Color(0xFFE0AC53)),
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 40,
+                            backgroundImage: NetworkImage(widget.barberImage),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.barberName,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Inter',
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: const [
+                                    Icon(Icons.star, color: Color(0xFFE0AC53)),
+                                    Icon(Icons.star, color: Color(0xFFE0AC53)),
+                                    Icon(Icons.star, color: Color(0xFFE0AC53)),
+                                    Icon(Icons.star, color: Color(0xFFE0AC53)),
+                                    Icon(Icons.star_half, color: Color(0xFFE0AC53)),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                const Text(
+                                  'Tags:',
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontFamily: 'Inter',
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                Wrap(
+                                  spacing: 4.0,
+                                  runSpacing: 4.0,
+                                  children: widget.barberTags.map((tag) {
+                                    return Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 4, horizontal: 8),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        border: Border.all(color: const Color(0xFFE0AC53)),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Text(
+                                        tag,
+                                        style: const TextStyle(
+                                          color: Color(0xFFE0AC53),
+                                          fontFamily: 'Inter',
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
                               ],
                             ),
-                            const SizedBox(height: 8),
-                            const Text(
-                              'Tags:',
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w400
-                              ),
-                            ),
-                            Wrap(
-                              spacing: 4.0,
-                              runSpacing: 4.0,
-                              children: widget.barberTags.map((tag) {
-                                return Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 4, horizontal: 8),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    border: Border.all(
-                                        color: const Color(0xFFE0AC53)),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Text(
-                                    tag,
-                                    style: const TextStyle(
-                                      color: Color(0xFFE0AC53),
-                                      fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w400
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Description',
+                        style: TextStyle(
+                          color: Color(0xFFE0AC53),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        widget.barberDescription,
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontFamily: 'Inter',
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Reviews',
+                        style: TextStyle(
+                          color: Color(0xFFE0AC53),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      SizedBox(
+                        height: 150,
+                        child: ListView.builder(
+                          itemCount: widget.barberReview.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4.0),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.comment, size: 16, color: Color(0xFFE0AC53)),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      widget.barberReview[index],
+                                      style: const TextStyle(
+                                        color: Colors.white70,
+                                        fontFamily: 'Inter',
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        fontStyle: FontStyle.italic,
+                                      ),
                                     ),
                                   ),
-                                );
-                              }).toList(),
-                            ),
-                          ],
+                                ],
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],

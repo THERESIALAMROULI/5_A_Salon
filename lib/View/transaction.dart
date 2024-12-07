@@ -294,7 +294,7 @@ class _transactionViewState extends State<transactionView> {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        VoucherSection(),
+                        // VoucherSection(),
                       ],
                     ),
                   ),
