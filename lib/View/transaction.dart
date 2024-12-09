@@ -166,9 +166,9 @@ class _transactionViewState extends State<transactionView> {
                         const Divider(color: Color(0xFFE0AC53)),
                         ...services.map((service) {
                           return TransactionListItem(
-                            nama: service['name'],
-                            quantity: 1,
-                            price: service['price'],
+                              nama: service['name'],
+                              quantity: 1,
+                              price: (service['price'] as num).toInt(),
                           );
                         }).toList(),
 

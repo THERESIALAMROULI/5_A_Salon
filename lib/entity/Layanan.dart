@@ -1,37 +1,38 @@
 import 'dart:convert';
 
 class Layanan {
-  int id;
-  String jenis_layanan;
-  double tarif;
-  String deskripsi_layanan;
-  int id_barber;
+  final int id;
+  final String jenis_Layanan;
+  final double tarif;
+  final String deskripsiLayanan;
+  final int id_barber;
 
   Layanan({
     required this.id,
-    required this.jenis_layanan,
+    required this.jenis_Layanan,
     required this.tarif,
-    required this.deskripsi_layanan,
+    required this.deskripsiLayanan,
     required this.id_barber,
   });
 
-  factory Layanan.fromRawJson(String str) => Layanan.fromJson(json.decode(str));
-
-  factory Layanan.fromJson(Map<String, dynamic> json) => Layanan(
-        id: json["id"],
-        jenis_layanan: json["jenis_layanan"],
-        tarif: json["tarif"]?.toDouble() ?? 0.0, 
-        deskripsi_layanan: json["deskripsi_layanan"],
-        id_barber: json["id_barber"],
-      );
-
-  String toRawJson() => json.encode(toJson());
+  factory Layanan.fromJson(Map<String, dynamic> json) {
+    return Layanan(
+      id: json['id'],
+      jenis_Layanan: json['jenis_layanan'],
+      tarif: json['tarif'] is String
+          ? double.parse(json['tarif'])
+          : (json['tarif'] as num).toDouble(), 
+      deskripsiLayanan: json['deskripsi_layanan'],
+      id_barber: json['id_barber'],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "jenis_layanan": jenis_layanan,
+        "jenis_layanan": jenis_Layanan,
         "tarif": tarif,
-        "deskripsi_layanan": deskripsi_layanan,
+        "deskripsi_layanan": deskripsiLayanan,
         "id_barber": id_barber,
       };
 }
+

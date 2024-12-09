@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tubesfix/View/transaction.dart';
+import 'package:tubesfix/entity/Layanan.dart';
 
 class SelectServiceScreen extends StatefulWidget {
   final String barberName;
@@ -7,6 +8,7 @@ class SelectServiceScreen extends StatefulWidget {
   final List<String> barberTags;
   final List<String> barberReview;
   final String barberDescription;
+  final List<Layanan> layanan; 
   final Map? data;
 
   const SelectServiceScreen({
@@ -16,7 +18,8 @@ class SelectServiceScreen extends StatefulWidget {
     required this.barberTags,
     required this.barberReview,
     required this.barberDescription,
-    this.data
+    required this.layanan, 
+    this.data,
   }) : super(key: key);
 
   @override
@@ -83,19 +86,10 @@ class SectionTitle extends StatelessWidget {
 }
 
 class _SelectServiceScreenState extends State<SelectServiceScreen> {
-  final Map<String, int> services = {
-    'Haircut': 70000,
-    'Treatment': 90000,
-    'Mustache': 50000,
-    'Coloring': 120000,
-    'Beard': 40000,
-    'Shaving': 30000,
-  };
-
   final List<String> selectedServices = []; 
   TextEditingController namaController = TextEditingController();
   String? errorTextName;
-  String? errorTextDate; 
+  String? errorTextDate;
   DateTime? selectedDate;
 
   Future<void> _selectDate(BuildContext context) async {
@@ -103,7 +97,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(Duration(days: 365)), 
+      lastDate: DateTime.now().add(const Duration(days: 365)),
     );
     if (picked != null && picked != selectedDate) {
       setState(() {
@@ -114,22 +108,25 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final availableServices = services.keys
-        .where((service) => widget.barberTags.contains(service))
+    final availableServices = widget.layanan
+        .where((service) => widget.barberTags.contains(service.jenis_Layanan))
         .toList();
 
     final selectedTotal = selectedServices
-        .map((service) => services[service] ?? 0)
-        .fold(0, (value, element) => value + element);
+        .map((serviceName) =>
+            availableServices.firstWhere((s) => s.jenis_Layanan == serviceName).tarif)
+        .fold(0.0, (value, element) => value + element);
 
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        automaticallyImplyLeading: false, 
+        automaticallyImplyLeading: false,
         title: const Text(
           'ATMA BARBER',
           style: TextStyle(
-            fontFamily: 'Mixages', fontSize: 24, fontWeight: FontWeight.w700,
+            fontFamily: 'Mixages',
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
             color: Color(0xFFE0AC53),
           ),
         ),
@@ -146,7 +143,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                 color: Colors.black,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
-                  side: BorderSide(color: Color(0xFFE0AC53), width: 1.5),
+                  side: const BorderSide(color: Color(0xFFE0AC53), width: 1.5),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -202,7 +199,8 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                                           vertical: 4, horizontal: 8),
                                       decoration: BoxDecoration(
                                         color: Colors.black,
-                                        border: Border.all(color: const Color(0xFFE0AC53)),
+                                        border: Border.all(
+                                            color: const Color(0xFFE0AC53)),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Text(
@@ -256,10 +254,12 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                           itemCount: widget.barberReview.length,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 4.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 4.0),
                               child: Row(
                                 children: [
-                                  const Icon(Icons.comment, size: 16, color: Color(0xFFE0AC53)),
+                                  const Icon(Icons.comment,
+                                      size: 16, color: Color(0xFFE0AC53)),
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
@@ -295,14 +295,15 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                 spacing: 8.0,
                 runSpacing: 4.0,
                 children: availableServices.map((service) {
-                  final isSelected = selectedServices.contains(service);
+                  final isSelected =
+                      selectedServices.contains(service.jenis_Layanan);
                   return GestureDetector(
                     onTap: () {
                       setState(() {
                         if (isSelected) {
-                          selectedServices.remove(service);
+                          selectedServices.remove(service.jenis_Layanan);
                         } else {
-                          selectedServices.add(service);
+                          selectedServices.add(service.jenis_Layanan);
                         }
                       });
                     },
@@ -320,10 +321,14 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        service,
+                        '${service.jenis_Layanan}',
                         style: TextStyle(
-                          color: isSelected ? Color(0xFFE0AC53) : Colors.white54,
-                          fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w400
+                          color: isSelected
+                              ? const Color(0xFFE0AC53)
+                              : Colors.white54,
+                          fontFamily: 'Inter',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),
@@ -408,22 +413,28 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      ...selectedServices.map((service) {
+                      ...selectedServices.map((serviceName) {
+                        final service = availableServices.firstWhere(
+                            (s) => s.jenis_Layanan == serviceName);
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              service,
+                              service.jenis_Layanan,
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600
+                                fontFamily: 'Inter',
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                             Text(
-                              'Rp. ${services[service]!.toStringAsFixed(0)}',
+                              'Rp. ${service.tarif.toInt()}',
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600
+                                fontFamily: 'Inter',
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ],
@@ -437,11 +448,13 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                             'Total',
                             style: TextStyle(
                               color: Colors.white,
-                              fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w700
+                              fontFamily: 'Inter',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                           Text(
-                            'Rp. ${selectedTotal.toStringAsFixed(0)}',
+                            'Rp. ${selectedTotal.toInt()}',
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 14,
@@ -465,7 +478,11 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                       ),
                       child: const Text(
                         'Cancel',
-                        style: TextStyle(color: Color(0xFFE0AC53), fontFamily: 'Inter', fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                          color: Color(0xFFE0AC53),
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
@@ -482,12 +499,6 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                           setState(() {
                             errorTextDate = 'Please select a date';
                           });
-                        } else if (selectedDate!.year == today.year &&
-                            selectedDate!.month == today.month &&
-                            selectedDate!.day == today.day) {
-                          setState(() {
-                            errorTextDate = 'You cannot book for today. Select a later date.';
-                          });
                         } else {
                           setState(() {
                             errorTextName = null;
@@ -499,16 +510,25 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                               builder: (context) => transactionView(
                                 dataformat: {
                                   'nama': namaController.text,
-                                  'date': selectedDate,
+                                  'date': selectedDate?.toIso8601String(), 
                                   'services': selectedServices,
-                                  'servicesPdf': selectedServices
-                                      .where((service) => services.containsKey(service))
-                                      .map((service) => {'name': service, 'quantity': 1})
-                                      .toList(),
-                                  'prices': selectedServices
-                                      .map((service) => {'name': service, 'price': services[service]!})
-                                      .toList(),
-                                  'total': selectedTotal,
+                                  'servicesPdf': selectedServices.map((service) {
+                                    return {
+                                      'name': service,
+                                      'quantity': 1,
+                                    };
+                                  }).toList(),
+                                  'prices': selectedServices.map((service) {
+                                    final tarif = widget.layanan
+                                      .firstWhere((layanan) => layanan.jenis_Layanan == service)
+                                      .tarif
+                                      .toInt();
+                                    return {
+                                      'name': service,
+                                      'price': tarif,
+                                    };
+                                  }).toList(),
+                                  'total': selectedTotal.toInt(),
                                 },
                                 data: widget.data,
                               ),
@@ -521,7 +541,11 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                       ),
                       child: const Text(
                         'Payment',
-                        style: TextStyle(color: Colors.black, fontFamily: 'Inter', fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
@@ -534,4 +558,3 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
     );
   }
 }
-
