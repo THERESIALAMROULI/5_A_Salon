@@ -510,7 +510,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                               builder: (context) => transactionView(
                                 dataformat: {
                                   'nama': namaController.text,
-                                  'date': selectedDate?.toIso8601String(), 
+                                  'date': selectedDate, 
                                   'services': selectedServices,
                                   'servicesPdf': selectedServices.map((service) {
                                     return {
