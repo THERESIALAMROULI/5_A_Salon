@@ -1,16 +1,221 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:tubesfix/View/selectService.dart';
+import 'package:tubesfix/client/BarberClient.dart';
+import 'package:tubesfix/client/LayananClient.dart';
+import 'package:tubesfix/entity/Barber.dart';
+import 'package:tubesfix/entity/Layanan.dart';
 
-class ViewList extends StatelessWidget {
-  const ViewList({Key? key}) : super(key: key);
+class ViewListScreen extends StatefulWidget {
+  final Map? data;
+
+  const ViewListScreen({super.key, this.data});
+
+  @override
+  _ViewListScreenState createState() => _ViewListScreenState();
+}
+
+class _ViewListScreenState extends State<ViewListScreen> {
+  late Future<List<Barber>> _barbersFuture;
+  late Future<List<Layanan>> _layananFuture;
+
+  final List<String> imageUrls = [
+      'https://drive.usercontent.google.com/download?id=1eKqFqigcme6f1SKOLYWsUIjMf7bCGdAs',
+      'https://drive.usercontent.google.com/download?id=18gSwk7y7t_4_z6aTj5S3b7b0URVmTGvq',
+      'https://drive.usercontent.google.com/download?id=1C4rr6Q6pUSIUA09ub5sSLN7qjB_1Espe',
+      'https://drive.usercontent.google.com/download?id=1mZwiDqZYL-098jws22YHT4uZSE3taPSH',
+      'https://drive.usercontent.google.com/download?id=174r-_8CHvBRR5j1_ThCJGHqc8Au-awpb',
+    ];
+
+  final List<String> reviews = [
+    'The barber was incredibly professional and gave me the best haircut I’ve had in years!',
+    'Amazing service! The staff was friendly, and the haircut exceeded my expectations.',
+    'The attention to detail was impressive, and the barber ensured I was comfortable throughout.',
+    'I loved how they styled my hair; it’s exactly what I wanted. Highly recommend!',
+    'Unfortunately, the barber seemed rushed, and the haircut didn’t turn out as I had hoped.',
+  ];
+
+  final Set<String> selectedTags = {}; 
+
+  @override
+  void initState() {
+    super.initState();
+    _barbersFuture = BarberClient.fetchBarbers(); 
+    _layananFuture = LayananClient.fetchLayanan(); 
+  }
+
+  List<int> getFilteredIndices(List<Barber> barbers, List<Layanan> layanan) {
+    if (selectedTags.isEmpty) {
+      return List.generate(barbers.length, (index) => index);
+    }
+
+    return List.generate(barbers.length, (index) => index).where((i) {
+      final barberLayanan = layanan
+          .where((l) => l.id_barber == barbers[i].id)
+          .map((l) => l.jenis_Layanan)
+          .toSet();
+      return selectedTags.every((tag) => barberLayanan.contains(tag));
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.black,
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Padding(
+          padding: EdgeInsets.only(left: 16.0),
+          child: Text(
+            'ATMA BARBER',
+            style: TextStyle(
+              fontFamily: 'Mixages',
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFFE0AC53),
+            ),
+          ),
+        ),
+        backgroundColor: Colors.black,
+        centerTitle: false,
+        titleSpacing: 0.5,
+        actions: const [
+          Icon(Icons.notifications, color: Color(0xFFE0AC53)),
+          SizedBox(width: 16),
+        ],
       ),
-      home: const ViewListScreen(),
+      body: FutureBuilder<List<Barber>>(
+        future: _barbersFuture,
+        builder: (context, barberSnapshot) {
+          return FutureBuilder<List<Layanan>>(
+            future: _layananFuture,
+            builder: (context, layananSnapshot) {
+              if (barberSnapshot.connectionState == ConnectionState.waiting ||
+                  layananSnapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (barberSnapshot.hasError || layananSnapshot.hasError) {
+                return Center(
+                  child: Text(
+                    'Error: ${barberSnapshot.error ?? layananSnapshot.error}',
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                );
+              } else if (!barberSnapshot.hasData || barberSnapshot.data!.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'No barbers available.',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                );
+              }
+
+              final barbers = barberSnapshot.data!;
+              final layanan = layananSnapshot.data!;
+              final filteredIndices = getFilteredIndices(barbers, layanan);
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 16),
+                    const SectionTitle(
+                      firstText: 'Our Service ',
+                      secondText: 'List',
+                      firstTextColor: Color(0xFFE0AC53),
+                      secondTextColor: Colors.white,
+                    ),
+                    const SizedBox(height: 16),
+                    Center(
+                      child: Wrap(
+                        spacing: 8.0,
+                        runSpacing: 4.0,
+                        children: layanan
+                            .map((l) => l.jenis_Layanan)
+                            .toSet()
+                            .map((tag) {
+                          final isSelected = selectedTags.contains(tag);
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                if (isSelected) {
+                                  selectedTags.remove(tag);
+                                } else {
+                                  selectedTags.add(tag);
+                                }
+                              });
+                            },
+                            child: Container(
+                              width: 95,
+                              height: 42,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                border: Border.all(
+                                  color: isSelected
+                                      ? Color(0xFFE0AC53)
+                                      : Colors.white54,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                tag,
+                                style: TextStyle(
+                                  color: isSelected
+                                      ? Color(0xFFE0AC53)
+                                      : Colors.white54,
+                                  fontFamily: 'Inter',
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const SectionTitle(
+                      firstText: 'Currently ',
+                      secondText: 'Available',
+                      firstTextColor: Color(0xFFE0AC53),
+                      secondTextColor: Colors.white,
+                    ),
+                    const SizedBox(height: 16),
+                    Expanded(
+                      child: ListView.builder(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        itemCount: filteredIndices.length,
+                        itemBuilder: (context, index) {
+                          final i = filteredIndices[index];
+                          final barber = barbers[i];
+                          final barberLayanan = layanan
+                              .where((l) => l.id_barber == barber.id)
+                              .map((l) => l.jenis_Layanan)
+                              .toList();
+                          final barberLayananHarga = layanan
+                              .where((l) => l.id_barber == barber.id)
+                              .toList();
+
+                          return ListItemCard(
+                            name: barber.nama_barber,
+                            imageUrl: imageUrls[i % imageUrls.length], 
+                            tags: barberLayanan, 
+                            rating: 4.5, 
+                            reviews: [reviews[i % reviews.length]], 
+                            description: barber.deskripsi, 
+                            layanan: barberLayananHarga,
+                            data: widget.data,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
@@ -37,11 +242,11 @@ class SectionTitle extends StatelessWidget {
           '— ',
           style: TextStyle(
             color: firstTextColor,
+            fontFamily: 'Inter',
             fontSize: 24,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w700,
           ),
         ),
-
         RichText(
           text: TextSpan(
             children: [
@@ -49,23 +254,24 @@ class SectionTitle extends StatelessWidget {
                 text: firstText,
                 style: TextStyle(
                   color: firstTextColor,
+                  fontFamily: 'Inter',
                   fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
               TextSpan(
                 text: secondText,
                 style: TextStyle(
                   color: secondTextColor,
+                  fontFamily: 'Inter',
                   fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ],
           ),
         ),
-
-        const SizedBox(width: 8), 
+        const SizedBox(width: 8),
         const Expanded(
           child: Divider(
             color: Colors.white,
@@ -78,262 +284,144 @@ class SectionTitle extends StatelessWidget {
   }
 }
 
-class ViewListScreen extends StatelessWidget {
-  const ViewListScreen({Key? key}) : super(key: key);
-  
-  @override
-  Widget build(BuildContext context) {
-    final List<String> names = [
-      'Jonatharion Putraeus',
-      'Asimandria Sinagard',
-      'Theresienne Lamroule',
-      'Eliandoria Setarian',
-      'Maria Castillara',
-    ];
-
-    final List<String> imageUrls = [
-      'https://insertface.com/fb/2826/hairstyle-oval-face-man-2825929-kt0sv-fb.jpg',
-      'https://insertface.com/fb/2809/oval-face-shape-hairstyle-2808777-a6n25-fb.jpg',
-      'https://insertface.com/fb/2822/oval-face-hairstyle-male-2821798-5p40c-fb.jpg',
-      'https://insertface.com/fb/2822/oval-face-curly-hairstyle-2821797-vehkh-fb.jpg',
-      'https://insertface.com/fb/2801/curly-hairstyle-oval-face-2801258-ixuew-fb.jpg',
-      'https://insertface.com/fb/2809/rectangle-face-shape-2809242-ywmq7-fb.jpg',
-      'https://insertface.com/fb/2805/inverted-triangle-face-shape-2804666-dbaaz-fb.jpg',
-    ];
-
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Padding(
-          padding: EdgeInsets.only(left: 16.0), 
-          child: Text(
-            'ATMA BARBER',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFFE0AC53),
-            ),
-          ),
-        ),
-        backgroundColor: Colors.black,
-        centerTitle: false,
-        titleSpacing: 0.5,
-        actions: const [
-          Icon(Icons.notifications, color: Color(0xFFE0AC53)),
-          SizedBox(width: 16),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 16),
-            const SectionTitle(
-              firstText: 'Our Service ',
-              secondText: 'List',
-              firstTextColor: Color(0xFFE0AC53), 
-              secondTextColor: Colors.white,
-            ),
-            const SizedBox(height: 16),
-
-            Wrap(
-              spacing: 8.0,
-              runSpacing: 4.0,
-              children: const [
-                ServiceTag(label: 'Haircut'),
-                ServiceTag(label: 'Treatment'),
-                ServiceTag(label: 'Mustache'),
-                ServiceTag(label: 'Coloring'),
-                ServiceTag(label: 'Beard'),
-                ServiceTag(label: 'Shaving'),
-                
-              ],
-              
-              // kapan kapan ganti tombol deh ( mager sekarang ) // teeheee feeling cute : > 
-            ),
-            const SizedBox(height: 16),
-            const SectionTitle(
-              firstText: 'Currently ',
-              secondText: 'Available',
-              firstTextColor: Color(0xFFE0AC53), 
-              secondTextColor: Colors.white,
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.only(bottom: 16),
-                itemCount: names.length, 
-                itemBuilder: (context, i) {
-                  return ListItemCard(
-                    
-                    name: names[i],
-                    imageUrl: imageUrls[i], 
-                    tags: getRandomTags(),
-                    rating: 4.5,
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ServiceTag extends StatelessWidget {
-  final String label;
-  const ServiceTag({Key? key, required this.label}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 80, 
-      height: 32,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: Colors.black,
-        border: Border.all(color: Colors.white54),
-        borderRadius: BorderRadius.circular(8), 
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(color: Colors.white54, fontSize: 12),
-      ),
-    );
-  }
-}
-
 class ListItemCard extends StatelessWidget {
   final String name;
-  final String imageUrl; 
+  final String imageUrl;
   final List<String> tags;
   final double rating;
+  final List<String> reviews;
+  final String description; 
+  final List<Layanan> layanan;
+  final Map? data;
 
   const ListItemCard({
     Key? key,
     required this.name,
-    required this.imageUrl, 
+    required this.imageUrl,
     required this.tags,
     required this.rating,
+    required this.reviews,
+    required this.description,
+    required this.layanan,
+    this.data,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4.0),
-      width: double.infinity,
-      height: 160,
-      child: Card(
-        
-        color: Colors.black,
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-          side: BorderSide(color: Color(0xFFE0AC53), width: 1.5),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 40,
-                backgroundImage: NetworkImage(imageUrl), 
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      name,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: List.generate(5, (index) {
-                        return Icon(
-                          index < rating.floor() ? Icons.star : Icons.star_half,
-                          color: Color(0xFFE0AC53),
-                          size: 20,
-                        );
-                      }),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Tags:',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 14,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        Expanded(
-                          child: Wrap(
-                            spacing: 4.0,
-                            runSpacing: 4.0,
-                            children: tags.map((tag) {
-                              return Container(
-                                width: 80, 
-                                padding: const EdgeInsets.symmetric(vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  border: Border.all(color: Color(0xFFE0AC53)),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  tag,
-                                  style: const TextStyle(
-                                    color: Color(0xFFE0AC53),
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SelectServiceScreen(
+              barberName: name,
+              barberImage: imageUrl,
+              barberTags: tags,
+              barberReview: reviews,
+              barberDescription: description, 
+              layanan: layanan,
+              data: data,
+            ),
+          ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4.0),
+        width: double.infinity,
+        height: 150,
+        child: Card(
+          color: Colors.black,
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+            side: const BorderSide(color: Color(0xFFE0AC53), width: 1.5),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 40,
+                  backgroundImage: NetworkImage(imageUrl),
                 ),
-              ),
-            ],
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        name,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Inter',
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: List.generate(5, (index) {
+                          return Icon(
+                            index < rating.floor()
+                                ? Icons.star
+                                : Icons.star_half,
+                            color: const Color(0xFFE0AC53),
+                            size: 20,
+                          );
+                        }),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Tags: ',
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontFamily: 'Inter',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Wrap(
+                              spacing: 4.0,
+                              runSpacing: 4.0,
+                              children: tags.map((tag) {
+                                return Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 4, horizontal: 8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    border: Border.all(
+                                        color: const Color(0xFFE0AC53)),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    tag,
+                                    style: const TextStyle(
+                                      color: Color(0xFFE0AC53),
+                                      fontFamily: 'Inter',
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-}
-
-
-// i know im so fking good // :>
-List<String> getRandomTags() {
-  final List<String> allTags = [
-    'Haircut',
-    'Treatment',
-    'Mustache',
-    'Coloring',
-    'Beard',
-    'Shaving'
-  ];
-  final random = Random();
-  final selectedTags = <String>{};
-  
-  int tagCount = random.nextInt(3) + 1; 
-  while (selectedTags.length < tagCount) {
-    selectedTags.add(allTags[random.nextInt(allTags.length)]);
-  }
-  
-  return selectedTags.toList();
 }

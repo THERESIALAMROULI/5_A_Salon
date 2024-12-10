@@ -2,23 +2,40 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart'; 
 import 'edit_profile_information.dart'; 
 
+import 'history_transaction_view.dart';
+
+import 'package:tubesfix/View/login.dart';
+import 'package:tubesfix/client/PelangganClient.dart';
+
 class profileView extends StatefulWidget {
-  const profileView({Key? key}) : super(key: key);
+  final Map? data;
+
+  const profileView({super.key, this.data});
 
   @override
   State<profileView> createState() => _ProfileViewState();
 }
 
 class _ProfileViewState extends State<profileView> {
-  String _name = "Budi Antoro";
-  String _email = "budi01@gmail.com";
-  String _phone = "+62 812 3456 7890";
-  String _username = "budiantoro";
+  late String _name;
+  late String _email;
+  late String _phone;
+  late String _username;
   bool _notificationsOn = true;
   File? _profileImage;
   final ImagePicker _picker = ImagePicker();
+
+  @override
+  void initState() {
+    super.initState();
+    _name = widget.data?['name'] ?? "Guest";
+    _email = widget.data?['email'] ?? "guest@example.com";
+    _phone = widget.data?['phone'] ?? "08123456789";
+    _username = widget.data?['username'] ?? "guest";
+  }
 
   Future<void> _pickImage(ImageSource source) async {
     if (source == ImageSource.camera) await _requestCameraPermission();
@@ -91,6 +108,12 @@ class _ProfileViewState extends State<profileView> {
               _email = newEmail;
               _phone = newPhone;
               _username = newUsername;
+              if (widget.data != null) {
+                widget.data!['name'] = newName;
+                widget.data!['email'] = newEmail;
+                widget.data!['phone'] = newPhone;
+                widget.data!['username'] = newUsername;
+              }
             });
           },
         ),
@@ -98,23 +121,32 @@ class _ProfileViewState extends State<profileView> {
     );
   }
 
+  Future<void> _logout() async {
+    final pelangganClient = PelangganClient();
+    final storage = FlutterSecureStorage();
+    final response = await pelangganClient.logout();
+    await storage.delete(key: 'token');
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginView()),
+    );
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-
               children: [
                 Stack(
                   alignment: Alignment.center,
                   children: [
-
                     Container(
                       height: 170,
                       width: double.infinity,
@@ -168,18 +200,28 @@ class _ProfileViewState extends State<profileView> {
                   ),
                   onTap: () => setState(() => _notificationsOn = !_notificationsOn),
                 ),
-                _profileOption(Icons.history, "Transaction History"),
+                _profileOption(
+            Icons.history,
+            "Transaction History",
+            onTap: () {
+              // Navigasi ke halaman TransactionHistoryPage
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const TransactionHistoryPage(),
+                ),
+              );
+            },
+          ),
                 _profileOption(Icons.card_giftcard, "My Voucher"),
                 _profileOption(Icons.contact_support, "Contact Us"),
                 const SizedBox(height: 20),
-                // Logout Button
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFE0AC53),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   ),
-                  onPressed: () {
-                  },
+                  onPressed: _logout,  
                   child: const Padding(
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                     child: Text(
