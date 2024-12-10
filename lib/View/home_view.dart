@@ -5,48 +5,9 @@ import 'package:tubesfix/client/BarberClient.dart';
 import 'package:tubesfix/client/LayananClient.dart';
 import 'package:tubesfix/entity/Barber.dart';
 import 'package:tubesfix/entity/Layanan.dart';
-
-  late Future<List<Barber>> _barbersFuture;
-  late Future<List<Layanan>> _layananFuture;
-
-  final List<String> imageUrls = [
-      'https://drive.usercontent.google.com/download?id=1eKqFqigcme6f1SKOLYWsUIjMf7bCGdAs',
-      'https://drive.usercontent.google.com/download?id=18gSwk7y7t_4_z6aTj5S3b7b0URVmTGvq',
-      'https://drive.usercontent.google.com/download?id=1C4rr6Q6pUSIUA09ub5sSLN7qjB_1Espe',
-      'https://drive.usercontent.google.com/download?id=1mZwiDqZYL-098jws22YHT4uZSE3taPSH',
-      'https://drive.usercontent.google.com/download?id=174r-_8CHvBRR5j1_ThCJGHqc8Au-awpb',
-    ];
-
-  final List<String> reviews = [
-    'The barber was incredibly professional and gave me the best haircut I’ve had in years!',
-    'Amazing service! The staff was friendly, and the haircut exceeded my expectations.',
-    'The attention to detail was impressive, and the barber ensured I was comfortable throughout.',
-    'I loved how they styled my hair; it’s exactly what I wanted. Highly recommend!',
-    'Unfortunately, the barber seemed rushed, and the haircut didn’t turn out as I had hoped.',
-  ];
-  void initState() {
-    _barbersFuture = BarberClient.fetchBarbers(); 
-    _layananFuture = LayananClient.fetchLayanan(); 
-  }
+import 'package:tubesfix/View/selectService.dart';
 
 
-class homeView extends StatelessWidget {
-  final Map? data;
-  
-  const homeView({super.key, this.data});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.black,
-      ),
-      home: const homeScreen(),
-    );
-  }
-}
 class ImageSlider extends StatelessWidget {
   final List<String> imageUrls = [
     'assets/images/awwa.jpg',
@@ -59,10 +20,10 @@ class ImageSlider extends StatelessWidget {
   Widget build(BuildContext context) {
         return Container(
           width: double.infinity,
-          height: 150, // Adjust height as needed
+          height: 150, 
           child: CarouselSlider(
             options: CarouselOptions(
-              height: 150, // Adjust height as needed
+              height: 150, 
               autoPlay: true,
               autoPlayInterval: const Duration(seconds: 4),
               enlargeCenterPage: true,
@@ -92,10 +53,18 @@ class ImageSlider extends StatelessWidget {
   }
 }
 
-class homeScreen extends StatelessWidget {
-  const homeScreen({super.key});
-    
+class homeView extends StatefulWidget {
+  final Map? data;
 
+  const homeView({super.key, this.data});
+
+  @override
+  _homeViewState createState() => _homeViewState();
+}
+    
+class _homeViewState extends State<homeView> {
+  Future<List<Barber>> _barbersFuture = BarberClient.fetchBarbers();
+  Future<List<Layanan>> _layananFuture = LayananClient.fetchLayanan();
 
   @override
   Widget build(BuildContext context) {
@@ -108,16 +77,7 @@ class homeScreen extends StatelessWidget {
       'Shaving'
     ];
 
-    final List<String> names = [
-      'Jonatharion Putraeus',
-      'Asimandria Sinagard',
-      'Theresienne Lamroule',
-      'Eliandoria Setarian',
-      'Maria Castillara',
-    ];
-  
-
-    final List<String> imageUrls = [
+  final List<String> imageUrls = [
       'https://drive.usercontent.google.com/download?id=1eKqFqigcme6f1SKOLYWsUIjMf7bCGdAs',
       'https://drive.usercontent.google.com/download?id=18gSwk7y7t_4_z6aTj5S3b7b0URVmTGvq',
       'https://drive.usercontent.google.com/download?id=1C4rr6Q6pUSIUA09ub5sSLN7qjB_1Espe',
@@ -125,10 +85,25 @@ class homeScreen extends StatelessWidget {
       'https://drive.usercontent.google.com/download?id=174r-_8CHvBRR5j1_ThCJGHqc8Au-awpb',
     ];
 
-    List<int> getFilteredIndices() {
-      return List.generate(names.length, (index) => index);
-    }
-    final filteredIndices = getFilteredIndices();
+  final List<String> reviews = [
+    'The barber was incredibly professional and gave me the best haircut I’ve had in years!',
+    'Amazing service! The staff was friendly, and the haircut exceeded my expectations.',
+    'The attention to detail was impressive, and the barber ensured I was comfortable throughout.',
+    'I loved how they styled my hair; it’s exactly what I wanted. Highly recommend!',
+    'Unfortunately, the barber seemed rushed, and the haircut didn’t turn out as I had hoped.',
+  ];
+
+  @override
+  void initState() {
+    super.initState(); 
+    _barbersFuture = BarberClient.fetchBarbers();
+    _layananFuture = LayananClient.fetchLayanan();
+  }
+
+  List<int> getFilteredIndices(List<Barber> barbers, List<Layanan> layanan) {
+    return List.generate(barbers.length, (index) => index);
+  }
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -153,77 +128,123 @@ class homeScreen extends StatelessWidget {
           SizedBox(width: 16),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SectionTitle(
-              firstText: 'Ready ',
-              secondText: 'For New Style ?',
-              firstTextColor: Color(0xFFE0AC53),
-              secondTextColor: Colors.white,
-            ),
-            const SizedBox(height: 10),
-            Center(
-              child: ImageSlider(),
-            ),
-            const SizedBox(height: 10),
-            Center(
-              child: Wrap(
-                spacing: 8.0,
-                runSpacing: 4.0,
-                children: serviceTags.map((tag) {
-                  return GestureDetector(
-                    child: Container(
-                      width: 87,
-                      height: 39,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        border: Border.all(color: Color(0xFFE0AC53)),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        tag,
-                        style: TextStyle(
-                          color: Color(0xFFE0AC53),
-                          fontFamily: 'Inter',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
+      body: FutureBuilder<List<Barber>>(
+        future: _barbersFuture,
+        builder: (context, barberSnapshot) {
+          return FutureBuilder<List<Layanan>>(
+            future: _layananFuture,
+            builder: (context, layananSnapshot) {
+              if (barberSnapshot.connectionState == ConnectionState.waiting ||
+                  layananSnapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (barberSnapshot.hasError || layananSnapshot.hasError) {
+                return Center(
+                  child: Text(
+                    'Error: ${barberSnapshot.error ?? layananSnapshot.error}',
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                );
+              } else if (!barberSnapshot.hasData || barberSnapshot.data!.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'No barbers available.',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                );
+              }
+
+              final barbers = barberSnapshot.data!;
+              final layanan = layananSnapshot.data!;
+              final filteredIndices = getFilteredIndices(barbers, layanan);
+
+              return Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SectionTitle(
+                      firstText: 'Ready ',
+                      secondText: 'For New Style ?',
+                      firstTextColor: Color(0xFFE0AC53),
+                      secondTextColor: Colors.white,
+                    ),
+                    const SizedBox(height: 10),
+                    Center(
+                      child: ImageSlider(),
+                    ),
+                    const SizedBox(height: 10),
+                    Center(
+                      child: Wrap(
+                        spacing: 8.0,
+                        runSpacing: 4.0,
+                        children: serviceTags.map((tag) {
+                          return GestureDetector(
+                            child: Container(
+                              width: 87,
+                              height: 39,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                border: Border.all(color: Color(0xFFE0AC53)),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                tag,
+                                style: TextStyle(
+                                  color: Color(0xFFE0AC53),
+                                  fontFamily: 'Inter',
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
-                  );
-                }).toList(),
-              ),
-            ),
-            
-            const SizedBox(height: 10),
-            
-            const SectionTitle(
-              firstText: 'Currently ',
-              secondText: 'Available',
-              firstTextColor: Color(0xFFE0AC53),
-              secondTextColor: Colors.white,
-            ),
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.only(bottom: 16),
-                itemCount: filteredIndices.length,
-                itemBuilder: (context, index) {
-                  final i = filteredIndices[index];
-                  return ListItemCard(
-                    name: names[i],
-                    imageUrl: imageUrls[i],
-                    tags: getRandomTags(),
-                    rating: 4.5,
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+                    
+                    const SizedBox(height: 10),
+                    const SectionTitle(
+                      firstText: 'Currently ',
+                      secondText: 'Available',
+                      firstTextColor: Color(0xFFE0AC53),
+                      secondTextColor: Colors.white,
+                    ),
+                  Expanded(
+                    child: ListView.builder(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      itemCount: filteredIndices.length,
+                      itemBuilder: (context, index) {
+                        final filteredIndex = filteredIndices[index];
+                        final barber = barbers[filteredIndex];
+                        final barberLayanan = layanan
+                            .where((l) => l.id_barber == barber.id)
+                            .map((l) => l.jenis_Layanan)
+                            .toList();
+                        final barberLayananHarga = layanan
+                            .where((l) => l.id_barber == barber.id)
+                            .toList();
+
+                        return ListItemCard(
+                          name: barber.nama_barber,
+                          imageUrl: imageUrls[filteredIndex % imageUrls.length],
+                          tags: barberLayanan,
+                          rating: 4.5,
+                          reviews: [reviews[filteredIndex % reviews.length]],
+                          description: barber.deskripsi,
+                          id_barber: barber.id,
+                          layanan: barberLayananHarga,
+                          data: widget.data,
+                        );
+                      },
+                    ),
+                  ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
@@ -312,6 +333,10 @@ class ListItemCard extends StatelessWidget {
   final String imageUrl;
   final List<String> tags;
   final double rating;
+  final List<String> reviews;
+  final String description; 
+  final int id_barber;
+  final List<Layanan> layanan;
   final Map? data;
 
   const ListItemCard({
@@ -320,13 +345,32 @@ class ListItemCard extends StatelessWidget {
     required this.imageUrl,
     required this.tags,
     required this.rating,
-    this.data
+    required this.reviews,
+    required this.description,
+    required this.id_barber,
+    required this.layanan,
+    this.data,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SelectServiceScreen(
+              barberName: name,
+              barberImage: imageUrl,
+              barberTags: tags,
+              barberReview: reviews,
+              barberDescription: description,
+              id_barber: id_barber, 
+              layanan: layanan,
+              data: data,
+            ),
+          ),
+        );
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4.0),
@@ -357,7 +401,9 @@ class ListItemCard extends StatelessWidget {
                         name,
                         style: const TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Inter', fontSize: 18, fontWeight: FontWeight.w700
+                          fontFamily: 'Inter',
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -377,10 +423,12 @@ class ListItemCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Tags:',
+                            'Tags: ',
                             style: TextStyle(
                               color: Colors.white70,
-                              fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w400
+                              fontFamily: 'Inter',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                           const SizedBox(width: 4),
@@ -402,7 +450,9 @@ class ListItemCard extends StatelessWidget {
                                     tag,
                                     style: const TextStyle(
                                       color: Color(0xFFE0AC53),
-                                      fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w400
+                                      fontFamily: 'Inter',
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
                                     ),
                                   ),
                                 );

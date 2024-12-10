@@ -5,9 +5,7 @@ import 'package:tubesfix/View/pdfViewer.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:tubesfix/client/PelangganClient.dart';
-import 'package:tubesfix/client/PesananClient.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:tubesfix/View/home.dart';
 
 class CouponEdge extends CustomClipper<Path> {
   @override
@@ -92,7 +90,7 @@ class _EBookingViewState extends State<EBookingView> {
   @override
   Widget build(BuildContext context) {
     final String orderNumber = _generateOrderNumber(); 
-  
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -103,7 +101,12 @@ class _EBookingViewState extends State<EBookingView> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Color(0xFFE0AC53)),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => HomeView(data: widget.data),  
+              ),
+            );
             },
           ),
           title: const Text(
