@@ -18,4 +18,15 @@ class BarberClient {
       throw Exception('Failed to load barbers');
     }
   }
+
+  static Future<String> fetchBarberNameById(int barberId) async {
+    final response = await http.get(Uri.parse('$_baseUrl/$barberId'));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      return jsonResponse['nama'] ?? 'Unknown Barber';
+    } else {
+      throw Exception('Failed to fetch barber name');
+    }
+  }
 }

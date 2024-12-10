@@ -40,4 +40,21 @@ class PesananClient {
       throw Exception('Failed to create pesanan: ${response.body}');
     }
   }
+
+  Future<List<Map<String, dynamic>>> fetchTransactionHistory(String token) async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/transaction-history'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      return data.map((item) => item as Map<String, dynamic>).toList();
+    } else {
+      throw Exception("Failed to load transaction history: ${response.body}");
+    }
+  }
 }

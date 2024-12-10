@@ -36,7 +36,7 @@ class _ReviewPageState extends State<ReviewPage> {
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0), // Adds spacing around the card
+        padding: const EdgeInsets.all(16.0), 
         child: Card(
           color: Colors.black,
           elevation: 5,
