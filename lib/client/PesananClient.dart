@@ -5,34 +5,35 @@ import 'package:tubesfix/entity/Pesanan.dart' as MyPesanan;
 
 class PesananClient {
   
-  static const String _baseUrl = 'http://192.168.64.229/laravel_tubes/public/api/pesanan';
+  static const String _baseUrl = 'http://192.168.0.6/laravel_tubes/public/api/pesanan';
 
-  // Function to fetch all Pesanans (READ)
-  Future<List<Pesanan>> fetchPesanans() async {
-    final response = await http.get(Uri.parse(_baseUrl));
-
-    if (response.statusCode == 200) {
-      List<dynamic> body = jsonDecode(response.body);
-      return body.map((json) => Pesanan.fromJson(json)).toList();
-    } else {
-      throw Exception('Failed to load Pesanans');
-    }
-  }
-
-  
-  Future<Pesanan> createPesanan(Pesanan Pesanan) async {
+  Future<bool> createPesanan({
+    required String token,
+    required int idPelanggan,
+    required int idBarber,
+    required String tanggalPesanan,
+    required String namaPemesan,
+    required String kodeBooking,
+  }) async {
     final response = await http.post(
       Uri.parse(_baseUrl),
       headers: {
+        'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
-      body: jsonEncode(Pesanan.toJson()),
+      body: jsonEncode({
+        'id_pelanggan': idPelanggan,
+        'id_barber': idBarber,
+        'tanggal_pesanan': tanggalPesanan,
+        'nama_pemesan': namaPemesan,
+        'kode_booking': kodeBooking,
+      }),
     );
 
     if (response.statusCode == 201) {
-      return Pesanan.fromJson(jsonDecode(response.body));
+      return true;
     } else {
-      throw Exception('Failed to create Pesanan');
+      throw Exception('Failed to create pesanan: ${response.body}');
     }
   }
 }

@@ -8,6 +8,7 @@ class SelectServiceScreen extends StatefulWidget {
   final List<String> barberTags;
   final List<String> barberReview;
   final String barberDescription;
+  final int id_barber;
   final List<Layanan> layanan; 
   final Map? data;
 
@@ -18,6 +19,7 @@ class SelectServiceScreen extends StatefulWidget {
     required this.barberTags,
     required this.barberReview,
     required this.barberDescription,
+    required this.id_barber,
     required this.layanan, 
     this.data,
   }) : super(key: key);
@@ -512,6 +514,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                                   'nama': namaController.text,
                                   'date': selectedDate, 
                                   'services': selectedServices,
+                                  'id_barber': widget.id_barber,
                                   'servicesPdf': selectedServices.map((service) {
                                     return {
                                       'name': service,
