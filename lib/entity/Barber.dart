@@ -1,32 +1,23 @@
 import 'dart:convert';
-import 'package:tubesfix/client/LayananClient.dart';
 
 class Barber {
   final int id;
-  final String namaBarber;
-  final List<int> layananIds; 
+  final String nama_barber;
+  final String deskripsi;
 
   Barber({
     required this.id,
-    required this.namaBarber,
-    required this.layananIds,
+    required this.nama_barber,
+    required this.deskripsi
   });
-
-  List<String> get tags {
-
-    return LayananClient.layanan
-        .where((layanan) => layanan.id_barber == id)
-        .map((layanan) => layanan.jenis_layanan)
-        .toSet() 
-        .toList();
-  }
 
   factory Barber.fromJson(Map<String, dynamic> json) {
     return Barber(
       id: json['id'],
-      namaBarber: json['namaBarber'],
-      layananIds: List<int>.from(json['layananIds']),
+      nama_barber: json['nama_barber'], 
+      deskripsi: json['deskripsi'],
     );
   }
 }
+
 

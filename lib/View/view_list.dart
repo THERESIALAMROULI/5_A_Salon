@@ -1,11 +1,13 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:tubesfix/View/selectService.dart';
-
+import 'package:tubesfix/client/BarberClient.dart';
+import 'package:tubesfix/client/LayananClient.dart';
+import 'package:tubesfix/entity/Barber.dart';
+import 'package:tubesfix/entity/Layanan.dart';
 
 class ViewListScreen extends StatefulWidget {
   final Map? data;
-  
+
   const ViewListScreen({super.key, this.data});
 
   @override
@@ -13,52 +15,50 @@ class ViewListScreen extends StatefulWidget {
 }
 
 class _ViewListScreenState extends State<ViewListScreen> {
-  final List<String> names = [
-    'Jonatharion Putraeus',
-    'Asimandria Sinagard',
-    'Theresienne Lamroule',
-    'Eliandoria Setarian',
-    'Maria Castillara',
-  ];
+  late Future<List<Barber>> _barbersFuture;
+  late Future<List<Layanan>> _layananFuture;
 
   final List<String> imageUrls = [
-    'https://insertface.com/fb/2826/hairstyle-oval-face-man-2825929-kt0sv-fb.jpg',
-    'https://insertface.com/fb/2809/oval-face-shape-hairstyle-2808777-a6n25-fb.jpg',
-    'https://insertface.com/fb/2822/oval-face-hairstyle-male-2821798-5p40c-fb.jpg',
-    'https://insertface.com/fb/2822/oval-face-curly-hairstyle-2821797-vehkh-fb.jpg',
-    'https://insertface.com/fb/2801/curly-hairstyle-oval-face-2801258-ixuew-fb.jpg',
-  ];
+      'https://drive.usercontent.google.com/download?id=1eKqFqigcme6f1SKOLYWsUIjMf7bCGdAs',
+      'https://drive.usercontent.google.com/download?id=18gSwk7y7t_4_z6aTj5S3b7b0URVmTGvq',
+      'https://drive.usercontent.google.com/download?id=1C4rr6Q6pUSIUA09ub5sSLN7qjB_1Espe',
+      'https://drive.usercontent.google.com/download?id=1mZwiDqZYL-098jws22YHT4uZSE3taPSH',
+      'https://drive.usercontent.google.com/download?id=174r-_8CHvBRR5j1_ThCJGHqc8Au-awpb',
+    ];
 
-  late final List<List<String>> barberTags = List.generate(
-    names.length,
-    (_) => getRandomTags(), 
-  );
-
-  final List<String> serviceTags = [
-    'Haircut',
-    'Treatment',
-    'Mustache',
-    'Coloring',
-    'Beard',
-    'Shaving'
+  final List<String> reviews = [
+    'The barber was incredibly professional and gave me the best haircut I’ve had in years!',
+    'Amazing service! The staff was friendly, and the haircut exceeded my expectations.',
+    'The attention to detail was impressive, and the barber ensured I was comfortable throughout.',
+    'I loved how they styled my hair; it’s exactly what I wanted. Highly recommend!',
+    'Unfortunately, the barber seemed rushed, and the haircut didn’t turn out as I had hoped.',
   ];
 
   final Set<String> selectedTags = {}; 
 
-List<int> getFilteredIndices() {
-  if (selectedTags.isEmpty) {
-    return List.generate(names.length, (index) => index);
+  @override
+  void initState() {
+    super.initState();
+    _barbersFuture = BarberClient.fetchBarbers(); 
+    _layananFuture = LayananClient.fetchLayanan(); 
   }
 
-  return List.generate(names.length, (index) => index).where((i) {
-    return selectedTags.every((tag) => barberTags[i].contains(tag));
-  }).toList();
-}
+  List<int> getFilteredIndices(List<Barber> barbers, List<Layanan> layanan) {
+    if (selectedTags.isEmpty) {
+      return List.generate(barbers.length, (index) => index);
+    }
+
+    return List.generate(barbers.length, (index) => index).where((i) {
+      final barberLayanan = layanan
+          .where((l) => l.id_barber == barbers[i].id)
+          .map((l) => l.jenis_Layanan)
+          .toSet();
+      return selectedTags.every((tag) => barberLayanan.contains(tag));
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final filteredIndices = getFilteredIndices();
-
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -83,86 +83,138 @@ List<int> getFilteredIndices() {
           SizedBox(width: 16),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 16),
-            const SectionTitle(
-              firstText: 'Our Service ',
-              secondText: 'List',
-              firstTextColor: Color(0xFFE0AC53),
-              secondTextColor: Colors.white,
-            ),
-            const SizedBox(height: 16),
-            Center(
-              child: Wrap(
-                spacing: 8.0,
-                runSpacing: 4.0,
-                children: serviceTags.map((tag) {
-                  final isSelected = selectedTags.contains(tag);
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (isSelected) {
-                          selectedTags.remove(tag); 
-                        } else {
-                          selectedTags.add(tag);
-                        }
-                      });
-                    },
-                    child: Container(
-                      width: 95,
-                      height: 42,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        border: Border.all(
-                          color: isSelected ? Color(0xFFE0AC53) : Colors.white54,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        tag,
-                        style: TextStyle(
-                          color: isSelected ? Color(0xFFE0AC53) : Colors.white54,
-                          fontFamily: 'Inter',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
+      body: FutureBuilder<List<Barber>>(
+        future: _barbersFuture,
+        builder: (context, barberSnapshot) {
+          return FutureBuilder<List<Layanan>>(
+            future: _layananFuture,
+            builder: (context, layananSnapshot) {
+              if (barberSnapshot.connectionState == ConnectionState.waiting ||
+                  layananSnapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (barberSnapshot.hasError || layananSnapshot.hasError) {
+                return Center(
+                  child: Text(
+                    'Error: ${barberSnapshot.error ?? layananSnapshot.error}',
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                );
+              } else if (!barberSnapshot.hasData || barberSnapshot.data!.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'No barbers available.',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                );
+              }
+
+              final barbers = barberSnapshot.data!;
+              final layanan = layananSnapshot.data!;
+              final filteredIndices = getFilteredIndices(barbers, layanan);
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 16),
+                    const SectionTitle(
+                      firstText: 'Our Service ',
+                      secondText: 'List',
+                      firstTextColor: Color(0xFFE0AC53),
+                      secondTextColor: Colors.white,
+                    ),
+                    const SizedBox(height: 16),
+                    Center(
+                      child: Wrap(
+                        spacing: 8.0,
+                        runSpacing: 4.0,
+                        children: layanan
+                            .map((l) => l.jenis_Layanan)
+                            .toSet()
+                            .map((tag) {
+                          final isSelected = selectedTags.contains(tag);
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                if (isSelected) {
+                                  selectedTags.remove(tag);
+                                } else {
+                                  selectedTags.add(tag);
+                                }
+                              });
+                            },
+                            child: Container(
+                              width: 95,
+                              height: 42,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                border: Border.all(
+                                  color: isSelected
+                                      ? Color(0xFFE0AC53)
+                                      : Colors.white54,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                tag,
+                                style: TextStyle(
+                                  color: isSelected
+                                      ? Color(0xFFE0AC53)
+                                      : Colors.white54,
+                                  fontFamily: 'Inter',
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
-                  );
-                }).toList(),
-              ),
-            ), 
-            const SizedBox(height: 16),
-            const SectionTitle(
-              firstText: 'Currently ',
-              secondText: 'Available',
-              firstTextColor: Color(0xFFE0AC53),
-              secondTextColor: Colors.white,
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.only(bottom: 16),
-                itemCount: filteredIndices.length,
-                itemBuilder: (context, index) {
-                  final i = filteredIndices[index];
-                  return ListItemCard(
-                    name: names[i],
-                    imageUrl: imageUrls[i],
-                    tags: barberTags[i],
-                    rating: 4.5,
-                    data: widget.data,
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+                    const SizedBox(height: 16),
+                    const SectionTitle(
+                      firstText: 'Currently ',
+                      secondText: 'Available',
+                      firstTextColor: Color(0xFFE0AC53),
+                      secondTextColor: Colors.white,
+                    ),
+                    const SizedBox(height: 16),
+                    Expanded(
+                      child: ListView.builder(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        itemCount: filteredIndices.length,
+                        itemBuilder: (context, index) {
+                          final i = filteredIndices[index];
+                          final barber = barbers[i];
+                          final barberLayanan = layanan
+                              .where((l) => l.id_barber == barber.id)
+                              .map((l) => l.jenis_Layanan)
+                              .toList();
+                          final barberLayananHarga = layanan
+                              .where((l) => l.id_barber == barber.id)
+                              .toList();
+
+                          return ListItemCard(
+                            name: barber.nama_barber,
+                            imageUrl: imageUrls[i % imageUrls.length], 
+                            tags: barberLayanan, 
+                            rating: 4.5, 
+                            reviews: [reviews[i % reviews.length]], 
+                            description: barber.deskripsi, 
+                            layanan: barberLayananHarga,
+                            data: widget.data,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
@@ -190,7 +242,9 @@ class SectionTitle extends StatelessWidget {
           '— ',
           style: TextStyle(
             color: firstTextColor,
-            fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.w700
+            fontFamily: 'Inter',
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
           ),
         ),
         RichText(
@@ -200,14 +254,18 @@ class SectionTitle extends StatelessWidget {
                 text: firstText,
                 style: TextStyle(
                   color: firstTextColor,
-                  fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.w700
+                  fontFamily: 'Inter',
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
               TextSpan(
                 text: secondText,
                 style: TextStyle(
                   color: secondTextColor,
-                  fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.w700
+                  fontFamily: 'Inter',
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ],
@@ -231,6 +289,9 @@ class ListItemCard extends StatelessWidget {
   final String imageUrl;
   final List<String> tags;
   final double rating;
+  final List<String> reviews;
+  final String description; 
+  final List<Layanan> layanan;
   final Map? data;
 
   const ListItemCard({
@@ -239,7 +300,10 @@ class ListItemCard extends StatelessWidget {
     required this.imageUrl,
     required this.tags,
     required this.rating,
-    this.data
+    required this.reviews,
+    required this.description,
+    required this.layanan,
+    this.data,
   }) : super(key: key);
 
   @override
@@ -253,6 +317,9 @@ class ListItemCard extends StatelessWidget {
               barberName: name,
               barberImage: imageUrl,
               barberTags: tags,
+              barberReview: reviews,
+              barberDescription: description, 
+              layanan: layanan,
               data: data,
             ),
           ),
@@ -287,7 +354,9 @@ class ListItemCard extends StatelessWidget {
                         name,
                         style: const TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Inter', fontSize: 18, fontWeight: FontWeight.w700
+                          fontFamily: 'Inter',
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -307,10 +376,12 @@ class ListItemCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Tags:',
+                            'Tags: ',
                             style: TextStyle(
                               color: Colors.white70,
-                              fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w400
+                              fontFamily: 'Inter',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                           const SizedBox(width: 4),
@@ -332,7 +403,9 @@ class ListItemCard extends StatelessWidget {
                                     tag,
                                     style: const TextStyle(
                                       color: Color(0xFFE0AC53),
-                                      fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w400
+                                      fontFamily: 'Inter',
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
                                     ),
                                   ),
                                 );
@@ -351,25 +424,4 @@ class ListItemCard extends StatelessWidget {
       ),
     );
   }
-}
-
-// i know im so fking good // :>
-List<String> getRandomTags() {
-  final List<String> allTags = [
-    'Haircut',
-    'Treatment',
-    'Mustache',
-    'Coloring',
-    'Beard',
-    'Shaving'
-  ];
-  final random = Random();
-  final selectedTags = <String>{};
-
-  int tagCount = random.nextInt(3) + 1; 
-  while (selectedTags.length < tagCount) {
-    selectedTags.add(allTags[random.nextInt(allTags.length)]);
-  }
-
-  return selectedTags.toList();
 }
