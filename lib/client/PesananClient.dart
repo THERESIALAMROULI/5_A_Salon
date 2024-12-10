@@ -13,6 +13,8 @@ class PesananClient {
     required int idBarber,
     required String tanggalPesanan,
     required String namaPemesan,
+    required String layananAmbil,
+    required int totalHarga,
     required String kodeBooking,
   }) async {
     final response = await http.post(
@@ -26,6 +28,8 @@ class PesananClient {
         'id_barber': idBarber,
         'tanggal_pesanan': tanggalPesanan,
         'nama_pemesan': namaPemesan,
+        'total_harga' : totalHarga,
+        'layanan_ambil': layananAmbil,
         'kode_booking': kodeBooking,
       }),
     );
