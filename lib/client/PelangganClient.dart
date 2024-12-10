@@ -32,7 +32,7 @@ class PelangganClient {
   static Future<Response> create(Pelanggan pelanggan) async {
     try {
       var response = await post(
-        Uri.parse('http://192.168.0.106/laravel_tubes/public/api/pelanggan'),
+        Uri.parse('http://192.168.0.6/laravel_tubes/public/api/pelanggan'),
         headers: {"Content-Type": "application/json"},
         body: pelanggan.toRawJson(),
       );
@@ -59,7 +59,7 @@ class PelangganClient {
 
   Future<Map<String, dynamic>> login(String username, String password) async {
     final response = await http.post(
-      Uri.parse('http://192.168.0.106/laravel_tubes/public/api/login'),
+      Uri.parse('http://192.168.0.6/laravel_tubes/public/api/login'),
       body: json.encode({
         'username': username, 
         'password': password,
@@ -82,7 +82,7 @@ class PelangganClient {
 
   Future<void> fetchPelangganData(String token) async {
     final response = await http.get(
-      Uri.parse('http://192.168.0.106/laravel_tubes/public/api/pelanggan'),
+      Uri.parse('http://192.168.0.6/laravel_tubes/public/api/pelanggan'),
       headers: {
         'Authorization': 'Bearer $token',
       },
@@ -106,7 +106,7 @@ class PelangganClient {
       }
 
       final response = await http.post(
-        Uri.parse('http://192.168.0.106/laravel_tubes/public/api/logout'),
+        Uri.parse('http://192.168.0.6/laravel_tubes/public/api/logout'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -122,4 +122,77 @@ class PelangganClient {
       print('Error during logout: $e');
     }
   }
+
+  Future<Map<String, dynamic>> fetchProfile(String token) async {
+    final response = await http.get(
+      Uri.parse('http://192.168.0.6/laravel_tubes/public/api/pelanggan/profile'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception("Failed to load profile: ${response.statusCode}");
+    }
+  }  
+
+  Future<Map<String, dynamic>> updateProfile({
+    required String token,
+    String? name,
+    String? username,
+    String? email,
+    String? phone,
+    String? password,
+  }) async {
+    try {
+      final response = await http.put(
+        Uri.parse('http://192.168.0.6/laravel_tubes/public/api/pelanggan/profile'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          if (name != null) 'nama': name,
+          if (username != null) 'username': username,
+          if (email != null) 'email': email,
+          if (phone != null) 'telepon': phone,
+          if (password != null) 'password': password,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception("Failed to update profile: ${response.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Error updating profile: $e");
+    }
+  }
+
+  Future<bool> changePassword({
+    required String token,
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final response = await http.post(
+      Uri.parse('http://192.168.0.6/laravel_tubes/public/api/change-password'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'current_password': currentPassword,
+        'new_password': newPassword,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }                                                            
 }

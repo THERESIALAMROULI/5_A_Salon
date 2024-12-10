@@ -2,39 +2,53 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart'; 
-import 'edit_profile_information.dart'; 
-
-import 'history_transaction_view.dart';
-
-import 'package:tubesfix/View/login.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:tubesfix/client/PelangganClient.dart';
+import 'edit_profile_information.dart';
+import 'history_transaction_view.dart';
+import 'package:tubesfix/View/login.dart';
 
 class profileView extends StatefulWidget {
-  final Map? data;
-
-  const profileView({super.key, this.data});
+  const profileView({Key? key}) : super(key: key);
 
   @override
   State<profileView> createState() => _ProfileViewState();
 }
 
 class _ProfileViewState extends State<profileView> {
-  late String _name;
-  late String _email;
-  late String _phone;
-  late String _username;
+  String _name = "";
+  String _email = "";
+  String _phone = "";
+  String _username = "";
   bool _notificationsOn = true;
   File? _profileImage;
   final ImagePicker _picker = ImagePicker();
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final PelangganClient _pelangganClient = PelangganClient();
 
   @override
   void initState() {
     super.initState();
-    _name = widget.data?['name'] ?? "Guest";
-    _email = widget.data?['email'] ?? "guest@example.com";
-    _phone = widget.data?['phone'] ?? "08123456789";
-    _username = widget.data?['username'] ?? "guest";
+    _loadProfileData();
+  }
+
+  Future<void> _loadProfileData() async {
+    try {
+      final token = await _storage.read(key: 'token');
+      if (token == null) throw Exception("No token found");
+
+      final profileData = await _pelangganClient.fetchProfile(token);
+      setState(() {
+        _name = profileData['name'] ?? "Guest";
+        _email = profileData['email'] ?? "guest@example.com";
+        _phone = profileData['telepon'] ?? "08123456789";
+        _username = profileData['username'] ?? "guest";
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to load profile: $e")),
+      );
+    }
   }
 
   Future<void> _pickImage(ImageSource source) async {
@@ -54,45 +68,6 @@ class _ProfileViewState extends State<profileView> {
     }
   }
 
-  void _showPhotoOptions() {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => _photoOptionSheet(),
-    );
-  }
-
-  Widget _photoOptionSheet() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _photoOption(icon: Icons.camera_alt, label: "Camera", onTap: () => _pickImage(ImageSource.camera)),
-          _photoOption(icon: Icons.photo, label: "Gallery", onTap: () => _pickImage(ImageSource.gallery)),
-        ],
-      ),
-    );
-  }
-
-  Widget _photoOption({required IconData icon, required String label, required VoidCallback onTap}) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        IconButton(
-          icon: Icon(icon, size: 30, color: const Color(0xFFE0AC53)),
-          onPressed: () {
-            Navigator.pop(context);
-            onTap();
-          },
-        ),
-        Text(label),
-      ],
-    );
-  }
-
   void _editProfile() {
     Navigator.push(
       context,
@@ -101,19 +76,11 @@ class _ProfileViewState extends State<profileView> {
           name: _name,
           email: _email,
           phone: _phone,
-          username: _username,
-          onSave: (newName, newEmail, newPhone, newUsername) {
+          onSave: (newName, newEmail, newPhone) {
             setState(() {
               _name = newName;
               _email = newEmail;
               _phone = newPhone;
-              _username = newUsername;
-              if (widget.data != null) {
-                widget.data!['name'] = newName;
-                widget.data!['email'] = newEmail;
-                widget.data!['phone'] = newPhone;
-                widget.data!['username'] = newUsername;
-              }
             });
           },
         ),
@@ -122,15 +89,18 @@ class _ProfileViewState extends State<profileView> {
   }
 
   Future<void> _logout() async {
-    final pelangganClient = PelangganClient();
-    final storage = FlutterSecureStorage();
-    final response = await pelangganClient.logout();
-    await storage.delete(key: 'token');
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => LoginView()),
-    );
-    
+    try {
+      await _pelangganClient.logout();
+      await _storage.delete(key: 'token');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginView()),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Logout failed: $e")),
+      );
+    }
   }
 
   @override
@@ -167,7 +137,7 @@ class _ProfileViewState extends State<profileView> {
                                   : const NetworkImage('https://via.placeholder.com/150'),
                             ),
                             GestureDetector(
-                              onTap: _showPhotoOptions,
+                              onTap: () => _pickImage(ImageSource.gallery),
                               child: const CircleAvatar(
                                 radius: 14,
                                 backgroundColor: Colors.white,
@@ -182,7 +152,7 @@ class _ProfileViewState extends State<profileView> {
                           style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                         Text(
-                          '$_email | $_phone',
+                          '$_email | $_username',
                           style: const TextStyle(color: Colors.black87, fontSize: 12),
                         ),
                       ],
@@ -201,27 +171,22 @@ class _ProfileViewState extends State<profileView> {
                   onTap: () => setState(() => _notificationsOn = !_notificationsOn),
                 ),
                 _profileOption(
-            Icons.history,
-            "Transaction History",
-            onTap: () {
-              // Navigasi ke halaman TransactionHistoryPage
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const TransactionHistoryPage(),
+                  Icons.history,
+                  "Transaction History",
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const TransactionHistoryPage()),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-                _profileOption(Icons.card_giftcard, "My Voucher"),
-                _profileOption(Icons.contact_support, "Contact Us"),
-                const SizedBox(height: 20),
+                const SizedBox(height: 200),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFE0AC53),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   ),
-                  onPressed: _logout,  
+                  onPressed: _logout,
                   child: const Padding(
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                     child: Text(
