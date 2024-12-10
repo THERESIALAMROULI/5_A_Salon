@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'change_password.dart'; 
+import 'change_password.dart';
+import 'package:tubesfix/client/PelangganClient.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final String name;
   final String email;
   final String phone;
-  final String username;
-  final Function(String, String, String, String) onSave;
+  final Function(String, String, String) onSave;
 
   const EditProfileScreen({
     Key? key,
     required this.name,
     required this.email,
     required this.phone,
-    required this.username,
     required this.onSave,
   }) : super(key: key);
 
@@ -25,7 +25,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late TextEditingController _nameController;
   late TextEditingController _emailController;
   late TextEditingController _phoneController;
-  late TextEditingController _usernameController;
+
 
   @override
   void initState() {
@@ -33,7 +33,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _nameController = TextEditingController(text: widget.name);
     _emailController = TextEditingController(text: widget.email);
     _phoneController = TextEditingController(text: widget.phone);
-    _usernameController = TextEditingController(text: widget.username);
   }
 
   @override
@@ -41,7 +40,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _nameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
-    _usernameController.dispose();
     super.dispose();
   }
 
@@ -81,24 +79,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               icon: Icons.phone,
             ),
             const SizedBox(height: 20),
-            _buildEditField(
-              label: 'Username',
-              controller: _usernameController,
-              icon: Icons.person_outline,
-            ),
-            const SizedBox(height: 20),
             _buildPasswordField(context),
             const SizedBox(height: 40),
             Center(
               child: ElevatedButton(
-                onPressed: () {
-                  widget.onSave(
-                    _nameController.text,
-                    _emailController.text,
-                    _phoneController.text,
-                    _usernameController.text,
-                  );
-                  Navigator.pop(context);
+                onPressed: () async {
+                  await _updateProfile();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFE0AC53),
@@ -121,6 +107,49 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _updateProfile() async {
+    final storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'token');
+
+    if (token == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Authentication token not found")),
+      );
+      return;
+    }
+
+    try {
+      final updatedData = {
+        'nama': _nameController.text,
+        'email': _emailController.text,
+        'telepon': _phoneController.text,
+      };
+
+      final response = await PelangganClient().updateProfile(
+        token: token,
+        name: updatedData['nama'],
+        email: updatedData['email'],
+        phone: updatedData['telepon'],
+      );
+
+      widget.onSave(
+        _nameController.text,
+        _emailController.text,
+        _phoneController.text
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Profile updated successfully")),
+      );
+
+      Navigator.pop(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to update profile: $e")),
+      );
+    }
   }
 
   Widget _buildEditField({

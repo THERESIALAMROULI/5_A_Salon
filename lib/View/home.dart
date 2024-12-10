@@ -33,7 +33,8 @@ class _HomeViewState extends State<HomeView> {
       homeView(data: widget.data),
 
       ViewListScreen(data: widget.data), 
-      profileView(data: widget.data), 
+
+      profileView(), 
 
     ];
 
