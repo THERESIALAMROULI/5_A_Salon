@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tubesfix/View/home.dart';
 import 'package:tubesfix/View/register.dart';
-
+import 'package:tubesfix/client/PelangganClient.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginView extends StatefulWidget {
   final Map? data;
@@ -39,8 +40,7 @@ class _LoginViewState extends State<LoginView> {
                         const Text(
                           "ATMA BARBER",
                           style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Mixages', fontSize: 28, fontWeight: FontWeight.w700,
                             color: Color(0xFFE0AC53),
                           ),
                           textAlign: TextAlign.left,
@@ -66,8 +66,7 @@ class _LoginViewState extends State<LoginView> {
                           child: const Text(
                             "Login",
                             style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Inter', fontSize: 20, fontWeight: FontWeight.w600,
                               color: Colors.black,
                             ),
                           ),
@@ -88,7 +87,7 @@ class _LoginViewState extends State<LoginView> {
                           "don't have an account? ",
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 14,
+                            fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w400
                           ),
                         ),
                         TextButton(
@@ -102,7 +101,7 @@ class _LoginViewState extends State<LoginView> {
                             "Sign up",
                             style: TextStyle(
                               color: Color(0xFFE0AC53),
-                              fontSize: 14,
+                              fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w400
                             ),
                           ),
                         ),
@@ -121,7 +120,7 @@ class _LoginViewState extends State<LoginView> {
                         "Enter as guest",
                         style: TextStyle(
                           color: Color(0xFFE0AC53),
-                          fontSize: 14,
+                          fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w400
                         ),
                       ),
                     ),
@@ -172,7 +171,7 @@ class _LoginViewState extends State<LoginView> {
             },
             child: const Text(
               "I Forgot My Password",
-              style: TextStyle(color: Color.fromRGBO(248, 244, 227, 1)),
+              style: TextStyle(color: Color.fromRGBO(248, 244, 227, 1), fontFamily: 'Inter', fontSize: 10, fontWeight: FontWeight.w400),
             ),
           ),
         ),
@@ -193,243 +192,86 @@ class _LoginViewState extends State<LoginView> {
       prefixIcon: Icon(icon, color: Colors.white.withOpacity(0.75)),
     );
   }
+  void _showErrorDialog(String message) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.pop(context);
+      });
 
-  void _login() {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        backgroundColor: Colors.transparent,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 80,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFE0AC53),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                  ),
+                ),
+                child: const Center(
+                  child: Icon(
+                    Icons.cancel_outlined,
+                    size: 60,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  message,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
 
-    Map? dataForm = widget.data;
-    if (dataForm != null) {
-      if (dataForm['username'] == usernameController.text &&
-          dataForm['password'] == passwordController.text) {
+  void _login() async {
+    final pelangganClient = PelangganClient();
 
+    try {
+      final response = await pelangganClient.login(
+        usernameController.text,  
+        passwordController.text,
+      );
+
+      if (response.isNotEmpty && response.containsKey('token')) {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => HomeView(data: dataForm), 
+            builder: (_) => HomeView(data: response),  
           ),
         );
-
-      } else if(dataForm['username'] == usernameController.text &&
-          dataForm['password'] != passwordController.text) {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            Future.delayed(const Duration(seconds: 2), () {
-              Navigator.pop(context);
-            });
-
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              backgroundColor: Colors.transparent,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      height: 80,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFE0AC53),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          topRight: Radius.circular(15),
-                        ),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.cancel_outlined,
-                          size: 60,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: const Text(
-                        "Wrong Password",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      }else{
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            Future.delayed(const Duration(seconds: 2), () {
-              Navigator.pop(context);
-            });
-
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              backgroundColor: Colors.transparent,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      height: 80,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFE0AC53),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          topRight: Radius.circular(15),
-                        ),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.cancel_outlined,
-                          size: 60,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: const Text(
-                        "Username Not Found",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 24),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Don't have an account?",
-                            style: TextStyle(color: Color(0xFFF8F4E3)),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (_) => const RegisterView()),
-                              );
-                            },
-                            child: const Text(
-                              "Sign Up",
-                              style: TextStyle(color: Color(0xFFE0AC53)),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-
-        );
+      } else {
+        _showErrorDialog('Invalid username or password');
       }
-    } else {
-      showDialog(
-
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            Future.delayed(const Duration(seconds: 2), () {
-              Navigator.pop(context);
-            });
-
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              backgroundColor: Colors.transparent,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      height: 80,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFE0AC53),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          topRight: Radius.circular(15),
-                        ),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.account_circle_outlined,
-                          size: 60,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: const Text(
-                        "No account created",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 24),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Don't have an account?",
-                            style: TextStyle(color: Color(0xFFF8F4E3)),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (_) => const RegisterView()),
-                              );
-                            },
-                            child: const Text(
-                              "Sign Up",
-                              style: TextStyle(color: Color(0xFFE0AC53)),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-
-
+    } catch (e) {
+      print("Error: $e");
+      _showErrorDialog('Failed to connect to the server');
     }
   }
 

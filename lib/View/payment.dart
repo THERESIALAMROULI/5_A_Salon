@@ -1,20 +1,43 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:tubesfix/View/eBooking.dart';
+import 'package:intl/intl.dart'; 
+import 'package:flutter/services.dart';
 
 class PaymentView extends StatefulWidget {
+  final int total;
+  final String bankName; 
+  final String bankIcon;
+  final Map dataformat;
+  final Map? data;
+
+  const PaymentView({
+    Key? key,
+    required this.total,
+    required this.bankName,
+    required this.bankIcon,
+    required this.dataformat,
+    this.data
+  }) : super(key: key);
+
   @override
   _PaymentViewState createState() => _PaymentViewState();
 }
 
 class _PaymentViewState extends State<PaymentView> {
   late Timer _timer;
-  Duration _timeRemaining = Duration(hours: 23, minutes: 59, seconds: 59);
+  Duration _timeRemaining = Duration(hours: 24, minutes: 00, seconds: 00);
+  late Map? data;
+  late String dueDate;
 
   @override
   void initState() {
     super.initState();
     _startCountdownTimer();
+    data = widget.data;
+    DateTime now = DateTime.now();
+    DateTime dueDateTime = now.add(Duration(days: 1)); 
+    dueDate = DateFormat('MMM dd, yyyy, HH:mm').format(dueDateTime);
   }
 
   @override
@@ -42,6 +65,21 @@ class _PaymentViewState extends State<PaymentView> {
     return '$hours Hours $minutes Minutes $seconds Seconds';
   }
 
+  Map<String, String> bankVirtualAccounts = {
+    "Bank Rakyat Indonesia": "128 0813 4315 5142",
+    "Bank Negara Indonesia": "123 4567 8901 2345",
+    "Bank Central Asia": "456 7890 1234 5678",
+    "Bank Mandiri": "789 0123 4567 8901",
+    "Bank Syariah Indonesia": "234 5678 9012 3456",
+    "Bank Papua": "345 6789 0123 4567",
+    "Bank BPD DIY": "567 8901 2345 6789",
+  };
+
+  void copyToClipboard(String text) {
+    Clipboard.setData(ClipboardData(text: text)).then((_) {
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -61,8 +99,9 @@ class _PaymentViewState extends State<PaymentView> {
             'Payment',
             style: TextStyle(
               color: Color(0xFFE0AC53),
+              fontFamily: 'Inter',
               fontSize: 24,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),
@@ -70,7 +109,7 @@ class _PaymentViewState extends State<PaymentView> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 16),
                 Card(
@@ -87,20 +126,24 @@ class _PaymentViewState extends State<PaymentView> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Total payment',
-                              style: TextStyle(color: Colors.white, fontSize: 16),
+                              'Total Payment',
+                              style: TextStyle(color: Colors.white, fontFamily: 'Inter',
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,),
                             ),
                             Text(
-                              'Rp. 112.000',
+                              'Rp. ${widget.total}', 
                               style: TextStyle(
                                 color: Color(0xFFE0AC53),
-                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Inter',
                                 fontSize: 16,
+                                fontWeight: FontWeight.w600,
+
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 16),
+                        const Divider(color: Color(0xFFE0AC53)),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -108,15 +151,18 @@ class _PaymentViewState extends State<PaymentView> {
                               'Pay In',
                               style: TextStyle(
                                 color: Colors.white,
+                                fontFamily: 'Inter',
                                 fontSize: 14,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                             Text(
                               _formatTime(_timeRemaining),
                               style: TextStyle(
                                 color: Color(0xFFE0AC53),
+                                fontFamily: 'Inter',
                                 fontSize: 13,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ],
@@ -125,32 +171,34 @@ class _PaymentViewState extends State<PaymentView> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: Text(
-                            'Due Jan. 01, 2024, 23:59',
+                            'Due $dueDate',
                             style: TextStyle(
                               color: Colors.grey,
-                              fontSize: 12,
+                              fontFamily: 'Inter',
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 30),
                         Row(
                           children: [
                             Image.asset(
-                              'assets/images/icon_bri.png',
-                              width: 70, 
+                              widget.bankIcon,
+                              width: 70,
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              'Bank Rakyat Indonesia',
+                              widget.bankName,
                               style: TextStyle(
                                 color: Color(0xFFE0AC53),
-                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ],
                         ),
                         const Divider(color: Color(0xFFE0AC53)),
-                        const SizedBox(height: 8),
                         Padding(
                           padding: const EdgeInsets.only(left: 16.0),
                           child: Column(
@@ -160,8 +208,9 @@ class _PaymentViewState extends State<PaymentView> {
                                 'Account number',
                                 style: TextStyle(
                                   color: Colors.white,
+                                  fontFamily: 'Inter',
                                   fontSize: 14,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                               const SizedBox(height: 4),
@@ -169,11 +218,12 @@ class _PaymentViewState extends State<PaymentView> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '128 0813 4315 5142',
+                                    bankVirtualAccounts[widget.bankName] ?? 'VA Not Found',
                                     style: TextStyle(
                                       color: Color(0xFFE0AC53),
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Inter',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w900,
                                     ),
                                   ),
                                   IconButton(
@@ -182,11 +232,7 @@ class _PaymentViewState extends State<PaymentView> {
                                       color: Color(0xFFE0AC53),
                                     ),
                                     onPressed: () {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text('Account number copied!'),
-                                        ),
-                                      );
+                                      copyToClipboard(bankVirtualAccounts[widget.bankName] ?? 'VA Not Found');
                                     },
                                   ),
                                 ],
@@ -202,49 +248,56 @@ class _PaymentViewState extends State<PaymentView> {
                             children: [
                               const SizedBox(height: 8),
                               Text(
-                                'The verification process takes less than 10 minutes after successful payment',
+                                'The verification process takes less than 10 minutes after successful payment.',
                                 style: TextStyle(
                                   color: Colors.grey,
+                                  fontFamily: 'Inter',
                                   fontSize: 12,
+                                  fontWeight: FontWeight.w600,
                                   fontStyle: FontStyle.italic,
                                 ),
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                'Pay the order to the Virtual Account above before making another order with the virtual account so that the number remains the same.',
+                                'Pay the order to the Virtual Account above before making another order with the same account number to ensure consistency.',
                                 style: TextStyle(
                                   color: Colors.white,
+                                  fontFamily: 'Inter',
                                   fontSize: 12,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                '*Only accepts Bank Rakyat Indonesia',
+                                '*Only accepts ${widget.bankName}',
                                 style: TextStyle(
                                   color: Colors.grey,
+                                  fontFamily: 'Inter',
                                   fontSize: 12,
+                                  fontWeight: FontWeight.w600,
                                   fontStyle: FontStyle.italic,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        // dropdownnya intruksinya belum bang :>
                         const SizedBox(height: 16),
-                        _buildInstructionButton(
+                        _buildExpandableInstruction(
                           context,
-                          'mBanking Transfer Instructions',
+                          'mBanking Instructions',
+                          'Follow these steps to complete your payment via mBanking: \n1. Open your mobile banking app.\n2. Go to the payment section.\n3. Enter the Virtual Account number.\n4. Confirm payment details and make payment.',
                         ),
                         const SizedBox(height: 8),
-                        _buildInstructionButton(
+                        _buildExpandableInstruction(
                           context,
                           'ATM Transfer Instructions',
+                          'Follow these steps for ATM Transfer: \n1. Visit any ATM.\n2. Select “Transfer” option.\n3. Choose the "Virtual Account" option.\n4. Enter the account number and payment amount.\n5. Confirm and finish the transaction.',
                         ),
                         const SizedBox(height: 8),
-                        _buildInstructionButton(
+                        _buildExpandableInstruction(
                           context,
                           'EDC Transfer Instructions',
+                          'Follow these steps for EDC Transfer: \n1. Visit the nearest EDC terminal.\n2. Select the option for Virtual Account payment.\n3. Enter the account number shown above and confirm.\n4. Complete the payment.',
                         ),
                       ],
                     ),
@@ -253,7 +306,7 @@ class _PaymentViewState extends State<PaymentView> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFE0AC53),
+                    backgroundColor: const Color(0xFFE0AC53),
                     minimumSize: const Size.fromHeight(50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -263,7 +316,7 @@ class _PaymentViewState extends State<PaymentView> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EBookingView(),
+                        builder: (context) => EBookingView(total: widget.total, dataformat: widget.dataformat, data: widget.data, bankName: widget.bankName), 
                       ),
                     );
                   },
@@ -271,8 +324,9 @@ class _PaymentViewState extends State<PaymentView> {
                     'Confirmation',
                     style: TextStyle(
                       color: Colors.black,
+                      fontFamily: 'Inter',
                       fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -285,31 +339,42 @@ class _PaymentViewState extends State<PaymentView> {
     );
   }
 
-  Widget _buildInstructionButton(BuildContext context, String text) {
-    return OutlinedButton(
-      style: OutlinedButton.styleFrom(
-        backgroundColor: Color(0xFFE0AC53),
-        side: BorderSide(color: Color(0xFFE0AC53)),
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+  Widget _buildExpandableInstruction(BuildContext context, String title, String content) {
+    return Card(
+      color: Color(0xFFE0AC53),  
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
       ),
-      onPressed: () {},
-      child: Row(
-        children: [
-          const SizedBox(width: 16),
-          Icon(
-            Icons.keyboard_arrow_down,
-            color: Colors.black,
-          ),
-          const SizedBox(width: 16),
-          Text(
-            text,
-            style: TextStyle(
+      child: ExpansionTile(
+        tilePadding: EdgeInsets.zero,  
+        title: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+          child: Text(
+            title,
+            style: const TextStyle(
               color: Colors.black,
+              fontFamily: 'Inter',
               fontSize: 14,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  content,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Inter',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
           ),
         ],

@@ -1,5 +1,10 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:tubesfix/View/pdfViewer.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CouponEdge extends CustomClipper<Path> {
   @override
@@ -24,9 +29,54 @@ class CouponEdge extends CustomClipper<Path> {
 }
 
 class EBookingView extends StatelessWidget {
+  final int total;
+  final Map dataformat;
+  final Map? data;
+  final String bankName;
+
+  const EBookingView({Key? key, required this.total, required this.dataformat, this.data, required this.bankName}) : super(key: key);
+
+  String _generateOrderNumber() {
+    final random = Random();
+    return List.generate(18, (_) => random.nextInt(10).toString()).join();
+  }
+
+  String _generateBookingID() {
+    final random = Random();
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    return List.generate(8, (_) => characters[random.nextInt(characters.length)])
+        .join();
+  }
+
+  String _formatDate(DateTime date) { 
+    return DateFormat('dd MMMM yyyy', 'en_US').format(date); 
+  }
+
+  String _getCurrentDate() {
+    DateTime now = DateTime.now(); 
+    return DateFormat('dd MMM yyyy', 'en_US').format(now); 
+  }
+
+  void _copyToClipboard(String text, BuildContext context) {
+    Clipboard.setData(ClipboardData(text: text));
+  }
+
+  Future<void> _openMaps() async {
+    const String barbershopLatitude = '-7.779366'; 
+    const String barbershopLongitude = '110.416324'; 
+    final String googleUrl = "google.navigation:q=$barbershopLatitude,$barbershopLongitude"; 
+    
+    if (await canLaunch(googleUrl)) {
+      await launch(googleUrl);
+    } else {
+      throw 'Could not launch $googleUrl';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final String qrData = 'https://youtu.be/NY0ffyEu6uo?si=JZs_wMSXWfnC-OF_';
+    final String orderNumber = _generateOrderNumber(); 
+    final String bookingID = _generateBookingID(); 
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -36,17 +86,18 @@ class EBookingView extends StatelessWidget {
           backgroundColor: Colors.black,
           elevation: 0,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Color(0xFFE0AC53)),
+            icon: const Icon(Icons.arrow_back, color: Color(0xFFE0AC53)),
             onPressed: () {
               Navigator.pop(context);
             },
           ),
-          title: Text(
+          title: const Text(
             'E-Booking',
             style: TextStyle(
               color: Color(0xFFE0AC53),
+              fontFamily: 'Inter',
               fontSize: 24,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),
@@ -58,9 +109,9 @@ class EBookingView extends StatelessWidget {
               children: [
                 const SizedBox(height: 16),
                 Card(
-                  color: Color(0xFFE0AC53),
+                  color: const Color(0xFFE0AC53),
                   margin: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
+                  shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(16),
                       topRight: Radius.circular(16),
@@ -78,8 +129,9 @@ class EBookingView extends StatelessWidget {
                           children: [
                             _buildDetailRow(
                               label: 'ORDER NUMBER',
-                              value: '1564550825747980288',
+                              value: orderNumber,
                               isCopyable: true,
+                              onCopy: () => _copyToClipboard(orderNumber, context),
                             ),
                             const Divider(
                               color: Color(0xFFB98F48),
@@ -93,23 +145,24 @@ class EBookingView extends StatelessWidget {
                             const SizedBox(height: 8),
                             _buildDetailRow(
                               label: 'TOTAL COST',
-                              value: 'Rp. 112.000',
+                              value: 'Rp. ${total.toStringAsFixed(0)}',
                             ),
                             const SizedBox(height: 8),
                             _buildDetailRow(
                               label: 'APPOINTMENT DATE',
-                              value: '01 Jan 2024',
+                              value: _formatDate(dataformat['date']),
                             ),
                             const SizedBox(height: 16),
                             Center(
                               child: Column(
                                 children: [
-                                  Text(
+                                  const Text(
                                     'ID BOOKING',
                                     style: TextStyle(
                                       color: Colors.white,
+                                      fontFamily: 'Inter',
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w700
                                     ),
                                   ),
                                   const SizedBox(height: 8),
@@ -119,15 +172,16 @@ class EBookingView extends StatelessWidget {
                                       vertical: 10,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: Color(0xFFE5C692),
+                                      color: const Color(0xFFE5C692),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Text(
-                                      'WS23XNHR',
-                                      style: TextStyle(
+                                      bookingID, 
+                                      style: const TextStyle(
                                         color: Color(0xFFF8EFE0),
+                                        fontFamily: 'Inter',
                                         fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.w900
                                       ),
                                     ),
                                   ),
@@ -140,9 +194,9 @@ class EBookingView extends StatelessWidget {
                       ClipPath(
                         clipper: CouponEdge(),
                         child: Card(
-                          color: Color(0xFF1C1B1B),
+                          color: const Color(0xFF1C1B1B),
                           margin: EdgeInsets.zero,
-                          shape: RoundedRectangleBorder(
+                          shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(16),
                               bottomRight: Radius.circular(16),
@@ -156,10 +210,10 @@ class EBookingView extends StatelessWidget {
                                   padding: const EdgeInsets.all(8.0),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.circular(16), 
+                                    borderRadius: BorderRadius.circular(16),
                                   ),
                                   child: QrImageView(
-                                    data: qrData,
+                                    data: bookingID,
                                     size: 130,
                                     backgroundColor: Colors.white,
                                   ),
@@ -167,14 +221,15 @@ class EBookingView extends StatelessWidget {
                                 const SizedBox(height: 8),
                                 Align(
                                   alignment: Alignment.centerLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 16.0),
+                                  child: const Padding(
+                                    padding: EdgeInsets.only(left: 16.0),
                                     child: Text(
                                       '*Scan QR at Barbershop',
                                       style: TextStyle(
                                         color: Colors.grey,
+                                        fontFamily: 'Inter',
                                         fontSize: 12,
-                                        fontStyle: FontStyle.italic,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ),
@@ -189,21 +244,59 @@ class EBookingView extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: ElevatedButton.icon(
+                          onPressed: _openMaps, 
+                          icon: const Icon(Icons.directions),
+                          label: const Text('Navigate to Barbershop'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFE0AC53), 
+                            foregroundColor: Colors.black, 
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10), 
+                            textStyle: const TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
                     _buildActionButton(
                       icon: Icons.share,
                       label: 'Share',
-                      onPressed: () {
-                        // ini share, rencanannya pdf langsung ke wa atau email gitu
-                      },
+                      onPressed: () =>{
+                        
+                      }
                     ),
-                    const SizedBox(width: 24),
+                    const SizedBox(width: 16),
                     _buildActionButton(
                       icon: Icons.print,
                       label: 'Print',
                       onPressed: () {
-                        // print pdf nanti disini
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PdfViewerPage(
+                              bookingID: bookingID,
+                              name: dataformat["nama"], 
+                              email: data?['email'] ?? "guest@example.com",
+                              phoneNumber: data?['phone'] ?? "08123456789", 
+                              total: total,
+                              date: _formatDate(dataformat['date']), 
+                              publicationDate: _getCurrentDate(), 
+                              services: dataformat['servicesPdf'],
+                              data: data,
+                            ),
+                          ),
+                        );
                       },
                     ),
                   ],
@@ -212,12 +305,14 @@ class EBookingView extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Transactions that have been confirmed cannot be refunded/changed',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         color: Colors.red,
+                        fontFamily: 'Inter',
                         fontSize: 12,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const Divider(
@@ -225,20 +320,24 @@ class EBookingView extends StatelessWidget {
                       thickness: 1,
                       height: 16,
                     ),
-                    Text(
+                    const Text(
                       'Atma Barber',
                       style: TextStyle(
                         color: Colors.grey,
+                        fontFamily: 'Inter',
                         fontSize: 12,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
+                    const Text(
                       'NPWP: 012.345.678.9-000.000\nJl. Malioboro No. 99, Gedung A Lt. 2\nYogyakarta, Daerah Istimewa Yogyakarta - 55271',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         color: Colors.grey,
+                        fontFamily: 'Inter',
                         fontSize: 12,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const Divider(
@@ -249,12 +348,13 @@ class EBookingView extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                       },
-                      child: Text(
+                      child: const Text(
                         'Need help? Contact us',
                         style: TextStyle(
                           color: Color(0xFFE0AC53),
+                          fontFamily: 'Inter',
                           fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -273,44 +373,49 @@ class EBookingView extends StatelessWidget {
     required String label,
     required String value,
     bool isCopyable = false,
+    VoidCallback? onCopy,
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             color: Color(0xFFEED1A0),
+            fontFamily: 'Inter',
             fontSize: 11,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
         Row(
           children: [
             Text(
               value,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
+                fontFamily: 'Inter',
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
               ),
             ),
             if (isCopyable)
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.copy,
                   size: 16,
                   color: Color(0xFFA57B33),
                 ),
                 onPressed: () {
-                  // nanti salinnya disini tapi gak tahu caranya gimana :<
+                  if (onCopy != null) {
+                    onCopy();  
+                  }
                 },
               ),
           ],
         ),
       ],
     );
-  }
+  }                                 
 
   Widget _buildActionButton({
     required IconData icon,
@@ -321,17 +426,18 @@ class EBookingView extends StatelessWidget {
       children: [
         Icon(
           icon,
-          color: Color(0xFFE0AC53),
+          color: const Color(0xFFE0AC53),
         ),
         const SizedBox(width: 8),
         GestureDetector(
           onTap: onPressed,
           child: Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               color: Color(0xFFE0AC53),
-              fontWeight: FontWeight.bold,
+              fontFamily: 'Inter',
               fontSize: 16,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),

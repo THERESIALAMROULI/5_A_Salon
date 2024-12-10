@@ -3,11 +3,13 @@ import 'package:tubesfix/View/home_view.dart';
 import 'package:tubesfix/View/view_list.dart';
 import 'package:tubesfix/View/profile.dart';
 import 'package:tubesfix/View/transaction.dart';
+import 'package:tubesfix/View/paymentMethod.dart';
+import 'package:tubesfix/View/voucher.dart';
 
 class HomeView extends StatefulWidget {
-  final Map? data;
+  final Map data;
 
-  const HomeView({super.key, this.data});
+  const HomeView({super.key, required this.data});
 
 
   @override
@@ -25,13 +27,12 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     final List<Widget> _widgetOptions = <Widget>[
       homeView(data: widget.data),
-      ViewListScreen(), 
-      transactionView(data: widget.data), 
+      ViewListScreen(data: widget.data), 
+      profileView(data: widget.data), 
     ];
 
     return Scaffold(
