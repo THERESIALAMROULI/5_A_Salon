@@ -7,9 +7,9 @@ import 'package:tubesfix/View/paymentMethod.dart';
 import 'package:tubesfix/View/voucher.dart';
 
 class HomeView extends StatefulWidget {
-  final Map data;
+  final Map? data;
 
-  const HomeView({super.key, required this.data});
+  const HomeView({super.key, this.data});
 
 
   @override

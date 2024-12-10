@@ -27,6 +27,7 @@ dev_dependencies:
   url_launcher: ^6.1.5
   google_maps_flutter: ^2.2.4 
   geolocator: ^9.0.0 
+  carousel_slider:
 
 flutter:
   assets:
@@ -45,6 +46,10 @@ flutter:
     - assets/images/750c4cb8-8b7e-49f4-9ad0-66c3108eac87.jpg
     - assets/images/afc4f05d-5efc-4f69-97ab-5dfc66e92b09.jpg
     - assets/images/f7f1e639-d2ac-4f98-9131-992c4a8d71f5.jpg
+    - assets/images/awwa.jpg
+    - assets/images/gohard.jpg
+    - assets/images/man-getting-haircut.jpg
+    - assets/images/maxresdefault.jpg
   fonts:
     - family: Inter
       fonts:
