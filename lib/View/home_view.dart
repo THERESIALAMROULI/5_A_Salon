@@ -1,9 +1,38 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:tubesfix/client/BarberClient.dart';
+import 'package:tubesfix/client/LayananClient.dart';
+import 'package:tubesfix/entity/Barber.dart';
+import 'package:tubesfix/entity/Layanan.dart';
+
+  late Future<List<Barber>> _barbersFuture;
+  late Future<List<Layanan>> _layananFuture;
+
+  final List<String> imageUrls = [
+      'https://drive.usercontent.google.com/download?id=1eKqFqigcme6f1SKOLYWsUIjMf7bCGdAs',
+      'https://drive.usercontent.google.com/download?id=18gSwk7y7t_4_z6aTj5S3b7b0URVmTGvq',
+      'https://drive.usercontent.google.com/download?id=1C4rr6Q6pUSIUA09ub5sSLN7qjB_1Espe',
+      'https://drive.usercontent.google.com/download?id=1mZwiDqZYL-098jws22YHT4uZSE3taPSH',
+      'https://drive.usercontent.google.com/download?id=174r-_8CHvBRR5j1_ThCJGHqc8Au-awpb',
+    ];
+
+  final List<String> reviews = [
+    'The barber was incredibly professional and gave me the best haircut I’ve had in years!',
+    'Amazing service! The staff was friendly, and the haircut exceeded my expectations.',
+    'The attention to detail was impressive, and the barber ensured I was comfortable throughout.',
+    'I loved how they styled my hair; it’s exactly what I wanted. Highly recommend!',
+    'Unfortunately, the barber seemed rushed, and the haircut didn’t turn out as I had hoped.',
+  ];
+  void initState() {
+    _barbersFuture = BarberClient.fetchBarbers(); 
+    _layananFuture = LayananClient.fetchLayanan(); 
+  }
+
 
 class homeView extends StatelessWidget {
   final Map? data;
-
+  
   const homeView({super.key, this.data});
 
   @override
@@ -18,10 +47,56 @@ class homeView extends StatelessWidget {
     );
   }
 }
+class ImageSlider extends StatelessWidget {
+  final List<String> imageUrls = [
+    'assets/images/awwa.jpg',
+    'assets/images/gohard.jpg',
+    'assets/images/man-getting-haircut.jpg',
+    'assets/images/maxresdefault.jpg'
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+        return Container(
+          width: double.infinity,
+          height: 150, // Adjust height as needed
+          child: CarouselSlider(
+            options: CarouselOptions(
+              height: 150, // Adjust height as needed
+              autoPlay: true,
+              autoPlayInterval: const Duration(seconds: 4),
+              enlargeCenterPage: true,
+              viewportFraction: 0.8,
+              aspectRatio: 16 / 9,
+            ),
+      items: imageUrls.map((path) {
+        return Builder(
+          builder: (BuildContext context) {
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              margin: const EdgeInsets.symmetric(horizontal: 5.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                image: DecorationImage(
+                  image: AssetImage(path),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            );
+          },
+        );
+      }).toList(),
+    ),
+
+    );
+  }
+}
 
 class homeScreen extends StatelessWidget {
   const homeScreen({super.key});
-  
+    
+
+
   @override
   Widget build(BuildContext context) {
     final List<String> serviceTags = [
@@ -40,6 +115,7 @@ class homeScreen extends StatelessWidget {
       'Eliandoria Setarian',
       'Maria Castillara',
     ];
+  
 
     final List<String> imageUrls = [
       'https://drive.usercontent.google.com/download?id=1eKqFqigcme6f1SKOLYWsUIjMf7bCGdAs',
@@ -88,40 +164,9 @@ class homeScreen extends StatelessWidget {
               firstTextColor: Color(0xFFE0AC53),
               secondTextColor: Colors.white,
             ),
-            const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: Color(0xFFE0AC53),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,  
-                  crossAxisAlignment: CrossAxisAlignment.center, 
-                  children: [
-                    Text(
-                      "Launching Discount",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      "Get a 30% discount for any service!",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "30%    35%    37%    39%    50%",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.lineThrough,
-                      ),
-                    ),
-                  ],
-                ),
-              )
+            const SizedBox(height: 10),
+            Center(
+              child: ImageSlider(),
             ),
             const SizedBox(height: 10),
             Center(
@@ -153,7 +198,9 @@ class homeScreen extends StatelessWidget {
                 }).toList(),
               ),
             ),
+            
             const SizedBox(height: 10),
+            
             const SectionTitle(
               firstText: 'Currently ',
               secondText: 'Available',

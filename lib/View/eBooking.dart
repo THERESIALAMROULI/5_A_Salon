@@ -5,6 +5,9 @@ import 'package:tubesfix/View/pdfViewer.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:tubesfix/client/PelangganClient.dart';
+import 'package:tubesfix/client/PesananClient.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class CouponEdge extends CustomClipper<Path> {
   @override
@@ -27,25 +30,33 @@ class CouponEdge extends CustomClipper<Path> {
   @override
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }
-
-class EBookingView extends StatelessWidget {
+class EBookingView extends StatefulWidget {
   final int total;
   final Map dataformat;
   final Map? data;
   final String bankName;
+  final String idBooking;
+  final int idPelanggan;
 
-  const EBookingView({Key? key, required this.total, required this.dataformat, this.data, required this.bankName}) : super(key: key);
+  const EBookingView({
+    Key? key,
+    required this.total,
+    required this.dataformat,
+    this.data,
+    required this.bankName,
+    required this.idBooking,
+    required this.idPelanggan,
+  }) : super(key: key);
 
+  @override
+  _EBookingViewState createState() => _EBookingViewState();
+}
+
+class _EBookingViewState extends State<EBookingView> {
+  
   String _generateOrderNumber() {
     final random = Random();
     return List.generate(18, (_) => random.nextInt(10).toString()).join();
-  }
-
-  String _generateBookingID() {
-    final random = Random();
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    return List.generate(8, (_) => characters[random.nextInt(characters.length)])
-        .join();
   }
 
   String _formatDate(DateTime date) { 
@@ -73,11 +84,15 @@ class EBookingView extends StatelessWidget {
     }
   }
 
+   @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final String orderNumber = _generateOrderNumber(); 
-    final String bookingID = _generateBookingID(); 
-
+  
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -145,12 +160,12 @@ class EBookingView extends StatelessWidget {
                             const SizedBox(height: 8),
                             _buildDetailRow(
                               label: 'TOTAL COST',
-                              value: 'Rp. ${total.toStringAsFixed(0)}',
+                              value: 'Rp. ${widget.total.toStringAsFixed(0)}',
                             ),
                             const SizedBox(height: 8),
                             _buildDetailRow(
                               label: 'APPOINTMENT DATE',
-                              value: _formatDate(dataformat['date']),
+                              value: _formatDate(widget.dataformat['date']),
                             ),
                             const SizedBox(height: 16),
                             Center(
@@ -176,7 +191,7 @@ class EBookingView extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Text(
-                                      bookingID, 
+                                      widget.idBooking, 
                                       style: const TextStyle(
                                         color: Color(0xFFF8EFE0),
                                         fontFamily: 'Inter',
@@ -213,7 +228,7 @@ class EBookingView extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                   child: QrImageView(
-                                    data: bookingID,
+                                    data: widget.idBooking,
                                     size: 130,
                                     backgroundColor: Colors.white,
                                   ),
@@ -285,15 +300,15 @@ class EBookingView extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => PdfViewerPage(
-                              bookingID: bookingID,
-                              name: dataformat["nama"], 
-                              email: data?['email'] ?? "guest@example.com",
-                              phoneNumber: data?['phone'] ?? "08123456789", 
-                              total: total,
-                              date: _formatDate(dataformat['date']), 
+                              bookingID: widget.idBooking,
+                              name: widget.dataformat["nama"], 
+                              email: widget.data?['email'] ?? "guest@example.com",
+                              phoneNumber: widget.data?['phone'] ?? "08123456789", 
+                              total: widget.total,
+                              date: _formatDate(widget.dataformat['date']), 
                               publicationDate: _getCurrentDate(), 
-                              services: dataformat['servicesPdf'],
-                              data: data,
+                              services: widget.dataformat['servicesPdf'],
+                              data: widget.data,
                             ),
                           ),
                         );

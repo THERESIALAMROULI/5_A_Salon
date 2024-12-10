@@ -203,6 +203,7 @@ class _ViewListScreenState extends State<ViewListScreen> {
                             rating: 4.5, 
                             reviews: [reviews[i % reviews.length]], 
                             description: barber.deskripsi, 
+                            id_barber: barber.id,
                             layanan: barberLayananHarga,
                             data: widget.data,
                           );
@@ -291,6 +292,7 @@ class ListItemCard extends StatelessWidget {
   final double rating;
   final List<String> reviews;
   final String description; 
+  final int id_barber;
   final List<Layanan> layanan;
   final Map? data;
 
@@ -302,6 +304,7 @@ class ListItemCard extends StatelessWidget {
     required this.rating,
     required this.reviews,
     required this.description,
+    required this.id_barber,
     required this.layanan,
     this.data,
   }) : super(key: key);
@@ -318,7 +321,8 @@ class ListItemCard extends StatelessWidget {
               barberImage: imageUrl,
               barberTags: tags,
               barberReview: reviews,
-              barberDescription: description, 
+              barberDescription: description,
+              id_barber: id_barber, 
               layanan: layanan,
               data: data,
             ),
