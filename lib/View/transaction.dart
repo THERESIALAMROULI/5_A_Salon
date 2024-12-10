@@ -90,6 +90,7 @@ class _transactionViewState extends State<transactionView> {
     String name = widget.dataformat['nama'] ?? 'Guest';
     List services = widget.dataformat['prices'] ?? [];
     int total = widget.dataformat['total'] ?? 0;
+    final String serviceNames = services.map((service) => service['name']).join(', ');
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -317,6 +318,7 @@ class _transactionViewState extends State<transactionView> {
                           bankName: selectedPaymentMethod, 
                           bankIcon: selectedPaymentIcon,
                           dataformat: widget.dataformat,
+                          layananAmbil: serviceNames,
                           data: widget.data,
                         ),
                       ),

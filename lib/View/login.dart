@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tubesfix/View/home.dart';
 import 'package:tubesfix/View/register.dart';
 import 'package:tubesfix/client/PelangganClient.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginView extends StatefulWidget {
   final Map? data;

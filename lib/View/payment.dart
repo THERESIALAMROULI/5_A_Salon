@@ -13,6 +13,7 @@ class PaymentView extends StatefulWidget {
   final String bankName; 
   final String bankIcon;
   final Map dataformat;
+  final String layananAmbil;
   final Map? data;
 
   const PaymentView({
@@ -21,6 +22,7 @@ class PaymentView extends StatefulWidget {
     required this.bankName,
     required this.bankIcon,
     required this.dataformat,
+    required this.layananAmbil,
     this.data
   }) : super(key: key);
 
@@ -57,7 +59,9 @@ class _PaymentViewState extends State<PaymentView> {
         idPelanggan: _idPelanggan, 
         idBarber: widget.dataformat['id_barber'], 
         tanggalPesanan: Stringdate, 
-        namaPemesan: widget.dataformat['nama'], 
+        namaPemesan: widget.dataformat['nama'],
+        layananAmbil: widget.layananAmbil, 
+        totalHarga: widget.total,
         kodeBooking: bookingID, 
       );
 
