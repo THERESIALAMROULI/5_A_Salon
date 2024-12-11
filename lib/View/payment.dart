@@ -1,14 +1,19 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:tubesfix/View/eBooking.dart';
 import 'package:intl/intl.dart'; 
 import 'package:flutter/services.dart';
+import 'package:tubesfix/client/PelangganClient.dart';
+import 'package:tubesfix/client/PesananClient.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class PaymentView extends StatefulWidget {
   final int total;
   final String bankName; 
   final String bankIcon;
   final Map dataformat;
+  final String layananAmbil;
   final Map? data;
 
   const PaymentView({
@@ -17,6 +22,7 @@ class PaymentView extends StatefulWidget {
     required this.bankName,
     required this.bankIcon,
     required this.dataformat,
+    required this.layananAmbil,
     this.data
   }) : super(key: key);
 
@@ -29,21 +35,82 @@ class _PaymentViewState extends State<PaymentView> {
   Duration _timeRemaining = Duration(hours: 24, minutes: 00, seconds: 00);
   late Map? data;
   late String dueDate;
+  late String Stringdate = widget.dataformat['date'].toLocal().toString().split(' ')[0];
+
+  int _idPelanggan = 0;
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final PelangganClient _pelangganClient = PelangganClient();
+
+  Future<void> _createPesanan(String bookingID, BuildContext context) async {
+    final PesananClient pesananClient = PesananClient();
+    final storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'token');
+
+    if (token == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("User not authenticated")),
+      );
+      return;
+    }
+
+    try {
+      final result = await pesananClient.createPesanan(
+        token: token,
+        idPelanggan: _idPelanggan, 
+        idBarber: widget.dataformat['id_barber'], 
+        tanggalPesanan: Stringdate, 
+        namaPemesan: widget.dataformat['nama'],
+        layananAmbil: widget.layananAmbil, 
+        totalHarga: widget.total,
+        kodeBooking: bookingID, 
+      );
+
+      if (result) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Pesanan berhasil dibuat")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Gagal membuat pesanan: $e")),
+      );
+    }
+  }
 
   @override
   void initState() {
-    super.initState();
-    _startCountdownTimer();
-    data = widget.data;
-    DateTime now = DateTime.now();
-    DateTime dueDateTime = now.add(Duration(days: 1)); 
-    dueDate = DateFormat('MMM dd, yyyy, HH:mm').format(dueDateTime);
-  }
+  super.initState();
+  _startCountdownTimer();
+  data = widget.data;
+  DateTime now = DateTime.now();
+  DateTime dueDateTime = now.add(Duration(days: 1));
+  dueDate = DateFormat('MMM dd, yyyy, HH:mm').format(dueDateTime);
+
+  _loadProfileData().then((_) {
+    setState(() {}); 
+  });
+}
 
   @override
   void dispose() {
     _timer.cancel();
     super.dispose();
+  }
+
+  Future<void> _loadProfileData() async {
+    try {
+      final token = await _storage.read(key: 'token');
+      if (token == null) throw Exception("No token found");
+
+      final profileData = await _pelangganClient.fetchProfile(token);
+      setState(() {
+        _idPelanggan = profileData['id'] ?? "1";
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to load pelanggan ID: $e")),
+      );
+    }
   }
 
   void _startCountdownTimer() {
@@ -56,6 +123,13 @@ class _PaymentViewState extends State<PaymentView> {
         timer.cancel();
       }
     });
+  }
+
+  String _generateBookingID() {
+    final random = Random();
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    return List.generate(8, (_) => characters[random.nextInt(characters.length)])
+        .join();
   }
 
   String _formatTime(Duration duration) {
@@ -82,6 +156,7 @@ class _PaymentViewState extends State<PaymentView> {
 
   @override
   Widget build(BuildContext context) {
+    final String bookingID = _generateBookingID(); 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -313,10 +388,11 @@ class _PaymentViewState extends State<PaymentView> {
                     ),
                   ),
                   onPressed: () {
+                    _createPesanan(bookingID, context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EBookingView(total: widget.total, dataformat: widget.dataformat, data: widget.data, bankName: widget.bankName), 
+                        builder: (context) => EBookingView(total: widget.total, dataformat: widget.dataformat, data: widget.data, bankName: widget.bankName, idBooking: bookingID, idPelanggan: _idPelanggan), 
                       ),
                     );
                   },
