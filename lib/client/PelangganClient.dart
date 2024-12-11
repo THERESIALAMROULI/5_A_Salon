@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class PelangganClient {
-  static final String url = '192.168.0.106'; 
+  static final String url = '192.168.64.1'; 
   static final String endpoint = '/laravel_tubes/public/api/pelanggan'; 
 
   static Future<List<Pelanggan>> fetchAll() async {
@@ -32,7 +32,7 @@ class PelangganClient {
   static Future<Response> create(Pelanggan pelanggan) async {
     try {
       var response = await post(
-        Uri.parse('http://192.168.0.6/laravel_tubes/public/api/pelanggan'),
+        Uri.parse('http://192.168.64.1/laravel_tubes/public/api/pelanggan'),
         headers: {"Content-Type": "application/json"},
         body: pelanggan.toRawJson(),
       );
@@ -59,7 +59,7 @@ class PelangganClient {
 
   Future<Map<String, dynamic>> login(String username, String password) async {
     final response = await http.post(
-      Uri.parse('http://192.168.0.6/laravel_tubes/public/api/login'),
+      Uri.parse('http://192.168.64.1/laravel_tubes/public/api/login'),
       body: json.encode({
         'username': username, 
         'password': password,
@@ -82,7 +82,7 @@ class PelangganClient {
 
   Future<void> fetchPelangganData(String token) async {
     final response = await http.get(
-      Uri.parse('http://192.168.0.6/laravel_tubes/public/api/pelanggan'),
+      Uri.parse('http://192.168.64.1/laravel_tubes/public/api/pelanggan'),
       headers: {
         'Authorization': 'Bearer $token',
       },
@@ -106,7 +106,7 @@ class PelangganClient {
       }
 
       final response = await http.post(
-        Uri.parse('http://192.168.0.6/laravel_tubes/public/api/logout'),
+        Uri.parse('http://192.168.64.1/laravel_tubes/public/api/logout'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ class PelangganClient {
 
   Future<Map<String, dynamic>> fetchProfile(String token) async {
     final response = await http.get(
-      Uri.parse('http://192.168.0.6/laravel_tubes/public/api/pelanggan/profile'),
+      Uri.parse('http://192.168.64.1/laravel_tubes/public/api/pelanggan/profile'),
       headers: {
         'Authorization': 'Bearer $token',
       },
@@ -148,7 +148,7 @@ class PelangganClient {
   }) async {
     try {
       final response = await http.put(
-        Uri.parse('http://192.168.0.6/laravel_tubes/public/api/pelanggan/profile'),
+        Uri.parse('http://192.168.64.1/laravel_tubes/public/api/pelanggan/profile'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -178,7 +178,7 @@ class PelangganClient {
     required String newPassword,
   }) async {
     final response = await http.post(
-      Uri.parse('http://192.168.0.6/laravel_tubes/public/api/change-password'),
+      Uri.parse('http://192.168.64.1/laravel_tubes/public/api/change-password'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',

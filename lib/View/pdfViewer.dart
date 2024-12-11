@@ -230,6 +230,12 @@ class PdfViewerPage extends StatelessWidget {
                     'Atma Barber\nNPWP: 012.345.678.9-000.000\nJl. Malioboro No. 99, Gedung A Lt. 2\nYogyakarta, Daerah Istimewa Yogyakarta - 55271',
                     style: pw.TextStyle(fontSize: 10, color: PdfColors.grey),
                   ),
+                  pw.SizedBox(height: 16),
+                  pw.Text(
+                    'Kami Menunggu Kedatangan Anda Selanjutnya!',
+                    textAlign: pw.TextAlign.center,
+                    style: pw.TextStyle(fontSize: 20, color: PdfColor.fromHex("#E0AC53"), fontWeight: pw.FontWeight.bold, fontStyle: pw.FontStyle.italic),
+                  ),
                 ],
               ),
             ),
