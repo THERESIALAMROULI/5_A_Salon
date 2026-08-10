@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'View/login.dart';
+import 'package:tubesfix/View/login.dart';
 
 void main(){
   runApp(const MainApp());
