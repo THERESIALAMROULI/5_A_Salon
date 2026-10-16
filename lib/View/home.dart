@@ -1,11 +1,13 @@
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:tubesfix/View/home_view.dart';
 import 'package:tubesfix/View/view_list.dart';
 import 'package:tubesfix/View/profile.dart';
 
-
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final Map? data;
+
+  const HomeView({super.key, this.data});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -14,41 +16,35 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   int _selectedIndex = 0;
 
-
-  void _onItemTapped(int index){
-
+  void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
-
-  static const List<Widget> _widgetOptions = <Widget>[
-    homeScreen(),
-    ViewListScreen(),
-    ProfileView(),
-
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _widgetOptions = <Widget>[
+      homeView(data: widget.data),
+      ViewListScreen(data: widget.data),
+      profileView(),
+    ];
+
     return Scaffold(
-
-      bottomNavigationBar: BottomNavigationBar(
-      backgroundColor: Colors.black, // <-- This works for fixed
-      selectedItemColor: Colors.white,
-      unselectedItemColor: const Color.fromARGB(255, 228, 218, 128),
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home,),label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.list,),label: 'List'),
-          BottomNavigationBarItem(icon: Icon(Icons.person,),label: 'Profile'),
-
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
-
       body: _widgetOptions.elementAt(_selectedIndex),
+      bottomNavigationBar: ConvexAppBar(
+        backgroundColor: Colors.black,
+        color: const Color(0xFFE0AC53), 
+        activeColor: const Color(0xFFE0AC53),
+        items: [
+          TabItem(icon: Icons.home, title: 'Home'),
+          TabItem(icon: Icons.list, title: 'List'),
+          TabItem(icon: Icons.person, title: 'Profile'),
+        ],
+        initialActiveIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        style: TabStyle.reactCircle, 
+      ),
     );
   }
 }
