@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:tubesfix/client/api_config.dart';
 import 'package:tubesfix/entity/Review.dart';
 
 class ReviewClient {
-  static const String baseUrl = 'http://192.168.0.6/laravel_tubes/public/api/reviews';
+  static String get baseUrl => ApiConfig.baseUrl;
 
   static Future<bool> addReview(String token, Review review) async {
     final response = await http.post(
@@ -15,8 +16,9 @@ class ReviewClient {
       body: json.encode(review.toJson()),
     );
 
-    if (response.statusCode == 200) {
-      return json.decode(response.body)['success'];
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final res = json.decode(response.body);
+      return res['success'] ?? true;
     } else {
       throw Exception('Failed to add review');
     }
@@ -51,6 +53,27 @@ class ReviewClient {
       return json.decode(response.body)['success'];
     } else {
       throw Exception('Failed to delete review');
+    }
+  }
+
+  /// Fetches all customer reviews associated with a specific barber.
+  static Future<List<Review>> fetchReviewsByBarber(int barberId) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/reviews/barber/$barberId'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        return data.map((jsonItem) => Review.fromJson(jsonItem)).toList();
+      } else {
+        return [];
+      }
+    } catch (_) {
+      return [];
     }
   }
 }

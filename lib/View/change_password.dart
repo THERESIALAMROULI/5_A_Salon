@@ -77,18 +77,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
+        elevation: 0,
         title: const Text(
           'Change Password',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Color(0xFFE0AC53),
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w700,
+            fontSize: 20,
+          ),
         ),
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Color(0xFFE0AC53)),
         centerTitle: true,
       ),
       backgroundColor: Colors.black,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildPasswordField(
               label: 'Current Password',
@@ -122,26 +128,23 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 });
               },
             ),
-            const SizedBox(height: 40),
-            Center(
-              child: ElevatedButton(
-                onPressed: _changePassword,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFE0AC53),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+            const SizedBox(height: 36),
+            ElevatedButton(
+              onPressed: _changePassword,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFE0AC53),
+                foregroundColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Text(
-                  'Save Change',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                textStyle: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w800,
+                  fontSize: 16,
                 ),
               ),
+              child: const Text('Save Password'),
             ),
           ],
         ),
@@ -160,36 +163,42 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       children: [
         Text(
           label,
-          style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            color: Color(0xFFE0AC53),
+            fontFamily: 'Inter',
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 50, 50, 50),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: TextField(
-            controller: controller,
-            obscureText: !isPasswordVisible,
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                icon: Icon(
-                  isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                  color: Colors.white70,
-                ),
-                onPressed: onVisibilityToggle,
+        TextField(
+          controller: controller,
+          obscureText: !isPasswordVisible,
+          style: const TextStyle(color: Colors.white, fontFamily: 'Inter'),
+          decoration: InputDecoration(
+            suffixIcon: IconButton(
+              icon: Icon(
+                isPasswordVisible
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
+                color: const Color(0xFFE0AC53),
+                size: 20,
               ),
-              filled: true,
-              fillColor: Colors.transparent,
-              hintText: '********',
-              hintStyle: const TextStyle(color: Colors.white70),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide.none,
-              ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              onPressed: onVisibilityToggle,
             ),
+            filled: true,
+            fillColor: const Color(0xFF161616),
+            hintText: '••••••••',
+            hintStyle: const TextStyle(color: Colors.white38),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.white.withOpacity(0.12)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFFE0AC53), width: 1.5),
+            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           ),
         ),
       ],

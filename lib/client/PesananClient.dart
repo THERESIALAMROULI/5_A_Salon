@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
+import 'package:tubesfix/client/api_config.dart';
 import 'package:tubesfix/entity/Pesanan.dart' as MyPesanan;
 
 class PesananClient {
-  
-  static const String _baseUrl = 'http://192.168.64.1/laravel_tubes/public/api/pesanan';
+  static String get _baseUrl => '${ApiConfig.baseUrl}/pesanan';
 
   Future<bool> createPesanan({
     required String token,
@@ -43,7 +43,7 @@ class PesananClient {
 
   Future<List<Map<String, dynamic>>> fetchTransactionHistory(String token) async {
     final response = await http.get(
-      Uri.parse('$_baseUrl/transaction-history'),
+      Uri.parse('${ApiConfig.baseUrl}/transaction-history'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',

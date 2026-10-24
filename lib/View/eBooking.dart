@@ -91,213 +91,225 @@ class _EBookingViewState extends State<EBookingView> {
   Widget build(BuildContext context) {
     final String orderNumber = _generateOrderNumber(); 
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
         backgroundColor: Colors.black,
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Color(0xFFE0AC53)),
-            onPressed: () {
-              Navigator.push(
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFFE0AC53)),
+          onPressed: () {
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (_) => HomeView(data: widget.data),  
               ),
             );
-            },
-          ),
-          title: const Text(
-            'E-Booking',
-            style: TextStyle(
-              color: Color(0xFFE0AC53),
-              fontFamily: 'Inter',
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-            ),
+          },
+        ),
+        title: const Text(
+          'E-Booking',
+          style: TextStyle(
+            color: Color(0xFFE0AC53),
+            fontFamily: 'Inter',
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
           ),
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 16),
-                Card(
-                  color: const Color(0xFFE0AC53),
-                  margin: EdgeInsets.zero,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16),
-                      bottomLeft: Radius.circular(16),
-                      bottomRight: Radius.circular(16),
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildDetailRow(
-                              label: 'ORDER NUMBER',
-                              value: orderNumber,
-                              isCopyable: true,
-                              onCopy: () => _copyToClipboard(orderNumber, context),
-                            ),
-                            const Divider(
-                              color: Color(0xFFB98F48),
-                              thickness: 1,
-                              height: 8,
-                            ),
-                            _buildDetailRow(
-                              label: 'PAYMENT METHODS',
-                              value: 'Bank Transfer',
-                            ),
-                            const SizedBox(height: 8),
-                            _buildDetailRow(
-                              label: 'TOTAL COST',
-                              value: 'Rp. ${widget.total.toStringAsFixed(0)}',
-                            ),
-                            const SizedBox(height: 8),
-                            _buildDetailRow(
-                              label: 'APPOINTMENT DATE',
-                              value: _formatDate(widget.dataformat['date']),
-                            ),
-                            const SizedBox(height: 16),
-                            Center(
-                              child: Column(
-                                children: [
-                                  const Text(
-                                    'ID BOOKING',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'Inter',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 18,
-                                      vertical: 10,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFE5C692),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Text(
-                                      widget.idBooking, 
-                                      style: const TextStyle(
-                                        color: Color(0xFFF8EFE0),
-                                        fontFamily: 'Inter',
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w900
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      ClipPath(
-                        clipper: CouponEdge(),
-                        child: Card(
-                          color: const Color(0xFF1C1B1B),
-                          margin: EdgeInsets.zero,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(16),
-                              bottomRight: Radius.circular(16),
-                            ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 12),
+              Card(
+                color: const Color(0xFFE0AC53),
+                margin: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildDetailRow(
+                            label: 'ORDER NUMBER',
+                            value: orderNumber,
+                            isCopyable: true,
+                            onCopy: () => _copyToClipboard(orderNumber, context),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 16, bottom: 16),
+                          const Divider(
+                            color: Color(0xFFB98F48),
+                            thickness: 1,
+                            height: 16,
+                          ),
+                          _buildDetailRow(
+                            label: 'PAYMENT METHODS',
+                            value: 'Bank Transfer',
+                          ),
+                          const SizedBox(height: 10),
+                          _buildDetailRow(
+                            label: 'TOTAL COST',
+                            value: 'Rp. ${widget.total.toStringAsFixed(0)}',
+                          ),
+                          const SizedBox(height: 10),
+                          _buildDetailRow(
+                            label: 'APPOINTMENT DATE',
+                            value: _formatDate(widget.dataformat['date']),
+                          ),
+                          const SizedBox(height: 18),
+                          Center(
                             child: Column(
                               children: [
-                                Container(
-                                  padding: const EdgeInsets.all(8.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  child: QrImageView(
-                                    data: widget.idBooking,
-                                    size: 130,
-                                    backgroundColor: Colors.white,
+                                const Text(
+                                  'ID BOOKING',
+                                  style: TextStyle(
+                                    color: Color(0xFF2A200E),
+                                    fontFamily: 'Inter',
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: 1.2,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: const Padding(
-                                    padding: EdgeInsets.only(left: 16.0),
-                                    child: Text(
-                                      '*Scan QR at Barbershop',
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                        fontFamily: 'Inter',
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 24,
+                                    vertical: 10,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: const Color(0xFFB98F48),
+                                      width: 1.5,
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.25),
+                                        blurRadius: 6,
+                                        offset: const Offset(0, 3),
                                       ),
+                                    ],
+                                  ),
+                                  child: Text(
+                                    widget.idBooking, 
+                                    style: const TextStyle(
+                                      color: Color(0xFFE0AC53),
+                                      fontFamily: 'Inter',
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w900,
+                                      letterSpacing: 1.5,
                                     ),
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: ElevatedButton.icon(
-                          onPressed: _openMaps, 
-                          icon: const Icon(Icons.directions),
-                          label: const Text('Navigate to Barbershop'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFE0AC53), 
-                            foregroundColor: Colors.black, 
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10), 
-                            textStyle: const TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 10,
-                              fontWeight: FontWeight.w700,
-                            ),
+                    ),
+                    ClipPath(
+                      clipper: CouponEdge(),
+                      child: Card(
+                        color: const Color(0xFF181818),
+                        margin: EdgeInsets.zero,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(16),
+                            bottomRight: Radius.circular(16),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(10.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: QrImageView(
+                                  data: widget.idBooking,
+                                  size: 130,
+                                  backgroundColor: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              const Text(
+                                '*Scan QR code at Barbershop front desk',
+                                style: TextStyle(
+                                  color: Colors.white54,
+                                  fontFamily: 'Inter',
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 16),
-                    _buildActionButton(
-                      icon: Icons.share,
-                      label: 'Share',
-                      onPressed: () =>{
-                        
-                      }
+                  ],
+                ),
+              ),
+              const SizedBox(height: 18),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 4,
+                    child: ElevatedButton.icon(
+                      onPressed: _openMaps, 
+                      icon: const Icon(Icons.directions, size: 16),
+                      label: const Text('Directions'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFE0AC53), 
+                        foregroundColor: Colors.black, 
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 12), 
+                        textStyle: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                     ),
-                    const SizedBox(width: 16),
-                    _buildActionButton(
-                      icon: Icons.print,
-                      label: 'Print',
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    flex: 3,
+                    child: OutlinedButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.share_rounded, size: 16),
+                      label: const Text('Share'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFFE0AC53),
+                        side: const BorderSide(color: Color(0xFFE0AC53)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        textStyle: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    flex: 3,
+                    child: OutlinedButton.icon(
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -316,71 +328,82 @@ class _EBookingViewState extends State<EBookingView> {
                           ),
                         );
                       },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Transactions that have been confirmed cannot be refunded/changed',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontFamily: 'Inter',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const Divider(
-                      color: Color(0xFF2D2211),
-                      thickness: 1,
-                      height: 16,
-                    ),
-                    const Text(
-                      'Atma Barber',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontFamily: 'Inter',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      'NPWP: 012.345.678.9-000.000\nJl. Malioboro No. 99, Gedung A Lt. 2\nYogyakarta, Daerah Istimewa Yogyakarta - 55271',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontFamily: 'Inter',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const Divider(
-                      color: Color(0xFF2D2211),
-                      thickness: 1,
-                      height: 16,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                      },
-                      child: const Text(
-                        'Need help? Contact us',
-                        style: TextStyle(
-                          color: Color(0xFFE0AC53),
+                      icon: const Icon(Icons.print_rounded, size: 16),
+                      label: const Text('PDF'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFFE0AC53),
+                        side: const BorderSide(color: Color(0xFFE0AC53)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        textStyle: const TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF181818),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.white10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: const [
+                        Icon(Icons.info_outline, color: Colors.amber, size: 16),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Confirmed bookings cannot be refunded or cancelled',
+                            style: TextStyle(
+                              color: Colors.amber,
+                              fontFamily: 'Inter',
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      color: Colors.white12,
+                      thickness: 1,
+                      height: 20,
+                    ),
+                    const Text(
+                      'Atma Barber & Lounge',
+                      style: TextStyle(
+                        color: Color(0xFFE0AC53),
+                        fontFamily: 'Inter',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Jl. Malioboro No. 99, Gedung A Lt. 2\nYogyakarta, D.I. Yogyakarta - 55271',
+                      style: TextStyle(
+                        color: Colors.white60,
+                        fontFamily: 'Inter',
+                        fontSize: 11,
+                        height: 1.4,
+                      ),
+                    ),
                   ],
                 ),
-                const SizedBox(height: 16),
-              ],
-            ),
+              ),
+              const SizedBox(height: 20),
+            ],
           ),
         ),
       ),
@@ -399,10 +422,10 @@ class _EBookingViewState extends State<EBookingView> {
         Text(
           label,
           style: const TextStyle(
-            color: Color(0xFFEED1A0),
+            color: Color(0xFF35260C),
             fontFamily: 'Inter',
-            fontSize: 11,
-            fontWeight: FontWeight.w600,
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
           ),
         ),
         Row(
@@ -410,10 +433,10 @@ class _EBookingViewState extends State<EBookingView> {
             Text(
               value,
               style: const TextStyle(
-                color: Colors.white,
+                color: Colors.black,
                 fontFamily: 'Inter',
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
+                fontSize: 13,
+                fontWeight: FontWeight.w800,
               ),
             ),
             if (isCopyable)
@@ -421,8 +444,10 @@ class _EBookingViewState extends State<EBookingView> {
                 icon: const Icon(
                   Icons.copy,
                   size: 16,
-                  color: Color(0xFFA57B33),
+                  color: Color(0xFF2A200E),
                 ),
+                padding: const EdgeInsets.only(left: 6),
+                constraints: const BoxConstraints(),
                 onPressed: () {
                   if (onCopy != null) {
                     onCopy();  
@@ -430,34 +455,6 @@ class _EBookingViewState extends State<EBookingView> {
                 },
               ),
           ],
-        ),
-      ],
-    );
-  }                                 
-
-  Widget _buildActionButton({
-    required IconData icon,
-    required String label,
-    required VoidCallback onPressed,
-  }) {
-    return Row(
-      children: [
-        Icon(
-          icon,
-          color: const Color(0xFFE0AC53),
-        ),
-        const SizedBox(width: 8),
-        GestureDetector(
-          onTap: onPressed,
-          child: Text(
-            label,
-            style: const TextStyle(
-              color: Color(0xFFE0AC53),
-              fontFamily: 'Inter',
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
         ),
       ],
     );

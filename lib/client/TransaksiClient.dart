@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:tubesfix/client/api_config.dart';
 import 'package:tubesfix/entity/Transaksi.dart';
 
 class TransactionClient {
-  static const String baseUrl = 'http://192.168.64.1/laravel_tubes/public/api';
+  static String get baseUrl => ApiConfig.baseUrl;
 
   static Future<List<Transaction>> fetchTransactions(String token) async {
     final response = await http.get(

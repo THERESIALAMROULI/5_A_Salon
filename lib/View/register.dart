@@ -22,11 +22,9 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.black,
-        body: SafeArea(
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: SafeArea(
           child: Column(
             children: [
               Expanded(
@@ -264,8 +262,9 @@ class _RegisterViewState extends State<RegisterView> {
               ),
             ],
           ),
-      )));
-      }  
+        ),
+      );
+  }  
   
 
 

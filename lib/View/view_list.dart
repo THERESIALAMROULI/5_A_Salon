@@ -128,7 +128,7 @@ class _ViewListScreenState extends State<ViewListScreen> {
                     Center(
                       child: Wrap(
                         spacing: 8.0,
-                        runSpacing: 4.0,
+                        runSpacing: 6.0,
                         children: layanan
                             .map((l) => l.jenis_Layanan)
                             .toSet()
@@ -145,15 +145,18 @@ class _ViewListScreenState extends State<ViewListScreen> {
                               });
                             },
                             child: Container(
-                              width: 95,
-                              height: 42,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 8),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                color: Colors.black,
+                                color: isSelected
+                                    ? const Color(0xFFE0AC53)
+                                    : const Color(0xFF161616),
                                 border: Border.all(
                                   color: isSelected
-                                      ? Color(0xFFE0AC53)
-                                      : Colors.white54,
+                                      ? const Color(0xFFE0AC53)
+                                      : Colors.white24,
+                                  width: 1.2,
                                 ),
                                 borderRadius: BorderRadius.circular(8),
                               ),
@@ -161,11 +164,13 @@ class _ViewListScreenState extends State<ViewListScreen> {
                                 tag,
                                 style: TextStyle(
                                   color: isSelected
-                                      ? Color(0xFFE0AC53)
-                                      : Colors.white54,
+                                      ? Colors.black
+                                      : Colors.white70,
                                   fontFamily: 'Inter',
                                   fontSize: 12,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: isSelected
+                                      ? FontWeight.w700
+                                      : FontWeight.w500,
                                 ),
                               ),
                             ),
@@ -330,99 +335,122 @@ class ListItemCard extends StatelessWidget {
         );
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 4.0),
+        margin: const EdgeInsets.symmetric(vertical: 6.0),
         width: double.infinity,
-        height: 150,
-        child: Card(
-          color: Colors.black,
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-            side: const BorderSide(color: Color(0xFFE0AC53), width: 1.5),
+        decoration: BoxDecoration(
+          color: const Color(0xFF161616),
+          borderRadius: BorderRadius.circular(16.0),
+          border: Border.all(
+            color: const Color(0xFFE0AC53).withOpacity(0.4),
+            width: 1.2,
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundImage: NetworkImage(imageUrl),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        name,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Inter',
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: List.generate(5, (index) {
-                          return Icon(
-                            index < rating.floor()
-                                ? Icons.star
-                                : Icons.star_half,
-                            color: const Color(0xFFE0AC53),
-                            size: 20,
-                          );
-                        }),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Tags: ',
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontFamily: 'Inter',
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Expanded(
-                            child: Wrap(
-                              spacing: 4.0,
-                              runSpacing: 4.0,
-                              children: tags.map((tag) {
-                                return Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 4, horizontal: 8),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    border: Border.all(
-                                        color: const Color(0xFFE0AC53)),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Text(
-                                    tag,
-                                    style: const TextStyle(
-                                      color: Color(0xFFE0AC53),
-                                      fontFamily: 'Inter',
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.4),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(14.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(2.5),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: const Color(0xFFE0AC53),
+                    width: 1.5,
                   ),
                 ),
-              ],
-            ),
+                child: CircleAvatar(
+                  radius: 34,
+                  backgroundImage: NetworkImage(imageUrl),
+                  backgroundColor: Colors.grey[850],
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      name,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Inter',
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      children: [
+                        Row(
+                          children: List.generate(5, (index) {
+                            return Icon(
+                              index < rating.floor()
+                                  ? Icons.star_rounded
+                                  : Icons.star_half_rounded,
+                              color: const Color(0xFFE0AC53),
+                              size: 17,
+                            );
+                          }),
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          rating.toStringAsFixed(1),
+                          style: const TextStyle(
+                            color: Color(0xFFE0AC53),
+                            fontFamily: 'Inter',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 5.0,
+                      runSpacing: 4.0,
+                      children: tags.map((tag) {
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 3, horizontal: 8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFE0AC53).withOpacity(0.12),
+                            border: Border.all(
+                              color: const Color(0xFFE0AC53).withOpacity(0.6),
+                              width: 0.8,
+                            ),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            tag,
+                            style: const TextStyle(
+                              color: Color(0xFFE0AC53),
+                              fontFamily: 'Inter',
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 6),
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: Color(0xFFE0AC53),
+                size: 24,
+              ),
+            ],
           ),
         ),
       ),
